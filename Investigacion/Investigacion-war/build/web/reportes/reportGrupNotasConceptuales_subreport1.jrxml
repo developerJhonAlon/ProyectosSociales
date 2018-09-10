@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportGrupNotasConceptuales_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="eee0a6f3-a0da-4f3a-95bc-ae7ed59f6f7c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_ID,
+       SEA_COBERTURA.COBERT_ID,
+       SEA_LOCALIZA.LOCAL_DESCRIP,
+       SEA_ZONA_PLANIFICACION.ZOP_NOMBRE_LARGO,
+       SEA_PROVINCIA.PRO_NOMBRE,
+        SEA_CANTON.CAN_NOMBRE,
+       SEA_COBERTURA.LOCAL_ID
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_COBERTURA,
+       SEA_LOCALIZA,
+       SEA_ZONA_DETALLE,
+       SEA_ZONA_PLANIFICACION,
+       SEA_PROVINCIA,
+       SEA_CANTON
+ WHERE     (SEA_COBERTURA.LOCAL_ID = SEA_LOCALIZA.LOCAL_ID)
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = SEA_COBERTURA.DATGEPROY_ID)
+       AND (SEA_COBERTURA.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_ZONA_DETALLE.COBERT_ID(+) = SEA_COBERTURA.COBERT_ID)
+       AND (SEA_ZONA_DETALLE.ZOP_ID = SEA_ZONA_PLANIFICACION.ZOP_ID(+))
+       AND (SEA_ZONA_DETALLE.PRO_ID = SEA_PROVINCIA.PRO_ID(+))
+       AND (SEA_ZONA_DETALLE.CAN_ID = SEA_CANTON.CAN_ID(+))
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = $P{DATGEPROY_ID})
+ORDER BY SEA_LOCALIZA.LOCAL_DESCRIP,
+         SEA_ZONA_PLANIFICACION.ZOP_NOMBRE_LARGO,
+         SEA_PROVINCIA.PRO_NOMBRE,
+         SEA_CANTON.CAN_NOMBRE]]>
+	</queryString>
+	<field name="DATGEPROY_ID" class="java.math.BigDecimal"/>
+	<field name="COBERT_ID" class="java.math.BigDecimal"/>
+	<field name="LOCAL_DESCRIP" class="java.lang.String"/>
+	<field name="ZOP_NOMBRE_LARGO" class="java.lang.String"/>
+	<field name="PRO_NOMBRE" class="java.lang.String"/>
+	<field name="CAN_NOMBRE" class="java.lang.String"/>
+	<field name="LOCAL_ID" class="java.math.BigDecimal"/>
+	<group name="LOCALIDAD">
+		<groupExpression><![CDATA[$F{LOCAL_DESCRIP}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="8eb3ef68-94d9-4b5d-abe1-c3c718d0bc32" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="542" height="18"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LOCAL_DESCRIP}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="10">
+				<staticText>
+					<reportElement uuid="a34e08fa-80a4-4891-9579-9895f996834c" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="-1" width="542" height="11"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="b45eb775-075b-44ee-af9e-721344c4330c" positionType="Float" mode="Opaque" x="0" y="34" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="3be7ea67-274e-418a-8661-958f6e85465c" positionType="Float" x="11" y="34" width="516" height="20" forecolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COBERTURA DE EJECUCIÓN DEL PROYECTO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="9dec193a-d540-4f58-8b17-76e3742c5fc8" x="0" y="26" width="546" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="9cd1337e-7af2-4dfb-9b7e-b2b395943a52" positionType="Float" x="0" y="11" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[B.   LOCALIZACIÓN GEOGRAFICA DEL PROYECTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f515543f-69c1-44a6-8706-049188d85f22" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="542" height="17"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="987783d2-81ea-46f6-9d9a-c2157bb8e908" x="123" y="0" width="419" height="17"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ZOP_NOMBRE_LARGO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1c465982-19dd-4ebd-b0a2-4514e7b84380" x="123" y="0" width="175" height="17"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRO_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7aebce0e-f352-47d4-bdab-de877fcbf53d" x="298" y="0" width="244" height="17"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAN_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1c0e3e8e-f29a-4f22-abf0-a023fbf3f8fd" x="123" y="0" width="100" height="16"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{LOCAL_ID}== 3 ? "NACIONAL" : " ")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

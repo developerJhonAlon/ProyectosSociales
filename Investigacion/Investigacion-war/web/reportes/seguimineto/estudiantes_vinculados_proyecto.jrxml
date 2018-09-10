@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estudiantes_vinculados_proyecto" language="groovy" pageWidth="555" pageHeight="555" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="571035ed-3a4e-44e2-a79f-475a0cd61ca2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+       SEG_USUARIO.USU_APELLIDOS||'   '||SEG_USUARIO.USU_NOMBRES "NOMBRES",
+       SEA_ESTUDIANTES_FORMATO.SESF_PROGRAMA "PROGRAMA PREGRADO/ POSGRADO",
+       SEA_ESTUDIANTES_FORMATO.SESF_FECHA_INICIO,
+       SEA_ESTUDIANTES_FORMATO.SESF_FECHA_FIN,
+       SEA_ESTUDIANTES_FORMATO.SESF_GENERO_TESIS  "GENERO TESIS",
+       SEA_ESTUDIANTES_FORMATO.SESF_TESIS  "TITULO DE LA TESIS"
+  FROM SEA_ESTUDIANTES_FORMATO,
+       SEA_FORMATO_LARGO,
+       SEA_SEGUIMIENTO_FORMATO,
+       SEG_USUARIO
+ WHERE (SEA_ESTUDIANTES_FORMATO.SSEF_ID = SEA_SEGUIMIENTO_FORMATO.SSEF_ID)
+       AND (SEA_SEGUIMIENTO_FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_ESTUDIANTES_FORMATO.USU_ID = SEG_USUARIO.USU_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="PROGRAMA PREGRADO/ POSGRADO" class="java.lang.String"/>
+	<field name="SESF_FECHA_INICIO" class="java.sql.Timestamp"/>
+	<field name="SESF_FECHA_FIN" class="java.sql.Timestamp"/>
+	<field name="GENERO TESIS" class="java.lang.String"/>
+	<field name="TITULO DE LA TESIS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7c92980b-8caf-4f48-a8a3-5b8b9fa29651" positionType="Float" x="0" y="0" width="123" height="40"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre del Estudiante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="80af68bb-f7e5-4477-ad7b-587626cc27ed" positionType="Float" x="123" y="0" width="112" height="40"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Programas de pregado o posgrado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d2e5dfb-9efa-49f2-a2f4-7ef57c114949" positionType="Float" x="235" y="0" width="154" height="25"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tiempo de participación en el proyecto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9a162cf7-f6e6-49c9-b072-4159a5495f69" positionType="Float" x="389" y="0" width="166" height="40"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Si generó tesis o proyecto de grado del estudiante?
+SI(Poner título)/NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a73db3d6-c255-4d23-9b48-337fbb74dbd4" positionType="Float" x="235" y="25" width="75" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="749bb4cc-d106-4df9-80d5-28486c742bc7" positionType="Float" x="310" y="25" width="79" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Fecha de fin]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="417b328c-ca5f-47c6-b450-6f79f3eaca01" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="123" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f41077d6-9acd-4dce-b1ef-e6bf4f7f787e" positionType="Float" stretchType="RelativeToTallestObject" x="123" y="0" width="112" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROGRAMA PREGRADO/ POSGRADO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="885704c7-65b0-4177-b2a6-aadd0dc139fa" positionType="Float" stretchType="RelativeToTallestObject" x="235" y="0" width="75" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SESF_FECHA_INICIO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="25887b6b-ab87-47e0-b455-0d87c7dc0ed9" positionType="Float" stretchType="RelativeToTallestObject" x="310" y="0" width="79" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SESF_FECHA_FIN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5da41300-aaa6-4571-bc43-dcd7120df6cb" positionType="Float" stretchType="RelativeToTallestObject" x="389" y="0" width="166" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{GENERO TESIS} == "S" ? "SI (" + $F{TITULO DE LA TESIS} + ")": "NO")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="no_se_financia" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="0" rightMargin="60" topMargin="5" bottomMargin="20" uuid="e8697c01-ee32-432e-a78d-1f012d9568e7">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="25"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CONVOCA_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_NO_FINANCIA_CONVOCA.SNFC_DETALLE
+    FROM SEA_CONVOCA, SEA_NO_FINANCIA_CONVOCA
+   WHERE (SEA_NO_FINANCIA_CONVOCA.CONVOCA_ID = SEA_CONVOCA.CONVOCA_ID)
+         AND (SEA_CONVOCA.CONVOCA_ID = $P{CONVOCA_ID})
+ORDER BY SEA_NO_FINANCIA_CONVOCA.SNFC_ID ASC]]>
+	</queryString>
+	<field name="SNFC_DETALLE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="125" height="20" uuid="f371dcb9-5e33-4f8b-8a5d-20ac82265234"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO SE FINANCIARÁ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="51" y="0" width="410" height="20" uuid="20e9b630-631c-408a-8b78-519f4d6f1911"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SNFC_DETALLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="29" y="0" width="22" height="20" uuid="6c207fa2-5050-4e8a-9d14-909807ea7f08"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

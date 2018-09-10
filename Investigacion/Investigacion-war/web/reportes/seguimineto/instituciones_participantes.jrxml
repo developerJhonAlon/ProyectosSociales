@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="instituciones_participantes" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="3a0ed134-aa1b-43d4-8608-6ec60bad85d5">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     SEA_OPCION_INSTITUCION."OPINSTI_NOMBRE" AS NOMBRE_INSTITUCION,
+     SEA_OPCION_INSTITUCION."OPINSTI_REPRESENTA_LEGAL" AS REPRESENTANTE_LEGAL,
+     SEA_OPCION_INSTITUCION."OPINSTI_CEDULA_RL" AS CEDULA_RL,
+     SEA_OPCION_INSTITUCION."OPINSTI_TELEFONO" AS TELEFONO,
+     SEA_OPCION_INSTITUCION."OPINSTI_MAIL" AS MAIL,
+     SEA_OPCION_INSTITUCION."OPINSTI_DIRECCION" AS DIRECCION,
+     SEA_OPCION_INSTITUCION."OPINSTI_PAGUINA_WEB" AS PAGINA_WEB,
+     SEA_OPCION_INSTITUCION."OPINSTI_ORGANO_EJECUTOR" AS ORGANO_EJECUTOR,
+     SEA_OPCION_INSTITUCION."OPINSTI_FAX" AS FAX
+FROM
+     "SISEAC"."SEA_OPCION_INSTITUCION" SEA_OPCION_INSTITUCION
+WHERE
+     SEA_OPCION_INSTITUCION."DATGEPROY_ID" =$P{DATGEPROY_ID}]]>
+	</queryString>
+	<field name="NOMBRE_INSTITUCION" class="java.lang.String"/>
+	<field name="REPRESENTANTE_LEGAL" class="java.lang.String"/>
+	<field name="CEDULA_RL" class="java.lang.String"/>
+	<field name="TELEFONO" class="java.lang.String"/>
+	<field name="MAIL" class="java.lang.String"/>
+	<field name="DIRECCION" class="java.lang.String"/>
+	<field name="PAGINA_WEB" class="java.lang.String"/>
+	<field name="ORGANO_EJECUTOR" class="java.lang.String"/>
+	<field name="FAX" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5054e537-1f6c-46f8-8a5c-3fe344fe6734" positionType="Float" x="0" y="0" width="555" height="15" forecolor="#000000"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_INSTITUCION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="81" splitType="Stretch">
+			<textField>
+				<reportElement uuid="e2d63bc4-a2fd-4984-b7df-00a18219b6bf" positionType="Float" x="105" y="0" width="234" height="15"/>
+				<box topPadding="2" leftPadding="4" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REPRESENTANTE_LEGAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8e9f89fc-ca03-4556-8d72-83ed809df00d" positionType="Float" x="0" y="0" width="105" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Representante Legal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e18528e5-e694-44a4-97c1-828e1326e8bb" positionType="Float" x="431" y="0" width="124" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CEDULA_RL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2ee575c6-c673-437b-8e12-00f1bbd8573d" positionType="Float" x="339" y="0" width="92" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula de Identidad]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="08ba7ed5-5c10-4c6d-81b9-21d2492e83be" positionType="Float" stretchType="RelativeToTallestObject" x="105" y="15" width="77" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="004f0ec0-3e28-4f33-a2f7-f48a0ab23b23" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="15" width="105" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfonos]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b300b68a-4c35-4af9-b2ec-5b9b8ad2b98e" positionType="Float" stretchType="RelativeToTallestObject" x="210" y="15" width="84" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FAX}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="92c0f808-ab10-4007-8494-b087b2bb3422" positionType="Float" stretchType="RelativeToTallestObject" x="182" y="15" width="28" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="4">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Fax]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a396c61a-481b-4d72-bb81-3d256bcb9542" x="386" y="15" width="169" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MAIL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f77959dd-2719-4137-8aa5-94c38ce97c5a" x="294" y="15" width="92" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="84476610-b79d-445a-bd8f-dfb80161ce45" isPrintRepeatedValues="false" x="105" y="30" width="450" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1d666b89-0d78-4a88-bd92-ee4e4e759f48" x="0" y="30" width="105" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="abe641ef-ba3b-42d5-97da-dff665c239b8" isPrintRepeatedValues="false" x="105" y="45" width="450" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAGINA_WEB}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bdbbe78b-6af5-43a1-89ab-db58a21eb4bf" x="0" y="45" width="105" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Página Web Institucional]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="76ce8664-5f7e-43fd-8f0c-e2595c47fbb6" isPrintRepeatedValues="false" x="105" y="60" width="450" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ORGANO_EJECUTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="96701815-d3cd-4112-b849-837cc6ae386a" x="0" y="60" width="105" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Órgano Ejecutor]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

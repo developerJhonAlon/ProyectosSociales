@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tabla_busqueda" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="68a83b9a-9147-4d75-8297-d9a1e99bf484">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_TABLA_CONTENIDO.STC_BASE_DATOS,
+       SEA_TABLA_CONTENIDO.STC_DENOMINACION,
+       SEA_TABLA_CONTENIDO.STC_NUMERO_PATENTE,
+       SEA_TABLA_CONTENIDO.STC_OTROS
+  FROM SEA_FORMATO_LARGO, SEA_TABLA_CONTENIDO, SEA_DIAGNOS_PROBLEMA
+ WHERE     (SEA_DIAGNOS_PROBLEMA.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_TABLA_CONTENIDO.SDP_ID = SEA_DIAGNOS_PROBLEMA.SDP_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="STC_BASE_DATOS" class="java.lang.String"/>
+	<field name="STC_DENOMINACION" class="java.lang.String"/>
+	<field name="STC_NUMERO_PATENTE" class="java.lang.String"/>
+	<field name="STC_OTROS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="68ea666b-0fcd-4231-b8f7-08d3a732a234" positionType="Float" x="0" y="0" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[2.3 Tabla de Búsqueda:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7eb652b1-f8f7-4d12-9aaf-12401ae09edf" positionType="Float" x="0" y="19" width="135" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Base de Datos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e829d092-b04a-4395-92c8-2bd42f628ae0" positionType="Float" x="135" y="19" width="135" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Denominacion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="66b0b837-e93b-43ad-9b4f-a55a072b649b" positionType="Float" x="270" y="19" width="135" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[No. De patente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="04c8398c-dd73-4ab0-940a-070c1d3b56b2" positionType="Float" x="405" y="19" width="150" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Otros]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="ada1832a-75f8-425f-978c-549d18451c0a" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="135" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STC_BASE_DATOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="141cabb3-d7f5-4153-a562-a4ecdd565feb" positionType="Float" stretchType="RelativeToTallestObject" x="135" y="0" width="135" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STC_DENOMINACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="af48b059-c5c7-47ad-b40f-152b67758545" positionType="Float" stretchType="RelativeToTallestObject" x="270" y="0" width="135" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STC_NUMERO_PATENTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3d2edb8a-97d2-4e1c-be6d-cdd6d5984c50" positionType="Float" stretchType="RelativeToTallestObject" x="405" y="0" width="150" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STC_OTROS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

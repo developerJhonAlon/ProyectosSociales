@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fechas_importantes" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="0" rightMargin="60" topMargin="10" bottomMargin="20" uuid="2be4b24b-dbe7-49c2-b6e1-d28ce97ccf35">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CONVOCA_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_PROCESO_X_CONVOCATORIA.PPC_FECINI,
+       SEA_PROCESO_X_CONVOCATORIA.PPC_FECIFIN,
+       SEA_PROCESO.PRO_DESCRIP
+  FROM SEA_PROCESO_X_CONVOCATORIA, SEA_PROCESO
+ WHERE (SEA_PROCESO_X_CONVOCATORIA.PRO_ID = SEA_PROCESO.PRO_ID)
+       AND (SEA_PROCESO_X_CONVOCATORIA.CONVOCA_ID = $P{CONVOCA_ID})
+ORDER BY SEA_PROCESO_X_CONVOCATORIA.PPC_ID ASC]]>
+	</queryString>
+	<field name="PPC_FECINI" class="java.sql.Timestamp"/>
+	<field name="PPC_FECIFIN" class="java.sql.Timestamp"/>
+	<field name="PRO_DESCRIP" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="314" height="20" uuid="695150e3-2564-47fe-b475-c911a59a71da"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre del Proceso]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="314" y="0" width="145" height="20" uuid="cdac83ca-9117-4b2f-a163-d556902740ef"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Presentación Hasta:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="19" y="0" width="295" height="20" uuid="8e7ab3f5-fcdc-4d69-8567-b4f0880af8cd"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRO_DESCRIP}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEE, d MMM yyyy - HH:mm:ss" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="314" y="0" width="145" height="20" uuid="adbfcb95-84bf-46d6-9710-26e9cb739fee"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PPC_FECIFIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="19" height="20" uuid="5eb136d1-eff7-4bfe-a435-4c94adefb335"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

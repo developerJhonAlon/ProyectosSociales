@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Asignación de Pares por Proyecto Extenso">
+                    <h:panelGrid id="panelListadoNotasConceptuales">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Filtrar por Convocatoria:"/>
+                            <p:selectOneMenu  
+                                value="#{proyectosAsignacionParController.idConvocatoria}"
+                                effect="fade"
+                                filter="false">
+                                <f:selectItem itemLabel="[-TODOS-]"/>
+                                <f:selectItems value="#{proyectosAsignacionParController.convocatoriaList}" var="conv" itemValue="#{conv.convocaId}" itemLabel="#{conv.convocaTitulo}">
+                                </f:selectItems>
+                                <p:ajax listener="#{proyectosAsignacionParController.listarNotasConceptuales}" update=":formPrincipal:dtNotaConceptual" 
+                                        onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+                            </p:selectOneMenu>       
+
+                        </h:panelGrid>
+                        <p:dataTable id="dtNotaConceptual" value="#{proyectosAsignacionParController.notaConceptualList}" var="notaConceptual"
+                                     paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." width="20">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column rendered="false" headerText="Convocatoria" style="white-space: pre-line" width="300" sortBy="#{notaConceptual.convocaId.convocaTitulo}">
+                                <h:outputText value="#{notaConceptual.convocaId.convocaTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Título del Proyecto" style="white-space: pre-line" sortBy="#{notaConceptual.datgeproyTitulo}">
+                                <h:outputText value="#{notaConceptual.datgeproyTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Director" style="white-space: pre-line" width="220">
+                                <h:outputText value="#{notaConceptual.usuId.usuCc.concat('-').concat(notaConceptual.usuId.nombresCompletos)}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+
+                            <p:column headerText="Seleccione" style="text-align: center" width="60">
+                                <p:button outcome="proyectoContenido" icon="ui-icon-circle-check">
+                                    <f:param name="id" value="#{notaConceptual.datgeproyId}" />
+                                    <f:param name="op" value="asigpar" />
+                                </p:button>                                    
+
+                            </p:column>
+
+                        </p:dataTable>                           
+                    </h:panelGrid>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

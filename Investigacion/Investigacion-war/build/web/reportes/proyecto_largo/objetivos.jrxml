@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="objetivos" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="62f6d7bf-018c-4f58-926e-a489e7cce4c9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SZDTAOBJPROY.SZDTAOBJPROY_CODE,
+       SZDTAOBJPROY.SZDTAOBJPROY_PADRE,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SZDTAOBJPROY.SZDTAOBJPROY_DESCR,
+       OBJETIVOPROY.SZDTAOBJPROY_CODE,
+       OBJETIVOPROY.SZDTAOBJPROY_PADRE,
+       OBJETIVOPROY.SZDTAOBJPROY_DESCR AS INDICADOR,
+       PARAMOBJETIVO.PRD_DESCRIPCION,
+       MEDIOS.SZDTAOBJPROY_DESCR AS MEDIO_VERIFICACION,
+       PARAMEDIOS.PRD_DESCRIPCION,
+       SUPUESTOS.SZDTAOBJPROY_DESCR AS SUPUESTOS,
+       PARAMSUPUESTOS.PRD_DESCRIPCION
+  FROM SZDTAOBJPROY, SEA_PARAMETROS_DET, SZDTAOBJPROY OBJETIVOPROY, SZDTAOBJPROY MEDIOS,
+            SZDTAOBJPROY SUPUESTOS, SEA_PARAMETROS_DET  PARAMOBJETIVO,
+            SEA_PARAMETROS_DET PARAMEDIOS,  SEA_PARAMETROS_DET  PARAMSUPUESTOS
+ WHERE     (SZDTAOBJPROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (OBJETIVOPROY.SZDTAOBJPROY_PADRE = SZDTAOBJPROY.SZDTAOBJPROY_CODE)
+       AND(MEDIOS.SZDTAOBJPROY_PADRE = OBJETIVOPROY.SZDTAOBJPROY_CODE)
+       AND(SUPUESTOS.SZDTAOBJPROY_PADRE = MEDIOS.SZDTAOBJPROY_CODE)
+       AND(OBJETIVOPROY.PRD_ID = PARAMOBJETIVO.PRD_ID)
+       AND(MEDIOS.PRD_ID = PARAMEDIOS.PRD_ID)
+       AND(SUPUESTOS.PRD_ID = PARAMSUPUESTOS.PRD_ID)
+       AND (SZDTAOBJPROY.SFL_ID = $P{SFL_ID})
+       AND(PARAMOBJETIVO.PRD_ID   =305)
+   ORDER BY SZDTAOBJPROY.SZDTAOBJPROY_CODE ASC]]>
+	</queryString>
+	<field name="SZDTAOBJPROY_CODE" class="java.math.BigDecimal"/>
+	<field name="SZDTAOBJPROY_PADRE" class="java.math.BigDecimal"/>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="SZDTAOBJPROY_DESCR" class="java.lang.String"/>
+	<field name="INDICADOR" class="java.lang.String"/>
+	<field name="MEDIO_VERIFICACION" class="java.lang.String"/>
+	<field name="SUPUESTOS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="87a78185-b89d-49ba-9a03-1290ea1f0525" positionType="Float" x="0" y="0" width="110" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Objetivos del Proyecto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="57ce668c-a30b-4808-98cb-2edc9195746b" positionType="Float" x="110" y="0" width="115" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd4144fa-8733-4417-a654-36e1fe8c2eed" positionType="Float" x="225" y="0" width="110" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Indicador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bfd90a3e-588f-41c6-903a-4ff8a023b1ef" positionType="Float" x="335" y="0" width="110" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Medio de Verificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c61cb669-2951-44a0-a011-f57ec7136aad" positionType="Float" x="445" y="0" width="110" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supuestos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2a313724-0f64-43bc-9b81-8b2859c7ebca" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRD_DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8c47b298-6f0b-4412-941a-2e62a57f1b10" positionType="Float" stretchType="RelativeToTallestObject" x="110" y="0" width="115" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SZDTAOBJPROY_DESCR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8d684e0a-2ff5-40c9-acab-37736b8bd3cf" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="225" y="0" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INDICADOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="bfb414f2-6ab9-41e5-ac3a-e062d2dec663" positionType="Float" stretchType="RelativeToTallestObject" x="335" y="0" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MEDIO_VERIFICACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5a6d8e5c-5c9c-4eca-9ed3-69c24bf2934c" positionType="Float" stretchType="RelativeToTallestObject" x="445" y="0" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUPUESTOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

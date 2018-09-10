@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listado_proyectos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abfc2c10-b523-49e0-be50-7bc340527f47">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<parameter name="idConvocatoria" class="java.math.BigDecimal"/>
+	<parameter name="sql" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{idConvocatoria}==null?"SELECT SEA_CONVOCA.CONVOCA_TITULO, SEA_CONVOCA.CONVOCA_DOC_NOMBRE, SEA_DAT_GENERAL_PROY.DATGEPROY_MONTO_TOTAL,  SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO TITULO_PROYECTO, (SEG_USUARIO.USU_APELLIDOS ||'  '|| SEG_USUARIO.USU_NOMBRES) NOMBRES FROM SEA_CONVOCA, SEA_DAT_GENERAL_PROY, SEA_RESPONSABLE_PROG, SEG_USUARIO WHERE (SEA_DAT_GENERAL_PROY.CONVOCA_ID = SEA_CONVOCA.CONVOCA_ID) AND (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID) AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID) AND (SEA_RESPONSABLE_PROG.TIPRES_ID = 3) AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '0') AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '1')" :"SELECT SEA_CONVOCA.CONVOCA_TITULO, SEA_CONVOCA.CONVOCA_DOC_NOMBRE, SEA_DAT_GENERAL_PROY.DATGEPROY_MONTO_TOTAL, SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO TITULO_PROYECTO, (SEG_USUARIO.USU_APELLIDOS ||'  '|| SEG_USUARIO.USU_NOMBRES) NOMBRES FROM SEA_CONVOCA, SEA_DAT_GENERAL_PROY, SEA_RESPONSABLE_PROG, SEG_USUARIO WHERE (SEA_DAT_GENERAL_PROY.CONVOCA_ID = SEA_CONVOCA.CONVOCA_ID) AND (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID) AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID) AND (SEA_RESPONSABLE_PROG.TIPRES_ID = 3) AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '0') AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '1') AND ( SEA_CONVOCA.CONVOCA_ID = " + $P{idConvocatoria} + ")"  ]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{sql}]]>
+	</queryString>
+	<field name="CONVOCA_TITULO" class="java.lang.String"/>
+	<field name="CONVOCA_DOC_NOMBRE" class="java.lang.String"/>
+	<field name="TITULO_PROYECTO" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="DATGEPROY_MONTO_TOTAL" class="java.math.BigDecimal"/>
+	<group name="PROYECTO">
+		<groupExpression><![CDATA[$F{CONVOCA_TITULO}]]></groupExpression>
+		<groupHeader>
+			<band height="73">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="40" width="555" height="18" uuid="575cc87a-73ee-4c06-86db-18de8919bce4"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_DOC_NOMBRE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="22" width="555" height="18" uuid="191ee666-19f3-44c6-86ab-2b17aea2d592"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_TITULO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="58" width="298" height="15" uuid="c7e49c6d-c850-4786-a8dd-13ffb1da8da2"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Titulo del Proyecto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="473" y="58" width="82" height="15" uuid="2c9074cc-705a-4645-a9fc-2036c85b344d"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Presupuesto Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="298" y="58" width="175" height="15" uuid="1bbaf722-4a1d-4a72-a9b6-c21464d372c2"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Director del Proyecto]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="61" uuid="9e524970-8b47-4a7c-bca3-c1f90b11e2f6"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="33" uuid="005b1b90-2ac1-4471-923d-70d678fa7b54"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA
+LISTADO DE PROYECTOS POR CONVOCATORIA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="26" y="0" width="272" height="15" uuid="10b83b4e-ce45-4bb4-8b15-bb836a9c85ab"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITULO_PROYECTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="473" y="0" width="82" height="15" uuid="0995f6da-feae-47f5-a032-940e7012ea2e"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="15">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATGEPROY_MONTO_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="26" height="15" uuid="fcb0c87a-8cd7-4e21-b02c-dd33181dd3f2"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PROYECTO_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="298" y="0" width="175" height="15" uuid="3135270d-c1dd-44e8-bdd6-14abc545cf49"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="435" y="0" width="80" height="20" uuid="57cc6ebb-ad39-4bb8-bd76-8b72ae5b3d9e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="20" uuid="d6bbff1b-3b7c-4ef4-8888-c82417df58ce"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

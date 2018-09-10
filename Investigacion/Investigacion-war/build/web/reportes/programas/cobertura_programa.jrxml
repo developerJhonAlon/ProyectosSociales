@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cobertura_programa" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="73c141b9-e321-4a7c-a218-04f7c45dc8bb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROG_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROG.DATGEPROG_ID,
+       SEA_LOCALIZA.LOCAL_DESCRIP,
+       SEA_PROVINCIA.PRO_NOMBRE,
+       SEA_CANTON.CAN_NOMBRE,
+       SEA_PARROQUIA.PRQ_NOMBRE
+  FROM SEA_DAT_GENERAL_PROG,
+       SEA_COBERTURA,
+       SEA_LOCALIZA,
+       SEA_PARROQUIA,
+       SEA_CANTON,
+       SEA_PROVINCIA
+ WHERE     (SEA_COBERTURA.DATGEPROG_ID = SEA_DAT_GENERAL_PROG.DATGEPROG_ID)
+       AND (SEA_COBERTURA.LOCAL_ID = SEA_LOCALIZA.LOCAL_ID)
+       AND (SEA_COBERTURA.PRQ_ID = SEA_PARROQUIA.PRQ_ID)
+       AND (SEA_PARROQUIA.CAN_ID = SEA_CANTON.CAN_ID)
+       AND (SEA_CANTON.PRO_ID = SEA_PROVINCIA.PRO_ID)
+       AND (SEA_DAT_GENERAL_PROG.DATGEPROG_ID = $P{DATGEPROG_ID})]]>
+	</queryString>
+	<field name="DATGEPROG_ID" class="java.math.BigDecimal"/>
+	<field name="LOCAL_DESCRIP" class="java.lang.String"/>
+	<field name="PRO_NOMBRE" class="java.lang.String"/>
+	<field name="CAN_NOMBRE" class="java.lang.String"/>
+	<field name="PRQ_NOMBRE" class="java.lang.String"/>
+	<group name="LOCALIDAD">
+		<groupExpression><![CDATA[$F{LOCAL_DESCRIP}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="3c74c6f6-235e-485e-b651-d657c4bf3a25" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="542" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LOCAL_DESCRIP}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="047dfc75-f1ac-4d54-9684-ef5d77751d37" positionType="Float" x="0" y="11" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[B. COBERTURA Y LOCALIZACIÓN]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="429e664f-60d8-401f-b7cf-6332b720a639" x="1" y="26" width="546" height="1"/>
+			</line>
+			<rectangle>
+				<reportElement uuid="b350cdc6-4bfb-4907-a42a-f53b2e2e9b19" positionType="Float" x="0" y="34" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="087fc77d-b84c-4e9c-a19c-4470eb26e3ef" positionType="Float" x="11" y="34" width="516" height="20" forecolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COBERTURA DE EJECUCIÓN DEL PROGRAMA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0151b624-b446-4732-9c93-25ef2c38683e" x="11" y="0" width="244" height="17"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRO_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="df331258-8387-4db4-bde2-2624c4486ba2" x="146" y="0" width="244" height="17"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAN_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="25aff490-2248-42ab-88fb-ddefe68139f2" x="298" y="0" width="244" height="17"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRQ_NOMBRE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

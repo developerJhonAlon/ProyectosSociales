@@ -1,0 +1,1603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte Nota C Terminadas" language="groovy" pageWidth="5000" pageHeight="595" orientation="Landscape" columnWidth="4960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ffe9416d-018a-41f5-bda0-e6091bd16d7e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="4114"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+        (SELECT SEA_PROGRAMA.PROG_DESCRIP
+            FROM SEA_DAT_GENERAL_PROY, SEA_PROGRAMA
+            WHERE  A.PROG_ID = SEA_PROGRAMA.PROG_ID
+            AND ROWNUM =1)
+       "NOMBRE DEL PROGRAMA",
+        (SELECT GRUPI_DESCRIP
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_GRUPINV,
+               SEA_DEPCENPROY,
+               SEG_USUARIO
+         WHERE     DATGEPROY_ESTADO != '0'
+		 AND DATGEPROY_ESTADO != '1'
+               --AND CONVOCA_ID = 2
+               AND SEA_GRUPINV.GRUPI_ID = SEA_DEPCENPROY.GRUPI_ID
+               AND A.DATGEPROY_ID = SEA_DEPCENPROY.DATGEPROY_ID
+               AND USU_ID = A.USU_ID_CREAP
+               AND ROWNUM = 1)
+          "GRUPO DE INVESTIGACIÓN",
+           A.DATGEPROY_TITULO
+            "PROYECTO",
+          (SELECT SEA_PARAMETROS_DET.PRD_DESCRIPCION
+            FROM SEA_DAT_GENERAL_PROY, SEA_PARAMETROS_DET
+        WHERE A.PRD_ID = SEA_PARAMETROS_DET.PRD_ID
+        AND  ROWNUM = 1)
+        "TIPO",
+        (SELECT SEA_FORMATO_LARGO.SFL_FECHA_INICIO
+          FROM SEA_DAT_GENERAL_PROY, SEA_FORMATO_LARGO
+         WHERE  A.DATGEPROY_ID =  SEA_FORMATO_LARGO.DATGEPROY_ID
+         AND ROWNUM =1)
+          "FECHA INICIO",
+         (SELECT SEA_FORMATO_LARGO.SFL_FECHA_FINALIZA
+          FROM SEA_DAT_GENERAL_PROY, SEA_FORMATO_LARGO
+         WHERE  A.DATGEPROY_ID =  SEA_FORMATO_LARGO.DATGEPROY_ID
+         AND ROWNUM =1)
+         "FECHA FIN PLANIFICADA",
+        (SELECT SUBSTR(SEA_PARAMETROS_DET.PRD_DESCRIPCION,1,13)
+            FROM SEA_DAT_GENERAL_PROY, SEA_PARAMETROS_DET
+        WHERE A.PRD_ID = SEA_PARAMETROS_DET.PRD_ID
+        AND  ROWNUM = 1)
+        "TIPO DE PROYECTO",
+        (SELECT SZTAAINV_DESCRIPCION
+          FROM SEA_DAT_GENERAL_PROY, SZTAINCO, SZTAAINV
+         WHERE     A.DATGEPROY_ID = SZTAINCO.DATGEPROY_ID
+               AND SZTAAINV.SZTAAINV_CODE = SZTAINCO.SZTAAINV_CODE
+              -- AND USU_ID = A.USU_ID_CREAP
+               AND ROWNUM = 1)
+          "AREA INVESTIGACIÓN",
+       (SELECT LINEA_DESCIP
+          FROM SEA_DAT_GENERAL_PROY,
+               SEG_USUARIO,
+               SEA_DEPCENPROY,
+               SEA_LINEAINVES
+         WHERE     USU_ID = A.USU_ID_CREAP
+               AND A.DATGEPROY_ID = SEA_DEPCENPROY.DATGEPROY_ID
+               AND SEA_LINEAINVES.LINEA_ID = SEA_DEPCENPROY.LINEA_ID
+               AND ROWNUM = 1)
+          "LINEA DE INVESTIGACIÓN",
+          A.DATGEPROY_MONTO_TOTAL
+          "FINANCIAMIENTO ESPE",
+          A.DATGEPROY_MONTO_OTRA_INST
+          "FINANCIAMIENTO OTRAS",
+          (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Director del Proyecto'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "DIRECTOR PROYECTO ",
+           (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Director del Proyecto'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "C I DIRECTOR",
+           (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Director Subrogante'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "DIRECTOR SUBROGANTE",
+           (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Director Subrogante'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI DIRECTOR SUBROGANTE",
+           (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 1'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 1",
+           (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 1'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI INVESTIGADOR 1",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 2'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 2",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 2'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI INVESTIGADOR 2",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 3'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 3",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 3'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI INVESTIGADOR 3",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 4'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 4",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 4'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI INVESTIGADOR 4",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 5'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 5",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 5'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI INVESTIGADOR 5",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 6'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 6",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 6'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI INVESTIGADOR 6",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 1'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 1",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 1'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI AYUDANTE 1",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 2'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 2",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 2'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI AYUDANTE 2",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 3'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 3",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 3'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI AYUDANTE 3",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 4'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 4",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 4'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI AYUDANTE 4",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 5'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 5",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 5'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI AYUDANTE 5",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 6'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 6",
+          (SELECT SEG_USUARIO.USU_CC
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 6'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "CI AYUDANTE 6",
+          (SELECT STVSUBJ.STVSUBJ_DESC
+            FROM SEA_DEPCENPROY, SEA_DAT_GENERAL_PROY, SATURN.STVSUBJ
+            WHERE SEA_DEPCENPROY.DATGEPROY_ID = A.DATGEPROY_ID
+                AND SEA_DEPCENPROY.STVSUBJ_CODE_DEPTO = STVSUBJ.STVSUBJ_CODE
+                AND ROWNUM =1)
+                "DEPARTAMENTO",
+          (SELECT STVMAJR.STVMAJR_DESC
+            FROM SEA_DEPCENPROY, SEA_DAT_GENERAL_PROY, SATURN.STVMAJR
+          WHERE SEA_DEPCENPROY.DATGEPROY_ID = A.DATGEPROY_ID
+             AND SEA_DEPCENPROY.STVMAJR_CODE_CAR = STVMAJR.STVMAJR_CODE
+             AND ROWNUM =1)
+             "CARRERA",
+           (SELECT SEA_PROG_POSTGRADO.POSTPROG_DESCRIP
+             FROM SEA_DEPCENPROY, SEA_DAT_GENERAL_PROY, SEA_PROG_POSTGRADO
+            WHERE SEA_DEPCENPROY.DATGEPROY_ID = A.DATGEPROY_ID
+                AND SEA_DEPCENPROY.POSTPROG_ID = SEA_PROG_POSTGRADO.POSTPROG_ID
+                AND ROWNUM =1)
+             "PROGRAMA POSGRADO"
+
+
+  FROM SEA_DAT_GENERAL_PROY A
+ WHERE A.DATGEPROY_ESTADO != '0'
+AND A.DATGEPROY_ESTADO != '1'
+  AND A.DATGEPROY_PAGILEG_NOMBRE IS NOT NULL]]>
+	</queryString>
+	<field name="NOMBRE DEL PROGRAMA" class="java.lang.String"/>
+	<field name="GRUPO DE INVESTIGACIÓN" class="java.lang.String"/>
+	<field name="PROYECTO" class="java.lang.String"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="FECHA INICIO" class="java.sql.Timestamp"/>
+	<field name="FECHA FIN PLANIFICADA" class="java.sql.Timestamp"/>
+	<field name="TIPO DE PROYECTO" class="java.lang.String"/>
+	<field name="AREA INVESTIGACIÓN" class="java.lang.String"/>
+	<field name="LINEA DE INVESTIGACIÓN" class="java.lang.String"/>
+	<field name="FINANCIAMIENTO ESPE" class="java.math.BigDecimal"/>
+	<field name="FINANCIAMIENTO OTRAS" class="java.math.BigDecimal"/>
+	<field name="DIRECTOR PROYECTO " class="java.lang.String"/>
+	<field name="C I DIRECTOR" class="java.lang.String"/>
+	<field name="DIRECTOR SUBROGANTE" class="java.lang.String"/>
+	<field name="CI DIRECTOR SUBROGANTE" class="java.lang.String"/>
+	<field name="INVESTIGADOR 1" class="java.lang.String"/>
+	<field name="CI INVESTIGADOR 1" class="java.lang.String"/>
+	<field name="INVESTIGADOR 2" class="java.lang.String"/>
+	<field name="CI INVESTIGADOR 2" class="java.lang.String"/>
+	<field name="INVESTIGADOR 3" class="java.lang.String"/>
+	<field name="CI INVESTIGADOR 3" class="java.lang.String"/>
+	<field name="INVESTIGADOR 4" class="java.lang.String"/>
+	<field name="CI INVESTIGADOR 4" class="java.lang.String"/>
+	<field name="INVESTIGADOR 5" class="java.lang.String"/>
+	<field name="CI INVESTIGADOR 5" class="java.lang.String"/>
+	<field name="INVESTIGADOR 6" class="java.lang.String"/>
+	<field name="CI INVESTIGADOR 6" class="java.lang.String"/>
+	<field name="AYUDANTE 1" class="java.lang.String"/>
+	<field name="CI AYUDANTE 1" class="java.lang.String"/>
+	<field name="AYUDANTE 2" class="java.lang.String"/>
+	<field name="CI AYUDANTE 2" class="java.lang.String"/>
+	<field name="AYUDANTE 3" class="java.lang.String"/>
+	<field name="CI AYUDANTE 3" class="java.lang.String"/>
+	<field name="AYUDANTE 4" class="java.lang.String"/>
+	<field name="CI AYUDANTE 4" class="java.lang.String"/>
+	<field name="AYUDANTE 5" class="java.lang.String"/>
+	<field name="CI AYUDANTE 5" class="java.lang.String"/>
+	<field name="AYUDANTE 6" class="java.lang.String"/>
+	<field name="CI AYUDANTE 6" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="CARRERA" class="java.lang.String"/>
+	<field name="PROGRAMA POSGRADO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="99" splitType="Stretch">
+			<staticText>
+				<reportElement x="-612" y="59" width="5572" height="20" uuid="2b7fbe6c-fa16-438c-819d-65b76bf7304f"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN INNOVACIÓN Y TRASNFERENCIA DE TECNOLÓGICA]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="-612" y="0" width="5572" height="59" uuid="93c02520-0090-4666-ac80-486be2047c55"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="-613" y="79" width="5573" height="20" uuid="bf2b9d0b-1264-412e-af0e-da4d17550a76"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PORTAFOLIO DE PROYECTOS ESPE - 2016]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="36" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="22" height="38" uuid="b272dac6-0c93-46ad-b62c-a3aaee3ad3bb"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="1" width="184" height="38" uuid="eb778528-0d34-42f7-a8a1-e009e59ffc34"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DEL PROGRAMA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="207" y="1" width="166" height="38" uuid="835802ed-348a-47f2-8027-dcf92d5ff49e"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[GRUPO DE INVESTIGACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="1" width="348" height="38" uuid="59c46569-4f65-433f-bbed-93d80022517b"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PROYECTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="721" y="1" width="116" height="38" uuid="75bdfd14-253b-4237-88a1-60dc9f5e9d5f"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="837" y="1" width="100" height="38" uuid="39146173-4d8a-4752-82c5-b398b0fd9322"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FECHA INICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="937" y="1" width="100" height="38" uuid="b9db41d1-93e0-437b-9e21-de38fd27da8b"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FECHA FIN PLANIFICADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1037" y="1" width="100" height="38" uuid="b4ba53f0-4a86-4419-ae47-c4767685d9a3"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[TIPO DE PROYECTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1137" y="1" width="164" height="38" uuid="3c068a61-62a9-4038-9bc0-7e1cde3ee581"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AREA INVESTIGACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1301" y="1" width="164" height="38" uuid="8d71de06-e7b2-40e6-80a1-4e5fb0a98660"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[LINEA DE INVESTIGACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1465" y="1" width="108" height="38" uuid="8dfb620f-b91d-4337-b9e2-b0e623c484e4"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FINANCIAMIENTO ESPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1573" y="1" width="114" height="38" uuid="6f40d8ea-ba85-4254-a978-00d44e9ae9c2"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FINANCIAMIENTO OTRAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1687" y="1" width="170" height="38" uuid="f60b7d44-1438-45cc-9eb8-be573235b48c"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DIRECTOR PROYECTO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1857" y="1" width="76" height="38" uuid="4a94ec7f-9da5-4b69-911c-54171350ea52"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[C I DIRECTOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1933" y="1" width="149" height="38" uuid="3f3783a2-e710-4cbe-9eb6-87ed451dbbbd"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DIRECTOR SUBROGANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2082" y="1" width="86" height="38" uuid="3b8a6dcd-5bbf-4b09-90eb-361964b2ce41"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI DIRECTOR SUBROGANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2168" y="1" width="100" height="38" uuid="218b8333-9c15-4736-af5f-df5a9f0a3dd6"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2268" y="1" width="85" height="38" uuid="47df0302-ba58-4e56-9a42-4d97cb405187"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI INVESTIGADOR 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2353" y="1" width="100" height="38" uuid="d78dbb7e-c113-4d36-b3ac-92d6d52b040c"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2453" y="1" width="81" height="38" uuid="c086c6ed-9dde-46dd-9874-71a96c9774bf"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI INVESTIGADOR 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2534" y="1" width="100" height="38" uuid="1b28a1ee-88a3-42a1-8a1b-26c93cd3530c"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2634" y="1" width="82" height="38" uuid="f4eeb886-403f-4124-b89a-9547b9929d6a"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI INVESTIGADOR 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2716" y="1" width="100" height="38" uuid="3eab9881-0784-4949-ae9b-f57c522974c9"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2816" y="1" width="80" height="38" uuid="8e42f3c2-7042-47f1-b0b5-710de6321b6d"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI INVESTIGADOR 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2896" y="1" width="100" height="38" uuid="212b4be6-f033-4d04-afda-b7a98074c49d"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2996" y="1" width="80" height="38" uuid="c471c7a3-db0a-4954-b40b-5b69440403e7"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI INVESTIGADOR 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3076" y="1" width="100" height="38" uuid="47bd7452-41e4-4ff6-824e-7286600dbad0"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3176" y="1" width="81" height="38" uuid="9a7fe7ef-ffca-4bc0-b2a2-f164894c2e27"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI INVESTIGADOR 6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3257" y="1" width="100" height="38" uuid="85ffa4d2-d3b0-4000-af9e-987a2c8551b8"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3357" y="1" width="75" height="38" uuid="a023e115-1ab8-4713-b4b0-d160c2a1fff8"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI AYUDANTE 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3432" y="1" width="100" height="38" uuid="f1267948-ed5f-480a-93a7-a096f4a7abcd"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3532" y="1" width="68" height="38" uuid="51aee256-38f7-41ce-b8b4-06791746e450"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI AYUDANTE 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3600" y="1" width="100" height="38" uuid="37c66636-3796-437b-9799-4fc62f2670a3"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3700" y="1" width="70" height="38" uuid="1a214a57-c36e-40c1-8a12-b6ed6d9abe3a"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI AYUDANTE 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3770" y="1" width="100" height="38" uuid="f58357cf-aabc-49bd-ba8d-f5f573ffad61"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3870" y="1" width="72" height="38" uuid="274d16b9-5056-48cf-9e8b-0006cb359077"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI AYUDANTE 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3942" y="1" width="100" height="38" uuid="af220b16-1d68-413f-a7d6-10b36845445a"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4042" y="1" width="66" height="38" uuid="9d425755-cda8-4e89-9ccb-8eea15e33143"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI AYUDANTE 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4108" y="1" width="100" height="38" uuid="10d6d7c7-b8a0-40ae-a4df-e5d29cf109e3"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4208" y="1" width="65" height="38" uuid="841f5fee-b3ac-4e72-b0b2-0b18a59bba7a"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CI AYUDANTE 6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4273" y="1" width="180" height="38" uuid="171d8c80-38fb-4ee0-8a45-4d75721b311e"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DEPARTAMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4453" y="1" width="200" height="38" uuid="d5659a69-edcf-4828-80a9-ba8d8d015446"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CARRERA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4653" y="1" width="183" height="38" uuid="2ab09a6b-8c85-4785-95c3-8a653c33f578"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PROGRAMA POSGRADO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="22" height="20" uuid="4bf0e3b2-d6b2-4018-b799-a3028e00accc"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="22" y="0" width="185" height="20" uuid="4ed745ed-e0d6-4f31-94c8-3712b490ffa3"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE DEL PROGRAMA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="207" y="0" width="166" height="20" uuid="13db6d13-43c7-4baf-91cd-3ed0df33953d"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GRUPO DE INVESTIGACIÓN}.equals( null ) ? "": $F{GRUPO DE INVESTIGACIÓN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="373" y="0" width="348" height="20" uuid="388b463a-b10b-424d-9c5d-a4aca26c4ab3"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROYECTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="721" y="0" width="116" height="20" uuid="df6afc6c-3d89-4ea5-ac80-7d53cdcf2c01"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement stretchType="RelativeToTallestObject" x="837" y="0" width="100" height="20" uuid="6319de64-1a3d-40f9-a0d0-2f064eab7390"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA INICIO}.equals( null ) ?"":$F{FECHA INICIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement stretchType="RelativeToTallestObject" x="937" y="0" width="100" height="20" uuid="d6cb52af-fe7e-44bb-9fad-0898b3e069e1"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA FIN PLANIFICADA}.equals( null ) ?"":$F{FECHA FIN PLANIFICADA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="1037" y="0" width="100" height="20" uuid="8be6ed46-2d73-4dfc-9f62-c827b2d5c840"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO DE PROYECTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="1137" y="0" width="164" height="20" uuid="c0efc36c-2515-44f0-9fc5-d63d013b0366"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AREA INVESTIGACIÓN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="1301" y="0" width="164" height="20" uuid="c102b8b5-242a-4528-a395-b096d569750d"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LINEA DE INVESTIGACIÓN}.equals( null ) ? "":$F{LINEA DE INVESTIGACIÓN}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;#,##0.00-">
+				<reportElement stretchType="RelativeToTallestObject" x="1465" y="0" width="108" height="20" uuid="a19f21b3-5243-43bf-8e32-e466efc9500a"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FINANCIAMIENTO ESPE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement stretchType="RelativeToTallestObject" x="1573" y="0" width="114" height="20" uuid="d174276b-74be-45f8-9609-69ea8c6ebddc"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FINANCIAMIENTO OTRAS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="1687" y="0" width="170" height="20" uuid="84f87286-800e-4fb7-b0e6-dc35ec5ed4c7"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR PROYECTO }.equals( null ) ?"":$F{DIRECTOR PROYECTO }]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="1857" y="0" width="76" height="20" uuid="9d3a59d0-4805-448f-a477-616a4b9541c2"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{C I DIRECTOR}.equals( null ) ?"":$F{C I DIRECTOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="1933" y="0" width="149" height="20" uuid="dca0be37-bcc7-41f4-acb5-3400c72e940a"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR SUBROGANTE}.equals(null ) ?"":$F{DIRECTOR SUBROGANTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2082" y="0" width="86" height="20" uuid="7a007988-a11c-4400-922f-5ec08dd728bc"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI DIRECTOR SUBROGANTE}.equals( null )?"":$F{CI DIRECTOR SUBROGANTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2168" y="0" width="100" height="20" uuid="c19aa565-61be-4b83-b9fb-9a0e17de4761"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 1}.equals( null ) ?"":$F{INVESTIGADOR 1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2268" y="0" width="85" height="20" uuid="b2bf36cb-f3a0-4214-b488-0cad6abe4263"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI INVESTIGADOR 1}.equals( null )?"":$F{CI INVESTIGADOR 1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2353" y="0" width="100" height="20" uuid="4e2c10eb-a759-45cf-ad7d-ff6acce61301"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 2}.equals( null )?"":$F{INVESTIGADOR 2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2453" y="0" width="81" height="20" uuid="5489f573-1ec7-4938-aa74-5667bc9d7c50"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI INVESTIGADOR 2}.equals( null )?"":$F{CI INVESTIGADOR 2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2534" y="0" width="100" height="20" uuid="786568c9-8f3e-4ec9-8cbe-3c9051c714b9"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 3}.equals( null )?"":$F{INVESTIGADOR 3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2634" y="0" width="82" height="20" uuid="19a65f80-dce7-42bb-b0e4-00d611dc1e4d"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI INVESTIGADOR 3}.equals( null )?"":$F{CI INVESTIGADOR 3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2716" y="0" width="100" height="20" uuid="b7a84e2a-8db7-4082-909f-91e010780dc5"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 4}.equals( null )?"":$F{INVESTIGADOR 4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2816" y="0" width="80" height="20" uuid="65a7eb15-a327-425f-a05d-624edcae225f"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI INVESTIGADOR 4}.equals( null )?"":$F{CI INVESTIGADOR 4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2896" y="0" width="100" height="20" uuid="1b8fdce6-4f5c-4e3b-9277-6ba18e54af7f"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 5}.equals( null )?"":$F{INVESTIGADOR 5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="2996" y="0" width="80" height="20" uuid="986d5fd4-f99c-4f21-9061-96d59b7bc7ad"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI INVESTIGADOR 5}.equals( null )?"":$F{CI INVESTIGADOR 5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3076" y="0" width="100" height="20" uuid="4ee54156-5fe6-4ba6-803d-ece4bedc2a1e"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 6}.equals( null )?"":$F{INVESTIGADOR 6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3176" y="0" width="81" height="20" uuid="6cfdc453-fdb5-4aa1-8cce-67f941755539"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI INVESTIGADOR 6}.equals( null )?"":$F{CI INVESTIGADOR 6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3257" y="0" width="100" height="20" uuid="e0fde1ea-74b4-425f-882d-8433c25e1a0c"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 1}.equals( null )?"":$F{AYUDANTE 1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3357" y="0" width="75" height="20" uuid="db0878f8-993f-478f-8b0b-3db43c772b4e"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI AYUDANTE 1}.equals( null )?"":$F{CI AYUDANTE 1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3432" y="0" width="100" height="20" uuid="43412e03-517e-49fd-95c5-7a307cbb4178"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 2}.equals( null )?"":$F{AYUDANTE 2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3532" y="0" width="68" height="20" uuid="92cfd63e-5d88-43c2-b89f-2170c63f4b45"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI AYUDANTE 2}.equals( null )?"":$F{CI AYUDANTE 2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3600" y="0" width="100" height="20" uuid="f8523944-8f5c-4bda-b9a0-944c43c14c71"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 3}.equals( null )?"":$F{AYUDANTE 3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3700" y="0" width="70" height="20" uuid="f2bb9a6e-05a3-44ce-9f6b-a2aea7ab0b53"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI AYUDANTE 3}.equals(null)?"":$F{CI AYUDANTE 3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3770" y="0" width="100" height="20" uuid="998e9b02-0e56-49f0-b21e-a48e2f54a8ec"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 4}.equals(null)?"":$F{AYUDANTE 4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3870" y="0" width="72" height="20" uuid="82304da5-3fc5-4e68-8136-8c12376add53"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI AYUDANTE 4}.equals(null)?"":$F{CI AYUDANTE 4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="3942" y="0" width="100" height="20" uuid="29a8a38e-2743-485d-9432-05e7dccf69ed"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 5}.equals(null)?"":$F{AYUDANTE 5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="4042" y="0" width="66" height="20" uuid="a0017339-5ce3-41ea-9811-75e1d169badf"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI AYUDANTE 5}.equals(null)?"":$F{CI AYUDANTE 5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="4108" y="0" width="100" height="20" uuid="e26bab7d-e692-419f-8589-7bdf125aaf49"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 6}.equals(null)?"":$F{AYUDANTE 6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="4208" y="0" width="65" height="20" uuid="e6bf4738-aa74-4a25-9a3f-8944eb5dcd35"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CI AYUDANTE 6}.equals(null)?"":$F{CI AYUDANTE 6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="4273" y="0" width="180" height="20" uuid="c456d510-69ea-4a83-bfaf-35aeadae9c4a"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}.equals(null)?"":$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="4453" y="0" width="200" height="20" uuid="35172744-2c49-46fc-bc44-086bfc1282f8"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CARRERA}.equals(null)?"":$F{CARRERA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="4653" y="0" width="183" height="20" uuid="48bf5295-418c-492b-8f49-2794ac929e8d"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PROGRAMA POSGRADO}.equals(null)?"":$F{PROGRAMA POSGRADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="4836" y="34" width="80" height="20" uuid="5df8aac0-9bc2-4e26-bb80-c97c2e2c3019"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["PÃ¡gina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="4916" y="34" width="40" height="20" uuid="d16de54b-4b81-4049-8b97-4b63d71689cf"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

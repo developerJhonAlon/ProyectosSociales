@@ -1,0 +1,912 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte Nota C Terminadas" language="groovy" pageWidth="2360" pageHeight="595" orientation="Landscape" columnWidth="2320" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ffe9416d-018a-41f5-bda0-e6091bd16d7e">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="11"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<parameter name="idConvocatoria" class="java.lang.String">
+		<defaultValueExpression><![CDATA["=2"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT USU_CC,
+       USU_NOMBRES,
+       USU_APELLIDOS,
+       (SELECT STVSUBJ_DESC
+          FROM STVSUBJ,
+               SEA_DEPCENPROY,
+               SEA_DAT_GENERAL_PROY,
+               SEG_USUARIO
+         WHERE     STVSUBJ_CODE = STVSUBJ_CODE_DEPTO
+               AND A.DATGEPROY_ID = SEA_DEPCENPROY.DATGEPROY_ID
+               AND USU_ID = A.USU_ID_CREAP
+               AND ROWNUM = 1)
+          "DEPARTAMENTO",
+       DATGEPROY_TITULO "TITULO",
+       (SELECT SZTAAINV_DESCRIPCION
+          FROM SEA_DAT_GENERAL_PROY, SZTAINCO, SZTAAINV
+         WHERE     A.DATGEPROY_ID = SZTAINCO.DATGEPROY_ID
+               AND SZTAAINV.SZTAAINV_CODE = SZTAINCO.SZTAAINV_CODE
+               AND USU_ID = A.USU_ID_CREAP
+               AND ROWNUM = 1)
+          "AREA INVESTIGACIÓN",
+       (SELECT LINEA_DESCIP
+          FROM SEA_DAT_GENERAL_PROY,
+               SEG_USUARIO,
+               SEA_DEPCENPROY,
+               SEA_LINEAINVES
+         WHERE     USU_ID = A.USU_ID_CREAP
+               AND A.DATGEPROY_ID = SEA_DEPCENPROY.DATGEPROY_ID
+               AND SEA_LINEAINVES.LINEA_ID = SEA_DEPCENPROY.LINEA_ID
+               AND ROWNUM = 1)
+          "LINEA DE INVESTIGACIÓN",
+       DATGEPROY_TIEMPO_EJECUCION "TIEMPO DE EJECUCIÓN",
+       (SELECT SUM (SPNC_TOTAL)
+          FROM SEA_PRESUP_NOTASC
+         WHERE     SANI_ID = 1
+               AND A.DATGEPROY_ID = SEA_PRESUP_NOTASC.DATGEPROY_ID)
+          "AÑO 1",
+       (SELECT SUM (SPNC_TOTAL)
+          FROM SEA_PRESUP_NOTASC
+         WHERE     SANI_ID = 2
+               AND A.DATGEPROY_ID = SEA_PRESUP_NOTASC.DATGEPROY_ID)
+          "AÑO 2",
+       (CASE WHEN DATGEPROY_PAGILEG_NOMBRE = ' ' THEN 'NO' ELSE 'SI' END)
+          "PAGINA LEGAL",
+       (CASE WHEN DATGEPROY_PLANT_NOMBRE = ' ' THEN 'NO' ELSE 'SI' END)
+          "PLAN TRABAJO",
+       (SELECT GRUPI_DESCRIP
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_GRUPINV,
+               SEA_DEPCENPROY,
+               SEG_USUARIO
+         WHERE     DATGEPROY_ESTADO != '0'
+		 AND DATGEPROY_ESTADO != '1'
+               AND CONVOCA_ID = 2
+               AND SEA_GRUPINV.GRUPI_ID = SEA_DEPCENPROY.GRUPI_ID
+               AND A.DATGEPROY_ID = SEA_DEPCENPROY.DATGEPROY_ID
+               AND USU_ID = A.USU_ID_CREAP
+               AND ROWNUM = 1)
+          "GRUPO DE INVESTIGACIÓN",
+
+           (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Director del Proyecto'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "DIRECTOR PROYECTO ",
+
+
+           (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Director Subrogante'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "DIRECTOR SUBROGANTE",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 1'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 1",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 2'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 2",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 3'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 3",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 4'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 4",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 5'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 5",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Investigador 6'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "INVESTIGADOR 6",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 1'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 1",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 2'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 2",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 3'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 3",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 4'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 4",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 5'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 5",
+       (SELECT SEG_USUARIO.USU_NOMBRES || '   ' || SEG_USUARIO.USU_APELLIDOS
+          FROM SEA_DAT_GENERAL_PROY,
+               SEA_TIPO_RESPONS,
+               SEA_RESPONSABLE_PROG,
+               SEG_USUARIO
+         WHERE     TIPRES_DESCRIP = 'Ayudante de Investigación 6'
+               AND SEA_TIPO_RESPONS.TIPRES_ID =
+                      SEA_RESPONSABLE_PROG.TIPRES_ID
+               AND A.DATGEPROY_ID = SEA_RESPONSABLE_PROG.DATGEPROY_ID
+               AND USU_ID = USU_ID_DOCENTE
+               AND ROWNUM = 1)
+          "AYUDANTE 6"
+  FROM SEA_DAT_GENERAL_PROY A, SEG_USUARIO
+ WHERE     A.DATGEPROY_ESTADO != '0'
+ AND A.DATGEPROY_ESTADO != '1'
+       AND USU_ID = A.USU_ID_CREAP
+       AND A.DATGEPROY_PAGILEG_NOMBRE IS NOT NULL]]>
+	</queryString>
+	<field name="USU_CC" class="java.lang.String"/>
+	<field name="USU_NOMBRES" class="java.lang.String"/>
+	<field name="USU_APELLIDOS" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="TITULO" class="java.lang.String"/>
+	<field name="AREA INVESTIGACIÓN" class="java.lang.String"/>
+	<field name="LINEA DE INVESTIGACIÓN" class="java.lang.String"/>
+	<field name="TIEMPO DE EJECUCIÓN" class="java.lang.String"/>
+	<field name="AÑO 1" class="java.math.BigDecimal"/>
+	<field name="AÑO 2" class="java.math.BigDecimal"/>
+	<field name="PAGINA LEGAL" class="java.lang.String"/>
+	<field name="PLAN TRABAJO" class="java.lang.String"/>
+	<field name="GRUPO DE INVESTIGACIÓN" class="java.lang.String"/>
+	<field name="DIRECTOR PROYECTO " class="java.lang.String"/>
+	<field name="DIRECTOR SUBROGANTE" class="java.lang.String"/>
+	<field name="INVESTIGADOR 1" class="java.lang.String"/>
+	<field name="INVESTIGADOR 2" class="java.lang.String"/>
+	<field name="INVESTIGADOR 3" class="java.lang.String"/>
+	<field name="INVESTIGADOR 4" class="java.lang.String"/>
+	<field name="INVESTIGADOR 5" class="java.lang.String"/>
+	<field name="INVESTIGADOR 6" class="java.lang.String"/>
+	<field name="AYUDANTE 1" class="java.lang.String"/>
+	<field name="AYUDANTE 2" class="java.lang.String"/>
+	<field name="AYUDANTE 3" class="java.lang.String"/>
+	<field name="AYUDANTE 4" class="java.lang.String"/>
+	<field name="AYUDANTE 5" class="java.lang.String"/>
+	<field name="AYUDANTE 6" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="59" width="2319" height="20" uuid="2b7fbe6c-fa16-438c-819d-65b76bf7304f"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN INNOVACIÓN Y TRASNFERENCIA DE TECNOLOGÍA]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="1" y="0" width="2319" height="59" uuid="93c02520-0090-4666-ac80-486be2047c55"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="36" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="22" y="1" width="79" height="39" uuid="4d1966ae-fdf2-4876-b5a4-114d92b8128f"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEPARTAMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="1" width="187" height="39" uuid="1e69c1d6-cb04-49f2-9264-222a6d613e5a"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TITULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="1" width="100" height="39" uuid="3450302f-429f-45e7-bd17-e41660f52de3"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AREA INVESTIGACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="1" width="99" height="39" uuid="3b95f891-f997-4137-9b84-599dd4411d2f"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LINEA DE INVESTIGACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="1" width="99" height="39" uuid="1817b7e6-abe8-4a92-ac5d-adaa657fd106"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIEMPO DE EJECUCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="586" y="21" width="61" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="fc3a0478-0285-4d1a-a56a-d2dea0c58d04"/>
+				<box topPadding="1" leftPadding="2" bottomPadding="1" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[AÑO 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="647" y="21" width="50" height="19" uuid="44ef0597-fc1d-4e9a-b4f4-b524319a4a4c"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AÑO 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="697" y="1" width="100" height="39" uuid="1455d67a-4a36-4349-9eca-65665a1d03c8"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECTOR PROYECTO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="797" y="1" width="98" height="39" uuid="7c5c5069-e8b8-4563-b30d-bb3f13fbd2d3"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECTOR SUBROGANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="896" y="1" width="100" height="39" uuid="ac0b63e2-c035-4c08-8dbc-266088fd3954"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="996" y="1" width="97" height="39" uuid="6a3a1943-14c1-4c66-9641-eed73e304f7d"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1093" y="1" width="99" height="39" uuid="93e7e0a6-6a8c-45f1-9cb2-d7aed44349b1"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1192" y="1" width="99" height="39" uuid="748ae5e0-85dc-427d-a080-f1e6c988c3ca"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1291" y="1" width="99" height="39" uuid="4380d39d-ebe5-4fa6-9d1c-b13976dfacbd"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1390" y="1" width="99" height="39" uuid="75c7f1ae-850d-4bf8-a716-8cc4900384d4"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INVESTIGADOR 6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1489" y="1" width="99" height="39" uuid="ffd7e45f-6aa7-467b-bd6a-010a2a96a84e"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1588" y="1" width="99" height="39" uuid="9ef83067-80b6-4c65-a057-bb40225f7485"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1687" y="1" width="99" height="39" uuid="bb9dbf27-52c1-46c6-bf52-828e33ec3f69"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1786" y="1" width="99" height="39" uuid="63953854-5eec-46a6-af9f-fb46c14fc5da"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1885" y="1" width="99" height="39" uuid="aaddf19b-80ff-48f3-ad10-72b4af91ae09"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1984" y="1" width="99" height="39" uuid="2a793520-9670-432a-9399-6c177c14746c"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AYUDANTE 6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2083" y="1" width="99" height="39" uuid="0e58f9b2-a4d0-444f-869f-562b395cf9b1"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGINA LEGAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2182" y="1" width="95" height="39" uuid="12d58766-3e6e-4aa5-95d1-0f23e0adcbe1"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLAN TRABAJO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2277" y="1" width="40" height="39" uuid="8e312910-e1ab-4fcb-876b-a436b34b90ce"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1" width="22" height="39" uuid="b272dac6-0c93-46ad-b62c-a3aaee3ad3bb"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="586" y="1" width="111" height="20" uuid="58495e58-2420-4f4f-a12f-522f077dfa0e"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FINANCIAMIENTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="22" y="0" width="79" height="20" uuid="dbcecfb4-6bdd-4a01-bbd0-c6e9d5914b59"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="101" y="0" width="187" height="20" isPrintWhenDetailOverflows="true" uuid="46547bc5-c5af-49f0-b8f8-23d5013e7367"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TITULO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="388" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="7e48ea29-bbb8-4b87-a048-449374116759"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LINEA DE INVESTIGACIÓN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="487" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="0fe37f6e-33b5-487b-980d-dbaeea11e38c"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIEMPO DE EJECUCIÓN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="586" y="0" width="61" height="20" isPrintWhenDetailOverflows="true" uuid="1a0a43c2-39db-45bf-bb30-f6b24e685fcc"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AÑO 1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="647" y="0" width="50" height="20" isPrintWhenDetailOverflows="true" uuid="af74724e-a6b3-4a8f-8178-2148ee67f707"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AÑO 2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="697" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="52db51b1-779a-4124-ad37-2eca97d68418"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR PROYECTO }]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="797" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="d558c68c-ea2a-429f-8aca-6b3c9262aa65"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR SUBROGANTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="896" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="0c8926e6-eb28-4a59-8f15-81fb5e3ad116"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="996" y="0" width="97" height="20" isPrintWhenDetailOverflows="true" uuid="54f545a1-f589-43a8-906b-f8f5700c9193"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1093" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="f3bab4ce-97c4-4261-9781-ea5f10b63a16"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1192" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="761dcb29-bce5-4c20-afd0-7aabdf25a8c2"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 4}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1291" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="420e4e8a-7a11-408e-af2d-69658d71e203"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1390" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="012b2cdf-2ca5-4d08-a76c-a8e54af2bdd6"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INVESTIGADOR 6}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1489" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="4a6cb9c8-df36-4706-908d-73299ec5038b"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1588" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="19330fae-1075-4ffb-a3b3-8e172a0b4cac"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1687" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="81a40440-da81-4080-927e-5b5ebccaf9e0"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1786" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="ca7acdc2-97e4-40bb-93c0-911376ec9dad"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 4}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1885" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="641d72f4-4428-407a-91e5-4efc5ab887c6"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1984" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="a2394f78-1537-40fa-8616-54af6e079652"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AYUDANTE 6}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2083" y="0" width="99" height="20" isPrintWhenDetailOverflows="true" uuid="6e410a16-ee96-4196-b1c2-eedf31baee9b"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAGINA LEGAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2182" y="0" width="95" height="20" isPrintWhenDetailOverflows="true" uuid="c1c1a7c1-a98b-4ee3-85b2-2745b857b55b"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PLAN TRABAJO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="RelativeToTallestObject" x="2277" y="0" width="40" height="20" uuid="c2f1a89f-ec8c-458c-91a8-29f3ee8a0e83"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="22" height="20" uuid="4bf0e3b2-d6b2-4018-b799-a3028e00accc"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="288" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="1bcb2bf9-32e7-4a91-8659-7018af38840d"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AREA INVESTIGACIÓN}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="2183" y="34" width="80" height="20" uuid="5df8aac0-9bc2-4e26-bb80-c97c2e2c3019"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="2263" y="34" width="40" height="20" uuid="d16de54b-4b81-4049-8b97-4b63d71689cf"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

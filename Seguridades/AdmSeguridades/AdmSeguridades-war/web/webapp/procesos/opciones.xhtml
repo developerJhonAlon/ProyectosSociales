@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/vista/plantilla.xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:param name="backingBean" value="#{opcionesController}"/>
+    <ui:param name="tituloPagina" value="Catalogo Sistema"/>
+    <ui:define name="editar"/>
+    <ui:define name="contenido">
+
+        <h:form id="formPrincipal1" enctype="multipart/form-data">
+            <p:panel id="panelBase" header="Opciones" style="margin-bottom:10px; text-align: center;font-size: x-small">
+                <p:tabView scrollable="true" style="font-size: x-small" id="tabP">
+                    <p:tab title="Lista de Opciones">
+                        <h:panelGrid columns="1" cellpadding="5" id="h1">
+                            <p:commandButton id="btnAgregarP1" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                             title="Agrega Información" update=":formPrincipal:formPrincipal1:tabP:p1,:formPrincipal:formPrincipal1:tabP:h1" action="#{opcionesController.agregarP1()}" rendered="#{!opcionesController.controlGrabarP1}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" visible="#{opcionesController.controlGrabarP1}">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{opcionesController.validaVaciosP1}"
+                                                 title="Graba Información" update=":formPrincipal:formPrincipal1:tabP:p1,:formPrincipal:formPrincipal1:tabP:h1,:formPrincipal:formPrincipal1:tabP:dtOpcion" action="#{opcionesController.registrarP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 title="Cancelar" update=":formPrincipal:formPrincipal1:tabP:p1,:formPrincipal:formPrincipal1:tabP:h1,:formPrincipal:formPrincipal1:tabP:btnGrabarP1" action="#{opcionesController.cancelarP1}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5" style="text-align: left">
+                                <h:outputLabel for="nombre" value="Nombre Opción:" />
+                                <p:inputText id="nombre" value="#{opcionesController.nombre}" autocomplete="off" size="30">
+                                    <p:ajax event="keyup" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{opcionesController.validarVaciosP1}"/>
+                                </p:inputText>
+                                
+                                <p:outputLabel for="sistema" value="Sistema:" style="width:180px;text-transform: uppercase" />
+                                <p:selectOneMenu id="sistema" value="#{opcionesController.sistema}" required="false" style="width: 260px"  >
+                                    <f:selectItem itemLabel="Seleccione Sistema" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{opcionesController.sistemasList}" var="s"
+                                                   itemLabel="#{s.sisNombre}" itemValue="#{s.sisId}" />                                            
+                                    <p:ajax event="change" update=":formPrincipal:formPrincipal1:tabP:opcionPadre" listener="#{opcionesController.cargarOpcionesPadre}" />
+                                </p:selectOneMenu> 
+                                
+                                <p:outputLabel for="opcionPadre" value="Opción Padre:" />
+                                <p:selectOneMenu id="opcionPadre" value="#{opcionesController.opcionPadre}" required="false" style="width: 260px">
+                                    <f:selectItem itemLabel="Seleccione Opción Padre" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="--&gt;Menú Contenedor(Padre)" itemValue="x"/>
+                                    <f:selectItems value="#{opcionesController.opcionPadreList}" var="op"
+                                                   itemLabel="#{op.opcNombre}-#{op.opcId}-#{op.segSistemas.sisNombre} " itemValue="#{op.opcId}" />                                            
+                                    <p:ajax event="change" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1,:formPrincipal:formPrincipal1:tabP:nivel,:formPrincipal:formPrincipal1:tabP:url" listener="#{opcionesController.validarVaciosP1}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="nivel" value="Nivel:" />
+                                <p:selectOneMenu id="nivel" value="#{opcionesController.nivel}" required="false"  style="width:120px" disabled="true"  >
+                                    <f:selectItem itemLabel="Seleccione nivel" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                    <f:selectItem itemLabel="2" itemValue="2"/>
+                                    <p:ajax event="change" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{opcionesController.validarVaciosP1}" />
+                                </p:selectOneMenu>                                
+
+                                <h:outputLabel for="orden" value="Orden:" />
+                                <p:spinner id="orden" value="#{opcionesController.orden}" min="1" max="100" size="3">
+                                    <p:ajax event="change" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{opcionesController.validarVaciosP1}"/>
+                                </p:spinner>
+
+                                <h:outputLabel for="url" value="Url:"/>
+                                <p:inputText id="url" value="#{opcionesController.url}" maxlength="128" size="60" disabled="#{opcionesController.opcionPadre=='x'}" >
+                                    <p:ajax event="keyup" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{opcionesController.validarVaciosP1}"/>
+                                </p:inputText>
+                                
+                                <h:outputLabel for="icono" value="Icono:"/>
+                                <p:inputText id="icono" value="#{opcionesController.icono}" maxlength="50" size="60" >
+                                    <p:ajax event="keyup" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{opcionesController.validarVaciosP1}"/>
+                                </p:inputText>
+
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable id="dtOpcion" value="#{opcionesController.opcionesList}" var="opcion" paginator="true"
+                                     rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron Resultados">
+                            <p:ajax event="rowEdit" listener="#{opcionesController.onRowEditP1}" partialSubmit="true"/>
+                            <p:ajax event="rowEditCancel" listener="#{opcionesController.onRowCancelP1}" partialSubmit="true"/>
+
+
+                            <p:column headerText="Ord." style="width:5%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Sistema" filterBy="#{opcion.segSistemas.sisNombre}" style="width: 15%;text-align: left" filterMatchMode="contains" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.segSistemas.sisNombre}"/></f:facet>
+                                    <f:facet name="input"><p:selectOneMenu id="sistema" value="#{opcion.segSistemas.sisId}" required="false" style="width: 100%">
+                                            <f:selectItem itemLabel="#{opcion.segSistemas.sisNombre}" itemValue="#{opcion.segSistemas.sisId}" noSelectionOption="true"/>
+                                            <f:selectItems value="#{opcionesController.sistemasList}" var="s"
+                                                           itemLabel="#{s.sisNombre}" itemValue="#{s.sisId}" />                                            
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{opcion.opcNombre}" filterMatchMode="contains" style="width: 20%;text-align: left" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.opcNombre}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="nombre" value="#{opcion.opcNombre}" autocomplete="off" size="30"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>                            
+
+                            <p:column headerText="Opcion Padre" style="width: 10%;text-align: left;text-transform: uppercase" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.segOpcion.opcNombre}" /></f:facet>
+                                    <f:facet name="input"><p:selectOneMenu id="opcionPadre" value="#{opcionesController.opcionPadre}" required="false" style="width: 100%" >
+                                            <f:selectItem itemLabel="#{opcion.opcNombre}-#{opcion.opcId}-#{opcion.segSistemas.sisNombre}" itemValue="#{opcion.opcId}" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Opción Padre" itemValue="x" noSelectionOption="true"/>
+                                            <f:selectItems value="#{opcionesController.opcionPadreList}" var="op"
+                                                           itemLabel="#{op.opcNombre}-#{op.opcId}-#{op.segSistemas.sisNombre}" itemValue="#{op.opcId}" />                                    
+                                        </p:selectOneMenu></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Nivel" style="width: 2%;text-align: left" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.opcNivel}" /></f:facet>
+                                    <f:facet name="input"><p:selectOneMenu id="nivel" value="#{opcion.opcNivel}" style="width: 100%">
+                                            <f:selectItem itemLabel="#{opcion.opcNivel}" itemValue="#{opcion.opcNivel}" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="1" itemValue="1"/>
+                                            <f:selectItem itemLabel="2" itemValue="2"/>                                            
+                                        </p:selectOneMenu>                                
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Orden" style="width: 3%;text-align: left" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.opcOrden}"/></f:facet>
+                                    <f:facet name="input"><p:spinner id="orden" value="#{opcion.opcOrden}" min="1" max="100" size="3"></p:spinner></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Url" filterBy="#{opcion.opcUrl}" filterMatchMode="contains" style="width: 35%;text-align: left">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.opcUrl}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="url" value="#{opcion.opcUrl}" maxlength="128" size="60"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Icono" filterBy="#{opcion.opcImagen}" style="width: 5%;text-align: left">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{opcion.opcImagen}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="icono" value="#{opcion.opcImagen}" maxlength="50" style="width: 90%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                <p:commandButton id="btnEliminarP1" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                 onclick="PF('deleteDialog1').show();" process="@this">
+                                    <f:setPropertyActionListener value="#{opcion}" target="#{opcionesController.opcionSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+        </h:form>
+        <p:dialog id="deleteDlg1" header="Eliminar Registro" widgetVar="deleteDialog1" resizable="false" width="500" modal="true" appendTo="@(body)">
+            <h:form id="deleteForm1">
+                <p:outputPanel id="panelDeleteRegistro1">
+                    <center>
+                        <h:panelGrid id="displayDelete1" columns="1">
+                            <h:outputLabel value="¿ Está seguro que desea eliminar el registro.?" style="font-size: 11px" />
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminarP1" value="Eliminar" style="margin: 0"
+                                             onclick="PF('deleteDialog1').hide();">
+                                <p:ajax update=":formPrincipal:formPrincipal1:tabP:dtOpcion" listener="#{opcionesController.eliminarP1()}"/>
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+    </ui:define>   
+</ui:composition>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Registro de Procesos por Convocatoria" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold;margin-bottom: 80px">
+                    <h:panelGrid columns="1" cellpadding="5" id="h1">
+                        <p:commandButton id="btnAgregar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                         title="Agregra Información" update=":formPrincipal" action="#{procesoXConvocatoriaController.agregarP1()}" rendered="#{!procesoXConvocatoriaController.controlGrabar}">
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <p:panel id="p1" visible="#{procesoXConvocatoriaController.controlGrabar}">
+                        <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                            <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{procesoXConvocatoriaController.validaVacios}"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal" action="#{procesoXConvocatoriaController.registra()}">
+                            </p:commandButton>
+                            <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Cancelar Información" update=":formPrincipal" action="#{procesoXConvocatoriaController.cancelar()}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                            <h:outputLabel for="descC" value="Convocatoria:"  />
+                            <p:selectOneMenu id="descC" value="#{procesoXConvocatoriaController.tituloConv}" required="false" style="width:450px">
+                                <f:selectItem itemLabel="- Seleccione -" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{procesoXConvocatoriaController.tituloConvList}" var="ti"  itemLabel="#{ti.convocaTitulo}" itemValue="#{ti.convocaId}" />
+                                <p:ajax event="change" update=":formPrincipal:btnGrabarP1" listener="#{procesoXConvocatoriaController.validarVacios}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel for="descP" value="Proceso:"  />
+                            <p:selectOneMenu id="descP" value="#{procesoXConvocatoriaController.proDescrip}" required="false" style="width:450px">
+                                <f:selectItem itemLabel="- Seleccione -" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{procesoXConvocatoriaController.proDescripList}" var="ima" itemLabel="#{ima.proDescrip}" itemValue="#{ima.proId}" />
+                                <p:ajax event="change" listener="#{procesoXConvocatoriaController.validarVacios}" update=":formPrincipal:btnGrabarP1"/>
+                            </p:selectOneMenu>                     
+                            <h:outputLabel for="fechaIni" value="Fecha Desde:"  />
+                            <p:calendar id="fechaIni" navigator="true" style="width: 200px" value="#{procesoXConvocatoriaController.fechaIni}" locale="es" pattern="dd/MM/yyyy HH:mm">
+                                <p:ajax event="dateSelect" listener="#{procesoXConvocatoriaController.validarVacios}" update=":formPrincipal:btnGrabarP1"/>
+                            </p:calendar>
+                            <h:outputLabel for="fechaFin" value="Fecha Hasta:"  />
+                            <p:calendar id="fechaFin" navigator="true" value="#{procesoXConvocatoriaController.fechaFin}" style="width: 200px" locale="es" pattern="dd/MM/yyyy HH:mm">
+                                <p:ajax event="dateSelect" listener="#{procesoXConvocatoriaController.validarVacios}" update=":formPrincipal:btnGrabarP1"/>
+                            </p:calendar>                                            
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:dataTable id="dataTableProcConv" value="#{procesoXConvocatoriaController.procesoConvList}" var="convxProc"
+                                 paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                 emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                        <p:ajax event="rowEdit" listener="#{procesoXConvocatoriaController.onRowEdit}" update=":formPrincipal:dataTableProcConv"/>
+                        <p:ajax event="rowEditCancel" listener="#{procesoXConvocatoriaController.onRowCancel}" update=":formPrincipal:dataTableProcConv"/>
+                        <p:column headerText="Ord." width="20" style="text-align: center"> 
+                            <h:outputText value="#{index + 1}" />
+                        </p:column> 
+                        <p:column headerText="Nombre Convocatoria" >
+                            <h:outputText value="#{convxProc.seaConvoca.convocaTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Nombre Proceso" width="200">
+                            <h:outputText value="#{convxProc.seaProceso.proDescrip}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Estado" width="200" style="text-align: center">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="Activo" rendered="#{convxProc.ppcEstado=='1'}" style="text-transform: uppercase; font-size: x-small"/></f:facet>
+                                <f:facet name="output"><h:outputText value="Inactivo" rendered="#{convxProc.ppcEstado=='0'}" style="text-transform: uppercase; font-size: x-small"/></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneRadio value="#{convxProc.ppcEstado}" style="width: 100%" >
+                                        <f:selectItem itemLabel="Activo" itemValue="1"/>y
+                                        <f:selectItem itemLabel="Inactivo" itemValue="0"/>
+                                    </p:selectOneRadio>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Fecha Inicio" width="100">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{convxProc.ppcFecini}" style="font-size: x-small"><f:convertDateTime locale="es_EC" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-05:00"/>
+                                    </h:outputText> 
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:calendar navigator="true" value="#{convxProc.ppcFecini}" yearRange="1960:2050" size="20" style="font-size: 10px;width: 100%" locale="es_EC" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-05:00"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Fecha Fin" width="100">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{convxProc.ppcFecifin}" style="font-size: x-small"><f:convertDateTime locale="es_EC" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-05:00"/></h:outputText></f:facet>
+                                <f:facet name="input">
+                                    <p:calendar navigator="true" value="#{convxProc.ppcFecifin}" yearRange="1960:2050" size="20" style="font-size: 10px; width: 100%" locale="es_EC" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-05:00"/>
+                                </f:facet>
+                            </p:cellEditor> 
+                        </p:column> 
+                        <!--                    
+                                                
+                                                    <f:facet name="output"><h:outputText value="#{convxProc.ppcFecifin}" style="font-size: x-small"><f:convertDateTime locale="es" pattern="DD/MM/yyyy HH:mm" /></h:outputText> </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:calendar navigator="true" value="#{convxProc.ppcFecifin}" yearRange="1960:2050" size="20" style="font-size: 10px;width: 100%" locale="es" pattern="DD/MM/yyyy HH:mm"/>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>-->
+                        <p:column headerText="Editar" width="50" >
+                            <p:rowEditor />
+                        </p:column>
+                        <p:column headerText="Eliminar" style="text-align: center" width="50">
+                            <p:commandButton id="btnEliminar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                             onclick="PF('deleteDialog').show();" process="@this">
+                                <f:setPropertyActionListener value="#{convxProc}" target="#{procesoXConvocatoriaController.prosXConvocatoriaSelected}"/>
+                            </p:commandButton>     
+                        </p:column>
+                    </p:dataTable>     
+                </p:panel>
+
+                <p:dialog id="deleteDlg" header="Eliminar Registro" widgetVar="deleteDialog" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+                    <h:form id="deleteForm">
+                        <p:outputPanel id="panelDeleteRegistro">
+                            <center>
+                                <h:panelGrid id="deleteDialog" columns="1">
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <center>
+                                <p:commandButton id="btnEliminar"  value="Eliminar" style="margin:0"
+                                                 onclick="PF('deleteDialog').hide();">
+                                    <p:ajax update=":formPrincipal:dataTableProcConv" listener ="#{procesoXConvocatoriaController.eliminar()}" />
+                                </p:commandButton>
+                            </center>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

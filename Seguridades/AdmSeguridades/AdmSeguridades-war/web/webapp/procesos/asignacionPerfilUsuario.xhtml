@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/vista/plantilla.xhtml"
+    xmlns:p="http://primefaces.org/ui"
+
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:param name="backingBean" value="#{asignacionPerfilUsuarioController}" />
+    <ui:param name="tituloPagina" value="Perfiles por Usuario"/>
+    <ui:define name="editar"/>
+    <ui:define name="contenido">
+        <h:form id="formPrincipal1" enctype="multipart/form-data" >
+            <p:growl id="growl" showDetail="true" autoUpdate="true" showSummary="false"/>
+            <p:panel id="panelBase" header="Asignacion Perfiles Usuario" style="margin-bottom:10px; text-align: center;font-size: x-small" >
+                <h:panelGrid columns="1" cellpadding="5"  id="h" >
+                    <p:commandButton id="btnAgregar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                     title="Graba Información" update=":formPrincipal:formPrincipal1:p,:formPrincipal:formPrincipal1:h"   action="#{asignacionPerfilUsuarioController.agregar()}" >
+                    </p:commandButton>
+                </h:panelGrid>
+                <p:panel id="p" visible="#{asignacionPerfilUsuarioController.controlGrabar}" >                    
+                    <h:panelGrid columns="2" cellpadding="5"  >
+                        <p:commandButton id="btnGrabar" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "  disabled="#{asignacionPerfilUsuarioController.validaVacios}"
+                                         title="Graba Información" update=":formPrincipal:formPrincipal1:p,:formPrincipal:formPrincipal1:h,:formPrincipal:formPrincipal1:pInput,:formPrincipal:formPrincipal1:dtUsuPer,:formPrincipal:formPrincipal1:btnGrabar,:formPrincipal:formPrincipal1:usuario" action="#{asignacionPerfilUsuarioController.registra()}">
+                            <p:ajax event="click" oncomplete="if(#{asignacionPerfilUsuarioController.existe}) { alert('El perfil ya fue asignado al usuario'); return false;} else {return true;}"  />
+                        </p:commandButton>
+                        <p:commandButton id="btnCancelar" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                         title="Graba Información" update=":formPrincipal:formPrincipal1:p,:formPrincipal:formPrincipal1:h" action="#{asignacionPerfilUsuarioController.cancelar()}"   >
+                        </p:commandButton>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="6" cellpadding="5"  id="pInput" rendered="#{asignacionPerfilUsuarioController.controlGrabar}" >
+                        <p:outputLabel value="Usuario:" for="usuario" />
+                        <p:autoComplete id="usuario" minQueryLength="3" value="#{asignacionPerfilUsuarioController.usuario}" completeMethod="#{asignacionPerfilUsuarioController.completeText}" size="45">
+                            <p:ajax event="itemSelect" listener="#{asignacionPerfilUsuarioController.onItemSelect}"  update=":formPrincipal:formPrincipal1:btnGrabar"/>
+                    </p:autoComplete>
+
+
+                        <p:outputLabel for="perfil" value="Perfil:" />
+                        <p:selectOneMenu id="perfil" value="#{asignacionPerfilUsuarioController.perfil}" required="false" style="width: 260px"  >
+                            <f:selectItem itemLabel="Seleccione Perfil" itemValue="" noSelectionOption="true"/>
+                            <f:selectItems value="#{asignacionPerfilUsuarioController.perfilList}" var="p"
+                                           itemLabel="#{p.segSistemas.sisNombre} - #{p.perNombre}" itemValue="#{p.perId}" />                                            
+                            <p:ajax event="change" update=":formPrincipal:formPrincipal1:btnGrabar" listener="#{asignacionPerfilUsuarioController.validarVacios}" />
+                        </p:selectOneMenu>
+                        <p:message for="perfil" />
+                    </h:panelGrid>	
+
+                </p:panel>   
+
+                <p:dataTable id="dtUsuPer" value="#{asignacionPerfilUsuarioController}" var="usuPer" editable="true" style="width: 100%"
+                             paginator="true" lazy="true" rows="10" rowIndexVar="index" resizableColumns="true" 
+                             emptyMessage="No se encontraron resultados"   >
+
+                    <p:column headerText="Ord." width="30">
+                        <h:outputText value="#{index + 1}" />
+                    </p:column>
+
+                    <p:column headerText="Sistema" width="150" filterBy="#{usuPer.segPerfil.segSistemas.sisNombre}" sortBy="#{usuPer.segPerfil.segSistemas.sisNombre}" filterMatchMode="contains" >
+                        <h:outputText value="#{usuPer.segPerfil.segSistemas.sisNombre}" style="text-transform: uppercase"/>
+                    </p:column>   
+
+                    <p:column headerText="Perfil" width="150" style="line-break:inherit" filterBy="#{usuPer.segPerfil.perNombre}" sortBy="#{usuPer.segPerfil.perNombre}" filterMatchMode="contains" >
+                        <h:outputText value="#{usuPer.segPerfil.perNombre}" style="text-transform: uppercase"/>
+                    </p:column>                            
+
+                    <p:column headerText="Cédula" width="100" filterBy="#{usuPer.segUsuario.usuCc}" sortBy="#{usuPer.segUsuario.usuCc}">
+                        <h:outputText value="#{usuPer.segUsuario.usuCc}"/>
+                    </p:column>
+                    <p:column headerText="Nombres" filterBy="#{usuPer.segUsuario.usuNombres}" sortBy="#{usuPer.segUsuario.usuNombres}">
+                        <h:outputText value="#{usuPer.segUsuario.usuNombres}" style="text-transform: uppercase"/>
+                    </p:column>
+                    <p:column headerText="Apellidos" filterBy="#{usuPer.segUsuario.usuApellidos}" sortBy="#{usuPer.segUsuario.usuApellidos}">
+                        <h:outputText value="#{usuPer.segUsuario.usuApellidos}" style="text-transform: uppercase"/>
+                    </p:column>
+                    <p:column headerText="Fecha Inicio" width="70">
+                        <h:outputText value="#{usuPer.uspFechaIni}" style="text-transform: uppercase">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Fecha Fin" width="70">
+                        <h:outputText value="#{usuPer.uspFechaFin}" style="text-transform: uppercase">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column> 
+
+                    <p:column headerText="Activar/ Inactivar" width="50" style="white-space:pre-line">
+                        <p:commandButton id="btnEliminar" style="margin: 0" title="Activar/Inactivar la Asignacion de Perfil  " icon="ui-icon-cancel" 
+                                         onclick="PF('deleteDialogInac').show();" >
+                            <f:setPropertyActionListener value="#{usuPer}" target="#{asignacionPerfilUsuarioController.segUsuPerSelected}" />                                    
+                        </p:commandButton>   
+                    </p:column>
+
+                </p:dataTable>   
+
+            </p:panel>
+        </h:form>
+        <p:dialog id="deleteDlg" header="Eliminar Registro" widgetVar="deleteDialog" resizable="false" width="500" modal="true" appendTo="@(body)"  style="font-size: x-small">
+            <h:form id="deleteForm">
+                <p:outputPanel id="panelDeleteRegistro">
+                    <center>
+                        <h:panelGrid id="displayDelete" columns="1" >                          
+                            <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminar"  value="Eliminar" style="margin:0" 
+                                             onclick="PF('deleteDialog').hide();" >
+                                <p:ajax update=":formPrincipal:formPrincipal1:dtUsuPer" listener ="#{asignacionPerfilUsuarioController.inactivar}" />
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="deleteDlgInac" header="Inactivar Perfil" widgetVar="deleteDialogInac" resizable="false" width="500" modal="true" appendTo="@(body)"  style="font-size: x-small">
+            <h:form id="deleteFormInac">
+                <p:outputPanel id="panelDeleteRegistroInac">
+                    <center>
+                        <h:panelGrid id="displayDeleteInac" columns="1" >                          
+                            <h:outputLabel value="¿Está seguro que desea Inactivar el Perfil.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminarInac"  value="Inactivar" style="margin:0" 
+                                             onclick="PF('deleteDialogInac').hide();" >
+                                <p:ajax update=":formPrincipal:formPrincipal1:dtUsuPer" listener ="#{asignacionPerfilUsuarioController.inactivar}" />
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="msgExiste" widgetVar="dlgExiste" minHeight="40" rendered="#{asignacionPerfilUsuarioController.existe}">
+            <h:outputText value="El perfil ya fue asignado al usuario!" />
+        </p:dialog>        
+
+        <p:dialog header="Basic Dialog" widgetVar="dlg1" minHeight="40">
+            <h:outputText value="Resistance to PrimeFaces is futile!" />
+        </p:dialog>
+
+        <script  type="text/javascript">
+            function setaFoco(elemento) {
+                var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+                if (keyCode == 13) {
+                var i;
+                        for (i = 0; i &lt; elemento.form.elements.length; i++
+                                )
+                        if (elemento == elemento.form.elements[i])
+                        break;
+                        i = (i + 1) % elemento.form.elements.length;
+                elemento.form.elements[i].focus();
+                event.preventDefault();
+                return false;
+                }
+                return false;
+            }
+            function mostrarValor(elemento) {
+                alert('elemento:' + elemento.value + ' ' + elemento.name);
+                elemento.blur();
+            }
+
+        </script>
+    </ui:define>
+</ui:composition>

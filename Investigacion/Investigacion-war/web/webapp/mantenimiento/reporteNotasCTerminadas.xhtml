@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Notas Conceptuales Terminadas" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <h:panelGrid columns="1" width="95%">
+                    <p:commandButton id="btnReporte" value="Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " 
+                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                     title="Genera Reporte" actionListener="#{reporteNotasCTerminadasController.generaReporteNotasTPDF}" update=":formPrincipal:pdf">
+                    </p:commandButton>
+                    <p:panel id="pdf" visible="#{reporteNotasCTerminadasController.controlPDF}">
+                        <object type="application/pdf" data="/Investigacion-war/faces/reportes/#{reporteNotasCTerminadasController.nombreArchivoPdf}" width="90%" height="600px" ></object>
+                    </p:panel>
+                </h:panelGrid>
+            </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

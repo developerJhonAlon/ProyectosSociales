@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="convocatoria" language="groovy" pageWidth="595" pageHeight="842" columnWidth="455" leftMargin="80" rightMargin="60" topMargin="20" bottomMargin="20" uuid="28bd67de-76e1-4c9e-8d63-560569c3abc6">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="672"/>
+	<parameter name="CONVOCA_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Administrador\\Documents\\NetBeansProjects\\APP\\Investigacion5\\trunk\\Investigacion\\Investigacion-war\\web\\reportes\\Reporte_Convoca\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dirPhoto" class="java.lang.String">
+		<defaultValueExpression><![CDATA["E:\\PROY\\Investigacion\\Investigacion-war\\web\\resources\\images\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_CONVOCA.CONVOCA_TITULO,
+       SEA_CONVOCA.CONVOCA_DOC_NOMBRE,
+       SEA_CONVOCA.CONVOCA_FINANCIAMIENTO,
+       SEA_CONVOCA.CONVOCA_CALIFICA1,
+       SEA_CONVOCA.CONVOCA_EVALUA1,
+       SEA_CONVOCA.CONVOCA_CALIFICA2,
+       SEA_CONVOCA.CONVOCA_EVALUA2,
+       SEA_CONVOCA.CONVOCA_FORMATO_FASE1,
+       SEA_CONVOCA.CONVOCA_FORMATO_FASE2,
+       SEA_CONVOCA.CONVOCA_SELEC_PRIORI_FASE2,
+       CONVOCA_FINANC_OBSERV
+  FROM SEA_CONVOCA
+ WHERE (SEA_CONVOCA.CONVOCA_ID = $P{CONVOCA_ID})]]>
+	</queryString>
+	<field name="CONVOCA_TITULO" class="java.lang.String"/>
+	<field name="CONVOCA_DOC_NOMBRE" class="java.lang.String"/>
+	<field name="CONVOCA_FINANCIAMIENTO" class="java.math.BigDecimal"/>
+	<field name="CONVOCA_CALIFICA1" class="java.lang.String"/>
+	<field name="CONVOCA_EVALUA1" class="java.lang.String"/>
+	<field name="CONVOCA_CALIFICA2" class="java.lang.String"/>
+	<field name="CONVOCA_EVALUA2" class="java.lang.String"/>
+	<field name="CONVOCA_FORMATO_FASE1" class="java.lang.String"/>
+	<field name="CONVOCA_FORMATO_FASE2" class="java.lang.String"/>
+	<field name="CONVOCA_SELEC_PRIORI_FASE2" class="java.lang.String"/>
+	<field name="CONVOCA_FINANC_OBSERV" class="java.lang.String"/>
+	<group name="convocatoria">
+		<groupExpression><![CDATA[$V{PAGE_NUMBER}]]></groupExpression>
+		<groupHeader>
+			<band height="88">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="0" width="455" height="20" uuid="7d47d7eb-5e46-4408-bc3b-0423952ce9b4"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_DOC_NOMBRE}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="31" width="455" height="57" uuid="ff4602fb-4364-4f1c-a7fc-e54f86568426"/>
+					<subreportParameter name="CONVOCA_ID">
+						<subreportParameterExpression><![CDATA[$P{CONVOCA_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "bases.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="112">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="1" width="148" height="20" uuid="a285b2f2-67ae-4430-89f0-97b041e92071"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FINANCIAMIENTO]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="111" y="21" width="62" height="20" uuid="fe2d4073-a59e-41dd-8185-044617b56817"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_FINANCIAMIENTO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="21" width="111" height="20" uuid="4e1cd21e-7577-4726-b7b3-abd5c23bb404"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Se financiará HASTA USD ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="173" y="21" width="130" height="20" uuid="10623ed0-7263-4c4d-aa80-6bb15c034b26"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[, distribuidos como sigue:]]></text>
+				</staticText>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="41" width="455" height="43" uuid="8d2af9b3-f9c4-4583-b39e-30334b3e5625"/>
+					<subreportParameter name="CONVOCA_ID">
+						<subreportParameterExpression><![CDATA[$P{CONVOCA_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "financiamiento.jasper"]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="84" width="455" height="20" uuid="4eff0754-bd93-4085-9b45-bfefb2f82c54"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_FINANC_OBSERV}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="50">
+				<subreport>
+					<reportElement positionType="Float" x="0" y="0" width="455" height="50" uuid="018a5fcf-3e01-4815-8086-a358799ae526"/>
+					<subreportParameter name="CONVOCA_ID">
+						<subreportParameterExpression><![CDATA[$P{CONVOCA_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "no_se_financia.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="152">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="275" height="20" uuid="1c439c60-1012-4393-8d76-b6e71e99905b"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[EVALUACIÓN, SELECCIÓN Y PRIORIZACIÓN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="455" height="20" uuid="3d8dba08-a4a6-4056-a8bb-d4d3e8193086"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[La selección constará de dos fases:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="40" width="232" height="20" uuid="5ba2c57a-b92f-48c0-9624-4a8349b6ffed"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[PRIMERA FASE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="60" width="455" height="20" uuid="0b0dc74b-563a-464b-8796-cb2e69e62b12"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[En la primera fase se presentará las notas conceptuales y se realizará el proceso de calificación de la propuesta.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="80" width="232" height="20" uuid="1f1be9da-e9d2-4623-8148-25b5487d9661"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="false" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[CALIFICACIÓN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="100" width="455" height="20" uuid="58bdabef-301a-4b72-96e6-06271df62eef"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[En esta fase se verificarán los siguientes requisitos:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="23" y="120" width="432" height="20" uuid="63b6e100-d0bb-4be8-a51b-82267f4e9b05"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_CALIFICA1}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="133">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="232" height="20" uuid="66601f54-aa83-43a6-82b0-7d004019d178"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[SEGUNDA FASE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="455" height="27" uuid="0b97da11-7f34-4d2c-ab10-112755819419"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Los proyectos que pasen la primera fase, serán invitados a presentar la propuesta completa, y constará de los siguientes pasos: Evaluación, selección y priorización.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="55" width="232" height="20" uuid="a6240a6d-5b40-443e-a41a-073838692870"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="false" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[EVALUACIÓN]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="23" y="75" width="432" height="20" uuid="31472710-2d06-461b-9038-7935afb1e2f5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_EVALUA2}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="95" width="455" height="38" uuid="b5d4e9ba-1335-4805-92da-27ff2bb36c21"/>
+					<subreportParameter name="CONVOCA_ID">
+						<subreportParameterExpression><![CDATA[$P{CONVOCA_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "criterios_evaluacion2.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="41">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="232" height="20" uuid="5d2161da-1e13-40af-bff8-6cec6d81b56a"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="false" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[SELECCIÓN Y PRIORIZACIÓN]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="20" width="455" height="20" uuid="8926db63-3832-493e-8d80-f68b0b0c344b"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_SELEC_PRIORI_FASE2}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="118">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="100" height="20" uuid="a4c0d76e-2820-499b-ab23-2d8aff38d380"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FORMATOS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="19" width="455" height="20" uuid="fcbb8743-834a-4e55-bea0-708926df8eb7"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Las propuestas deben ser subidas en el sistema informático: Oficina Virtual de Investigación, disponible en el sitio web: http://ugi.espe.edu.ec o en miespe/docentes.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="38" width="232" height="20" uuid="0e2e5071-55f2-4b7c-bafc-12592f58a8d1"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="false" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[PRIMERA FASE]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="23" y="58" width="432" height="20" uuid="c61fff6b-4fc9-4856-a29e-b34705195bc0"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_FORMATO_FASE1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="78" width="232" height="20" uuid="14e81982-ac0d-418e-8105-028d86e11a78"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="false" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[SEGUNDA FASE]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="23" y="98" width="432" height="20" uuid="24895431-657d-4c65-bf8c-70b081d8e483"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CONVOCA_FORMATO_FASE2}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="76">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="232" height="20" uuid="d09cd7db-72bc-44f8-b6b5-34fe3bc0d6f6"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHAS IMPORTANTES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="19" width="455" height="20" uuid="7ef84b1c-3ebc-4e2d-aaad-6930f3846d33"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Los formatos pueden ser descragados en el sitio web: http://ugi.espe.edu.ec o en la unidad de Gestión de la Investigación.]]></text>
+				</staticText>
+				<subreport>
+					<reportElement x="0" y="39" width="455" height="37" uuid="61736057-aacf-46f5-9b63-c9d0e772974a"/>
+					<subreportParameter name="CONVOCA_ID">
+						<subreportParameterExpression><![CDATA[$P{CONVOCA_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fechas_importantes.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="85">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="455" height="65" uuid="def5dbf0-503f-4c84-a4a0-5a5507d9571a"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[UNIDAD DE GESTIÓN DE LA INVESTIGACIÓN
+http://ugi.espe.edu.ec
+
+Av. Gral. Rumiñahui s/n Sangolquí - Ecuador
+Teléfonos: +593(02) 3989 400
+Fax: +593(02) 2334 952
+P.O.BOX 171-5-231B]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="232" height="20" uuid="7d442bc8-618a-408d-9305-9b7a060ee83c"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[MAS INFORMACIÓN]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="58" width="455" height="20" uuid="49ce282f-5772-4995-845d-84042c67b674"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="1" width="455" height="57" uuid="154eda4b-5ad9-4930-b64f-4a476baa51e3"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="49" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="14" width="455" height="20" uuid="7d0eb3a1-6632-4873-ab5e-43cdc4fe0c6b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONVOCA_TITULO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="21">
+			<textField>
+				<reportElement x="335" y="0" width="80" height="20" uuid="a98d13c2-f8bc-4d0c-bea6-032bd6f89c65"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="415" y="0" width="40" height="20" uuid="58c50aaa-a7c4-4cdd-9f80-dca2ef165a19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

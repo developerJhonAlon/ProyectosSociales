@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                    <p:panel id="panelBase" header="Elaboración Programa: #{programaController.datosGeneralesPrograma.progId.progDescrip}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+
+                        <h:panelGrid columns="2" id="hpCabecera" >                   
+                            <p:selectBooleanButton id="value2" value="#{programaController.botonInicio}" onLabel="Agregar" offLabel="Programas" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                                <p:ajax update=":formPrincipal:panelBase" listener="#{programaController.inicioProgramas}" />
+                            </p:selectBooleanButton>
+                        </h:panelGrid>
+
+                        <p:panel id="inicio"  visible="#{programaController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <p:dataTable id="dtProgramas" value="#{programaController.datosGeneralesProList}" var="con" 
+                                         paginator="true" rows="15" rowIndexVar="index" resizableColumns="true"
+                                         emptyMessage="No se encontraron resultados" >                  
+                                <p:column headerText="Ord." style="text-align: center" width="20">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Programa" style="white-space: pre-line">
+                                    <h:outputText  value ="#{con.progId.progDescrip}"/> 
+                                </p:column>
+                                <p:column headerText="Nombre en inglés" style="white-space: pre-line" width="350">
+                                    <h:outputText  value ="#{con.datgeprogNombreIngles}"/> 
+                                </p:column>                                
+                                <!--                        <p:column headerText="Lineas de Investigacion" style="width:15%">
+                                                            <h:outputText value="#{con.lineaId.lineaIdPadre.lineaDescip}" /> 
+                                                        </p:column>
+                                                        <p:column headerText="Cod. UNESCO" style="width:25%">
+                                                            <h:outputText value="#{con.lineaId.lineaUnesco} - #{con.lineaId.lineaDescip}"   />
+                                                        </p:column>-->
+                                <p:column headerText="Objetivo PNBV" style="width:20%">
+                                    <h:outputText value="#{con.obplabvId.obplabvNombre}"   />
+                                </p:column>
+                                <p:column headerText="Seleccione" style="text-align: center" width="60">
+                                    <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Selecciona Programa" action="#{programaController.seleccionaProyecto}" 
+                                                     update=":formPrincipal:panelBase" process="@this">
+                                        <f:setPropertyActionListener value="#{con}" target="#{programaController.datosGeneralesPrograma}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                        <p:tabView id="tabP" scrollable="false" orientation="left" rendered="#{!programaController.botonInicio}" style="width: 99%; height: 100%" dynamic="true" effect="slide" effectDuration="slow" >  
+                            <p:ajax event="tabChange" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" />
+                            <p:tab title="1. Datos Generales" id="tabP1" > 
+                                <h:panelGrid  columns="1" cellpadding="5" cellspacing="0"  >
+                                    <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0;font-size: 11px;float: left" disabled="#{programaController.validaVaciosP1}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información"  update=":formPrincipal:tabP:pInput1,:formPrincipal:tabP:btnGrabarP1,:formPrincipal:tabP, :formPrincipal:message1" action="#{programaController.registraP1()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid  columns="2" cellpadding="5" cellspacing="0"  id="pInput1"  >
+                                    <h:outputText value=""/>
+                                    <p:spacer height="2"/>
+                                    <h:outputLabel  for="prgEsp" value="Nombre del Programa (Español):" style="text-align: left"/>
+                                    <p:selectOneMenu id="prgEsp" value="#{programaController.idPrograma}" required="false" style="width: 75%">
+                                        <f:selectItem itemLabel="Seleccione Programa" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{programaController.programaList}" var="programa" itemLabel="#{programa.progDescrip}" itemValue="#{programa.progId}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{programaController.validarVaciosP1}"/>
+                                    </p:selectOneMenu>
+                                    <h:outputLabel  for="prgIng" value="Nombre del Programa (Inglés):"/>
+                                    <p:inputTextarea id="prgIng" value="#{programaController.prgIngles}" cols="100">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{programaController.validarVaciosP1}"/>
+                                    </p:inputTextarea>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="7" id="h11">
+                                    <h:outputText value=""/>
+                                    <h:outputText value="Líneas de Investigación" style="alignment-adjust: middle;font-size: small "/>
+                                    <p:commandButton id="btnAgregarP11" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Líneas de Investigación" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h11" action="#{programaController.agregarP11()}" rendered="#{!programaController.controlGrabarP11}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:panel id="p1" visible="#{programaController.controlGrabarP11}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:commandButton id="btnGrabarP11" value="Grabar" icon="ui-icon-locked" style=" margin: 0;font-size: 11px;float: left" disabled="#{programaController.validaVaciosP11}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h11,:formPrincipal:tabP:dtTLineasProg,:formPrincipal:tabP:pInput1" action="#{programaController.registraP11()}">
+                                        </p:commandButton>
+                                        <p:commandButton id="btnCancelarP11" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left "
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Cancelar Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h11" action="#{programaController.cancelarP11()}">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    <left>
+                                        <h:panelGrid columns="4" cellpadding="5"  style="text-align: left">
+                                            <h:outputLabel for="linInv" value="Líneas de Investigación:"/>
+                                            <p:selectOneMenu id="linInv" value="#{programaController.lineaInvest}" required="false" style="width: 200px">
+                                                <f:selectItem itemLabel="Seleccione Línea" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{programaController.lineasinvesList}" var="lineaI" itemLabel="#{lineaI.lineaDescip}" itemValue="#{lineaI.lineaId}"/>
+                                                <p:ajax event="change" update=":formPrincipal:tabP:subl" listener="#{programaController.onLineaChange}"/>
+                                            </p:selectOneMenu>
+                                            <h:outputLabel for="subl" value="Sublíneas de Investigación Asociadas:"/>
+                                            <p:selectOneMenu id="subl" value="#{programaController.sublinea}" required="false" style="width: 200px">
+                                                <f:selectItem itemLabel="Seleccione Sublínea" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{programaController.sublineaList}" var="subli" itemLabel="#{subli.lineaUnesco}  #{subli.lineaDescip}" itemValue="#{subli.lineaId}"/>
+                                                <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP11" listener="#{programaController.validarVaciosP11}"/>
+                                            </p:selectOneMenu>
+
+                                        </h:panelGrid>
+                                    </left>
+                                </p:panel>
+                                <p:dataTable id="dtTLineasProg" value="#{programaController.szdtaproglinList}" var="linProg" paginator="true" editable="true"
+                                             rows="10" rowIndexVar="index" resizableColumns="true" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Ord." style="width:5%">
+                                        <h:outputText value="#{index + 1}" />
+                                    </p:column>
+                                    <p:column headerText="Líneas de Investigación" style="width: 20%_; white-space: pre-line">
+                                        <h:outputText value="#{linProg.lineaId.lineaIdPadre.lineaDescip}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Sublíneas de Investigación Asociadas" style="width: 20%_; white-space: pre-line">
+                                        <h:outputText value="#{linProg.lineaId.lineaDescip}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar" style="width: 8%; text-align: center">
+                                        <p:commandButton id="btnEliminarLinea" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                         process="@this" update=":formPrincipal:tabP:dtTLineasProg"
+                                                         action="#{programaController.eliminarP11()}">
+                                            <f:setPropertyActionListener value="#{linProg}" target="#{programaController.szdtaproglinSelected}"/>
+                                            <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                <!--
+                                <p:dataTable id="dataTableInstitucion" value="#{programaController.institucionList}"  var="opInst" paginator="true" editable="true"
+                                             rows="10" rowIndexVar="index" resizableColumns="true" emptyMessage="No se encontraron resultados">
+                                 </h:panelGrid>
+        
+                                <p:panel id="p3" visible="#{programaController.controlGrabar3}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                    <h:panelGrid columns="2" cellpadding="5" >
+                                        <p:commandButton id="btnGrabarP3" value="Grabar" icon="ui-icon-locked" style=" margin: 0;font-size: 11px;float: left" disabled="#{programaController.validaVaciosP3}"
+                                                         title="Graba Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3,:formPrincipal:tabP:dataTableInstitucion,:formPrincipal:tabP:pInput3" action="#{programaController.registraP3()}">
+                                        </p:commandButton>
+        
+                                        <p:commandButton id="btnCancelarP3" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                         title="Cancelar Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3" action="#{programaController.cancelarP3()}">
+                                        </p:commandButton>
+        
+                                    </h:panelGrid>
+                                    <left>
+                                -->
+                                <!--                            
+                                                            
+                                -->
+                            </p:tab>
+                            <p:tab title="2. Cobertura y Localización / Objetivos del Plan Nacional del Buen Vivir ">
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <p:commandButton id="btnGuardarP2" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" action="#{programaController.registraP2()}"  >
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <left>
+                                    <h:panelGrid columns="6" cellspacing="0" cellpadding="5"  id="h1" >
+                                        <h:outputLabel value="Localización:"/>
+                                        <p:selectOneRadio id="localizacion" value="#{programaController.seaCob.localId.localId}" style="width: 220px">
+                                            <f:selectItems value="#{programaController.seaLocList}" var="i" itemLabel="#{i.localDescrip}" itemValue="#{i.localId}"  />                                    
+                                        </p:selectOneRadio>
+                                        <h:outputLabel />
+                                        <h:outputLabel />
+                                        <h:outputLabel />
+                                        <h:outputLabel />
+                                        <h:outputLabel value="Provincia:"/>
+                                        <p:selectOneMenu id="proCob" value="#{programaController.seaCob.prqId.canId.proId.proId}" valueChangeListener="#{programaController.onChangeProvinciaCobertura}" required="false" style="width: 220px">
+                                            <f:selectItem itemLabel="Seleccione Provincia" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{programaController.itemListProCob}" var="na1"/>
+                                            <p:ajax event="change" update=":formPrincipal:tabP:canCob,:formPrincipal:tabP:parCob" />
+                                        </p:selectOneMenu>
+                                        <h:outputLabel value="Canton:"/>
+                                        <p:selectOneMenu id="canCob" value="#{programaController.seaCob.prqId.canId.canId}" valueChangeListener="#{programaController.onChangeCantonCobertura}" required="false" style="width: 160px">
+                                            <f:selectItem itemLabel="Seleccione Canton" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{programaController.itemListCanCob}" var="na2"/>
+                                            <p:ajax event="change"  update=":formPrincipal:tabP:parCob"/>
+                                        </p:selectOneMenu>
+                                        <h:outputLabel value="Parroquia:"/>
+                                        <p:selectOneMenu id="parCob" value="#{programaController.seaCob.prqId.prqId}" required="false" style="width: 160px">
+                                            <f:selectItem itemLabel="Seleccione Parroquia" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{programaController.itemListParCob}" var="na3"/>
+                                            <p:ajax event="change" update=":formPrincipal:tabP:btnGuardarP2" listener="#{programaController.validarVaciosP2()}"/>
+                                        </p:selectOneMenu>
+
+                                        <!--<h:outputLabel value="Objetivos Buen Vivir:"/>
+                                        <p:selectOneMenu id="buenVivir" value="#{programaController.seaDatGenPro.obplabvId.obplabvId}" style="width: 500px">   
+                                            <f:selectItem itemLabel="Seleccione Objetivo" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{programaController.seaBueVivList}" var="i" itemLabel="#{i.obplanbvDecrip}" itemValue="#{i.obplabvId}"  />                                    
+                                            <p:ajax event="change" update=":formPrincipal:tabP:btnGuardarP2" listener="#{programaController.validarVaciosP2()}"/>                                
+                                        </p:selectOneMenu>-->  
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" cellspacing="0" cellpadding="5">
+                                        <h:outputLabel value="Objetivos Buen Vivir:"/>
+                                        <p:selectOneMenu id="buenVivir" value="#{programaController.seaDatGenPro.obplabvId.obplabvId}" style="width: 500px">
+                                            <f:selectItem itemLabel="Seleccione Objetivo" itemValue="" noSelectionOption="true" />
+                                            <f:selectItems value="#{programaController.seaBueVivList}" var="i" itemLabel="#{i.obplanbvDecrip}" itemValue="#{i.obplabvId}"  />
+                                            <p:ajax event="change" update=":formPrincipal:tabP:btnGuardarP2" listener="#{programaController.validarVaciosP2()}"/>
+                                        </p:selectOneMenu>
+                                    </h:panelGrid>
+                                </left>
+                            </p:tab>
+                            <p:tab title="3.Plazo de Ejecuación / Instituciones Involucradas" id="tabP3" disabled="#{programaController.habilitaTab}" > 
+                                <h:panelGrid columns="6" cellpadding="5" >
+                                    <h:outputText value="PLAZO DE EJECUCIÓN" style="alignment-adjust: middle;font-size: small "/>
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel for="fechPres" value="Fecha de presentación (dd/mm/aaaa):" style="text-align: left"/>
+                                    <p:calendar id="fechPres" navigator="true" locale="es" pattern="dd/MM/yyyy" size="10" style="font-size: 10px; text-align: center" value="#{programaController.fechPresentacionDate}" yearRange="1960:2050">
+                                        <p:ajax event="dateSelect" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}"/>
+                                    </p:calendar>
+                                    <h:outputLabel for="fechIni" value="Fecha de Inicio (dd/mm/aaaa):" style="text-align: left"/>
+                                    <p:calendar id="fechIni" navigator="true" locale="es" pattern="dd/MM/yyyy" size="10" style="font-size: 10px; text-align: center" value="#{programaController.fechInicioDate}" yearRange="1960:2050">
+                                        <p:ajax event="dateSelect" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}"/>
+                                    </p:calendar>
+
+                                    <h:outputLabel for="fechFin" value="Fecha de Finalización (dd/mm/aaaa):" style="text-align: left"/>
+                                    <p:calendar id="fechFin" navigator="true" locale="es" pattern="dd/MM/yyyy" size="10" style="font-size: 10px; text-align: center" value="#{programaController.fechFinDate}" yearRange="1960:2050">
+                                        <p:ajax event="dateSelect" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}"/>
+                                    </p:calendar>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="7" id="h3">
+                                    <h:outputText value=""/>
+                                    <h:outputText value="INSTITUCIONES INVOLUCRADAS" style="alignment-adjust: middle;font-size: small "/>
+                                    <p:commandButton id="btnAgregarP3" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3" action="#{programaController.aregarP3()}" rendered="#{!programaController.controlGrabar3}" >
+                                    </p:commandButton>
+                                </h:panelGrid>
+
+                                <p:panel id="p3" visible="#{programaController.controlGrabar3}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                    <h:outputText value="INSTITUCIONES INVOLUCRADAS EN EL PROGRAMA" style="text-align: left;font-size: small;"/>
+
+                                    <h:panelGrid columns="2" cellpadding="5" >
+                                        <p:commandButton id="btnGrabarP3" value="Grabar" icon="ui-icon-locked" style=" margin: 0;font-size: 11px;float: left" disabled="#{programaController.validaVaciosP3}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3,:formPrincipal:tabP:dataTableInstitucion,:formPrincipal:tabP:pInput3" action="#{programaController.registraP3()}">
+                                        </p:commandButton>
+
+                                        <p:commandButton id="btnCancelarP3" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Cancelar Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3" action="#{programaController.cancelarP3()}">
+                                        </p:commandButton>
+
+                                    </h:panelGrid>
+                                    <left>
+                                        <h:panelGrid columns="4" cellpadding="5"  id="pInput3"  style="text-align: left">
+                                            <h:outputLabel  for="institucion" value="Nombre o siglas de la Institución:" style="text-align: left"/>
+                                            <p:inputText id="institucion" value="#{programaController.institucion}" required="false" autocomplete="off">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputText>
+                                            <h:outputLabel  for="direccion" value="Dirección:" style="text-align: left"/>
+                                            <p:inputText id="direccion" value="#{programaController.direccInst}" required="false" autocomplete="off">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputText>
+                                            <h:outputLabel  for="ciudad" value="Ciudad:" style="text-align: left"/>
+                                            <p:inputText id="ciudad" value="#{programaController.ciudadInst}" required="false" autocomplete="off">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputText>
+                                            <h:outputLabel  for="correo" value="Correo Electrónico (desarrollo@gmail.com):" style="text-align: left"/>
+                                            <p:inputText id="correo" value="#{programaController.correoInst}" required="false" autocomplete="off">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputText>
+                                            <h:outputLabel  for="pagWeb" value="Pag. Web (www.desarrollo.edu.ec):" style="text-align: left"/>
+                                            <p:inputText id="pagWeb" value="#{programaController.paginaWebInst}" required="false" autocomplete="off">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputText>
+                                            <h:outputLabel  for="telf" value="Teléfonos (593)-02-9999999:" style="white-space: pre-line" />
+                                            <p:inputMask id="telf" value="#{programaController.telefInst}" autocomplete="off" required="false" mask="(999)99-9999999">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputMask>
+                                            <p:outputLabel for="fax" value="Fax (593)-02-9999999:" />
+                                            <p:inputMask id="fax" value="#{programaController.faxInst}" autocomplete="off" required="false" mask="(999)99-9999999">
+                                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{programaController.validarVaciosP3}" />
+                                            </p:inputMask>
+                                        </h:panelGrid>
+                                    </left>
+                                </p:panel>
+                                <p:dataTable id="dataTableInstitucion" value="#{programaController.institucionList}"  var="opInst" paginator="true" editable="true"
+                                             rows="10" rowIndexVar="index" resizableColumns="true" emptyMessage="No se encontraron resultados">
+                                    <p:ajax event="rowEdit" listener="#{programaController.onRowEditP3}" update=":formPrincipal:tabP:dataTableInstitucion"/>
+                                    <p:ajax event="rowEditCancel" listener="#{programaController.onRowCancelP3}" update=":formPrincipal:tabP:dataTableInstitucion"/>
+
+                                    <p:column headerText="Ord." style="width:5%">
+                                        <h:outputText value="#{index + 1}" />
+                                    </p:column>
+                                    <p:column headerText="Institución" style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiNombre}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput31" value="#{opInst.opinstiNombre}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Dirección" style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiDireccion}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput32" value="#{opInst.opinstiDireccion}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Ciudad" style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiCiudad}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput33" value="#{opInst.opinstiCiudad}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Correo Electrónico" style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiMail}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput34" value="#{opInst.opinstiMail}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Pag. Web." style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiPaguinaWeb}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput35" value="#{opInst.opinstiPaguinaWeb}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Teléfono" style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiTelefono}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput36" value="#{opInst.opinstiTelefono}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Fax" style="width: 10%" >
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{opInst.opinstiFax}" style="text-transform: uppercase"/></f:facet>
+                                            <f:facet name="input"><p:inputText id="modelInput37" value="#{opInst.opinstiFax}"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Editar" style="width: 5%">
+                                        <p:rowEditor   />
+                                    </p:column>
+                                    <p:column headerText="Eliminar" style="width: 5%">
+                                        <p:commandButton id="btnEliminarP3" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                         onclick="PF('deleteDialog3').show();" process="@this" >
+                                            <f:setPropertyActionListener value="#{opInst}" target="#{programaController.opcionInstitucionSelected}" />
+                                        </p:commandButton>   
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="4. Personal Responsable del Programa"  disabled="#{programaController.habilitaTab}" > 
+                                <h:panelGrid columns="1" cellpadding="5" id="h4">
+                                    <p:commandButton id="btnAgregarP4" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p4,:formPrincipal:tabP:h4" action="#{programaController.agregarP4()}" rendered="#{!programaController.controlGrabarP4}"> 
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:panel id="p4" visible="#{programaController.controlGrabarP4}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                    <p:messages id="messages4"/>
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:commandButton id="btnGrabarP4" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{programaController.validaVaciosP4}" title="Graba Información" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         update=":formPrincipal:tabP:p4,:formPrincipal:tabP:h4,:formPrincipal:tabP:dtResponsablePrograma,:formPrincipal:tabP:pInput4" 
+                                                         action="#{programaController.registraP4()}">
+                                        </p:commandButton>
+                                        <p:commandButton id="btnCancelarP4" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " title="Graba Información" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         update=":formPrincipal:tabP:p4,:formPrincipal:tabP:h4" action="#{programaController.cancelarP4()}"> </p:commandButton>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="6" cellpadding="5" id="pInput4" rendered="#{programaController.controlGrabarP4}">
+                                        <p:outputLabel for="nResProg" value="Docente:" /> 
+                                        <p:selectOneMenu id="nResProg" value="#{programaController.responsablePrograma.usuIdDocente.usuId}" filter="true" filterMatchMode="contains" style="width: 260px">
+                                            <f:selectItem itemLabel="Seleccione Docente" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{programaController.docenteDeptoBList}" var="vd" itemLabel="#{vd.usuApellidos} #{vd.usuNombres}" itemValue="#{vd.usuId}"/>
+                                            <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP4" listener="#{programaController.validarVaciosP4}" /> 
+                                        </p:selectOneMenu>
+                                        <p:message for="nResProg" />
+                                        <p:outputLabel for="nTipRes" value="Responsable:" /> 
+                                        <p:selectOneMenu id="nTipRes" value="#{programaController.responsablePrograma.tipresId.tipresId}" required="false" style="width: 260px">
+                                            <f:selectItem itemLabel="Seleccione Docente Responsable" itemValue="" noSelectionOption="true"/> 
+                                            <f:selectItems value="#{programaController.tipoResponDoceList}" var="tr" itemLabel="#{tr.tipresDescrip}" itemValue="#{tr.tipresId}" />
+                                            <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP4" listener="#{programaController.validarVaciosP4}" /> 
+                                        </p:selectOneMenu> 
+                                        <p:message for="nTipRes" />
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:dataTable id="dtResponsablePrograma" value="#{programaController.responsableProgList}" var="resPrg" 
+                                             editable="false" style="width: auto" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                             emptyMessage="No se encontraron resultados">
+                                    <p:ajax event="rowEdit" listener="#{programaController.onRowEditP4}" />
+                                    <p:ajax event="rowEditCancel" listener="#{programaController.onRowCancelP4}" />                                                    
+
+                                    <p:column headerText="Ord." style="width:5%">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombres y Apellidos del Responsable del Programa" style="width: 25%;white-space: pre-line">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{resPrg.usuIdDocente.usuApellidos} #{resPrg.usuIdDocente.usuNombres}" style="text-transform: uppercase"/> </f:facet>
+                                            <f:facet name="input">
+                                                <p:selectOneMenu id="ResProg" value="#{resPrg.usuIdDocente.usuId}" filter="true" filterMatchMode="contains" style="width: 100%">
+                                                    <f:selectItems value="#{programaController.docenteDeptoBList}" var="ad" itemLabel="#{ad.usuId} #{ad.usuApellidos} #{ad.usuNombres}" itemValue="#{ad.usuId}"/>
+                                                </p:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Cargo" style="width: 13%">
+                                        <h:outputText value="#{resPrg.tipresId.tipresDescrip}" style="text-transform: uppercase"/>
+                                    </p:column>
+                                    <p:column headerText="Unidad/Dpto." style="width: 22%">
+                                        <h:outputText value="#{resPrg.stvsubjCode.stvsubjDesc}" style="text-transform: uppercase"/>
+                                    </p:column>
+                                    <p:column headerText="email" style="width: 15%">
+                                        <h:outputText value="#{resPrg.usuIdDocente.usuEmail}" style="text-transform: uppercase"/>
+                                    </p:column>
+                                    <p:column headerText="Teléfonos" style="width: 10%">
+                                        <h:outputText value="#{resPrg.usuIdDocente.usuTelefonoFijo} #{resPrg.usuIdDocente.usuTelefonoCelular}" style="text-transform: uppercase"/>
+                                    </p:column>
+                                    <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                        <p:commandButton id="btnEliminarP21" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                         onclick="PF('deleteDialog4').show();" process="@this">
+                                            <f:setPropertyActionListener value="#{resPrg}" target="#{programaController.responsableProgramaSelected}" />
+                                        </p:commandButton>    
+
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="7. Resumen del Programa / Objetivos" id="tabP5" disabled="#{programaController.habilitaTab}"> 
+                                <h:panelGrid columns="1" cellpadding="5" cellspacing="0" id="pInput5" >
+                                    <h:outputLabel for="resumen" value="RESUMEN DEL PROGRAMA:" style="text-align: left"/>
+                                    <p:inputTextarea id="resumen" rows="3" cols="150" value="#{programaController.resumenProg}" required="false" maxlength="3990">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnAgregarP5" listener="#{programaController.validarVaciosP5}"/>
+                                    </p:inputTextarea>
+                                    <h:outputText/>
+
+                                    <h:outputLabel for="objetivo" value="OBJETIVOS DEL PROGRAMA:" />
+                                    <p:inputTextarea id="objetivo" rows="3" value="#{programaController.objetProg}" required="false" cols="150">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnAgregarP5" listener="#{programaController.validarVaciosP5}"/>
+                                    </p:inputTextarea>
+
+                                    <p:commandButton id="btnAgregarP5" value="Agregar" icon="ui-icon-plus" style="margin: 0;font-size: 11px;float: left" disabled="#{programaController.validaVaciosP5}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Agregar Información" update="dataTableObjetivo" action="#{programaController.registrarP5()}">
+                                    </p:commandButton>
+
+                                    <p:dataTable id="dataTableObjetivo" value="#{programaController.objPrgList}" var="objPrg" editable="true" style="width: auto"
+                                                 paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" emptyMessage="No se encontraron resultados">
+
+                                        <p:ajax event="rowEdit" listener="#{programaController.onRowEditP5}" update=":formPrincipal:tabP:dataTableObjetivo"/>
+                                        <p:ajax event="rowEditCancel" listener="#{programaController.onRowCancelP5}" update=":formPrincipal:tabP:dataTableObjetivo"/>
+
+                                        <p:column headerText="Ord." style="width:5%">
+                                            <h:outputText value="#{index + 1}" />
+                                        </p:column>
+
+                                        <p:column headerText="Título" style="width: 25%">
+                                            <p:cellEditor>
+                                                <f:facet name="output"><h:outputText value="#{objPrg.objprogObjetivo}" style="text-transform: uppercase"/> </f:facet>
+                                                <f:facet name="input"><p:inputText id="modelInput51" value="#{objPrg.objprogObjetivo}" style="width:96%"/> </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="Editar" style="width: 5%">
+                                            <p:rowEditor   />
+                                        </p:column>
+
+                                        <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                            <p:commandButton id="btnEliminarP5" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                             onclick="PF('deleteDialog5').show();" process="@this">
+                                                <f:setPropertyActionListener value="#{objPrg}" target="#{programaController.objetivoPrgSelected}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="6. Viabilidad y Plan de Sostenibilidad "  disabled="#{programaController.habilitaTab}" > 
+                                <h:panelGrid columns="1" cellpadding="5"   >
+                                    <p:commandButton id="btnGuardarP6" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{programaController.validaVaciosP6}" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:btnGuardarP6" action="#{programaController.registraP6()}"  >
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <right>
+                                    <h:panelGrid columns="1" cellspacing="0" cellpadding="5"  id="h6">
+
+                                        <h:outputLabel for="viaTec" value="Viabilidad Técnica:" />
+                                        <p:inputTextarea id="viaTec" rows="3" cols="150" autoResize="false" value="#{programaController.seaViaPro.viaprogViabilidadTecnica}">
+                                            <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP6" listener="#{programaController.validarVaciosP6}"/>
+                                        </p:inputTextarea>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel for="perPai" value="Que perdería el país si el Programa no se ejecutara?:" />
+                                        <p:inputTextarea id="perPai" rows="3" cols="150" autoResize="false" value="#{programaController.seaViaPro.viaprogPerderiaPais}">
+                                            <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP6" listener="#{programaController.validarVaciosP6}"/>
+                                        </p:inputTextarea>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel for="impEsp" value="Cuáles son los resultados o impactos esperados del Programa?:" />
+                                        <p:inputTextarea id="impEsp" rows="3" cols="150" autoResize="false" value="#{programaController.seaViaPro.viaprogImpactEsperado}">
+                                            <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP6" listener="#{programaController.validarVaciosP6}"/>
+                                        </p:inputTextarea>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel for="impAmb"  value="Analisis de impacto ambiental:" />
+                                        <p:inputTextarea id="impAmb" rows="3" cols="150" autoResize="false" value="#{programaController.seaViaPro.viaprogImpactAmbiental}">
+                                            <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP6" listener="#{programaController.validarVaciosP6}"/>
+                                        </p:inputTextarea>
+                                    </h:panelGrid>
+                                </right>
+                            </p:tab>
+                            <p:tab title="7. Reporte Programas" id="tabP7">
+                            </p:tab>
+                        </p:tabView>
+                    </p:panel>
+                <p:dialog id="deleteDlg3" header="Eliminar Registro" widgetVar="deleteDialog3" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm3">
+                        <p:outputPanel id="panelDeleteRegistro3">
+                            <center>
+                                <h:panelGrid id="displayDelete3" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP3"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog3').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableInstitucion" listener ="#{programaController.eliminarP3()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg4" header="Eliminar Registro" widgetVar="deleteDialog4" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+                    <h:form id="deleteForm4">
+                        <p:outputPanel id="panelDeleteRegistro4">
+                            <center>
+                                <h:panelGrid id="displayDelete4" columns="1" >
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid> 
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminar4"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog4').hide();"  >
+                                        <p:ajax update=":formPrincipal:tabP:dtResponsablePrograma" listener="#{programaController.eliminarP4()}"/>
+                                    </p:commandButton>
+
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg5" header="Eliminar Registro" widgetVar="deleteDialog5" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm5">
+                        <p:outputPanel id="panelDeleteRegistro5">
+                            <center>
+                                <h:panelGrid id="displayDelete5" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP5"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog5').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableObjetivo" listener ="#{programaController.eliminarP5()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

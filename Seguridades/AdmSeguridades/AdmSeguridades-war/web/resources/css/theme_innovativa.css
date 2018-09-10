@@ -1,0 +1,35 @@
+// color bordes y textos contenedores 
+
+.ui-widget-content {
+    border: 1px solid #0D6938!important;
+    background: #FFF none repeat scroll 0% 0%!important;
+    color: rgb(35, 48, 93)!important;
+}
+
+
+// color encabezados y textos encabezados tablas
+
+.ui-widget-header {
+    border: 1px solid #CE1E1E;
+    background: #A51D1D -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0% 0%;
+    color: #333;
+    font-weight: bold;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.7);
+}
+
+
+// color texto botones y menus puntero mouse encima
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    font-weight: bold!important;
+    color: #D12222!important;
+}
+
+// color texto menus 
+.ui-widget-content a {
+    color: #BD3232!important;
+}
+// color fondo menu 
+.ui-menu, .ui-menu .ui-menu-child {
+    background: #B8AE0D -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0% 0%!important;
+}

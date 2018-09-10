@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bienes" language="groovy" pageWidth="278" pageHeight="842" columnWidth="278" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="793cb40e-c546-4c43-8ad9-38a40f52faf6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_ID,
+            SEA_FORMATO_LARGO.SFL_ID,
+            SZDTABIENPROY.SZDTABIENPROY_DESC
+FROM    SEA_DAT_GENERAL_PROY,
+            SEA_FORMATO_LARGO,
+            SZDTABIENPROY
+WHERE  (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = SEA_FORMATO_LARGO.DATGEPROY_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = SZDTABIENPROY .SFL_ID)
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='0')
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='1')
+      AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="DATGEPROY_ID" class="java.math.BigDecimal"/>
+	<field name="SFL_ID" class="java.math.BigDecimal"/>
+	<field name="SZDTABIENPROY_DESC" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="278" height="15" uuid="c701d7e7-76cf-4537-a4e7-2915ec543513"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SZDTABIENPROY_DESC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

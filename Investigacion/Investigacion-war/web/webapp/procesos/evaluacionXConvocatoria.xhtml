@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Evaluación por Convocatoria #{evaluacionXConvocatoriaController.convocatoriaSelected.convocaId.convocaTitulo}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold;margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >
+                    <p:selectBooleanButton id="value2" value="#{evaluacionXConvocatoriaController.botonInicio}" onLabel="Agregar" disabled="#{evaluacionXConvocatoriaController.botonInicio}" offLabel="Convocatorias" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                        <p:ajax update=":formPrincipal:panelBase,:formPrincipal:tabP" listener="#{evaluacionXConvocatoriaController.inicioProgramas}"/>
+                    </p:selectBooleanButton>
+                </h:panelGrid>
+                <p:panel id="inicio" visible="#{evaluacionXConvocatoriaController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                    <p:dataTable id="dtParesConvoca" value="#{evaluacionXConvocatoriaController.paresConvocaList}" var="parCon" paginator="true" rows="15" rowIndexVar="index" resizableColumns="true"
+                                 emptyMessage="No se encontraron resultados">
+                        <p:column headerText="Ord." style="width:5%;text-align: center">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Código Convocatortia" style="width:20%;white-space: pre-line">
+                            <h:outputText value="#{parCon.convocaId.convocaCodigo}"/>
+                        </p:column>
+                        <p:column headerText="Título Convocatoria" style="width:20%;white-space: pre-line">
+                            <h:outputText value="#{parCon.convocaId.convocaTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Resumen Convocatoria" style="width:20%;white-space: pre-line">
+                            <h:outputText value="#{parCon.convocaId.convocaDocNombre}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Tipo de Investigación" style="width:20%;white-space: pre-line">
+                            <h:outputText value="#{parCon.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Seleccione" style="width: 10%;text-align: center">
+                            <p:commandButton id="btnSeleccione" icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Seleccione Convocatoria" action="#{evaluacionXConvocatoriaController.seleccionaConvocatoria()}"
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{parCon}" target="#{evaluacionXConvocatoriaController.convocatoriaSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:tabView scrollable="true"  id="tabP" rendered="#{!evaluacionXConvocatoriaController.botonInicio}">
+                    <p:tab title="1. Valor de los Criterios de Evaluación" id="tabP1" disabled="#{evaluacionXConvocatoriaController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="5"  id="h1" >
+                            <p:commandButton id="btnAgregarP1" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Agregar Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{evaluacionXConvocatoriaController.agregarP1()}" rendered="#{!evaluacionXConvocatoriaController.controlGrabarP1}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" visible="#{evaluacionXConvocatoriaController.controlGrabarP1}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                <p:commandButton id="btnGrabarP1" value="Grabar"  icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{evaluacionXConvocatoriaController.validaVaciosP1}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dtValoCeConvoca,:formPrincipal:tabP:pInput1" action="#{evaluacionXConvocatoriaController.registraP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Cancela Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{evaluacionXConvocatoriaController.cancelarP1()}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0" id="pInput1" style="text-align: left">
+                                <h:outputLabel for="criEvc" value="Criterio de Evaluación" />
+                                <p:selectOneMenu id="criEv" value="#{evaluacionXConvocatoriaController.criEvalua}" required="false" style="width: 350px;white-space: pre-line; font-size: xx-small">
+                                    <f:selectItem itemLabel="Seleccione Criterio de Evaluación" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{evaluacionXConvocatoriaController.criterioValorList}" var="ceCon" itemLabel="#{ceCon.sceNombre}" itemValue="#{ceCon.sceId}" />
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{evaluacionXConvocatoriaController.validarVaciosP1}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel for="puntaje" value="Puntaje Evaluación" style="float: left"/>
+                                <p:spinner id="puntaje" size="1" value="#{evaluacionXConvocatoriaController.valorPuntaje}" min="0" stepFactor="0.1">
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{evaluacionXConvocatoriaController.validarVaciosP1}"/>
+                                </p:spinner>
+                            </h:panelGrid>
+                        </p:panel>                        
+                        <p:dataTable id="dtValoCeConvoca" value="#{evaluacionXConvocatoriaController.valorCeConvList}" var="valCeCon" paginator="true"
+                                     rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron resultados">
+                            
+                            <p:ajax event="rowEdit" listener="#{evaluacionXConvocatoriaController.onRowEditP1}" update=":formPrincipal:tabP:dtValoCeConvoca"/>
+                            <p:ajax event="rowEditCancel" listener="#{evaluacionXConvocatoriaController.onRowCancelP1}" update=":formPrincipal:tabP:dtValoCeConvoca"/>
+
+                            <p:column headerText="Ord." style="width:5%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Criterio de Evaluación" style="width: 40%" >
+                                    <h:outputText value="#{valCeCon.sceId.sceNombre}" style="white-space: pre-line;text-transform: uppercase;font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Puntaje Evaluación" style="width: 5%;white-space: pre-line" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{valCeCon.svxccValor}"/></f:facet>
+                                    <f:facet name="input"><p:spinner id="puntaje" size="1" value="#{evaluacionXConvocatoriaController.valorPuntajeEdit}" min="0" stepFactor="0.1"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor   />
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                <p:commandButton id="btnEliminarP1" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                    onclick="PF('deleteDialogP1').show();" process="@this">
+                                    <f:setPropertyActionListener value="#{valCeCon}" target="#{evaluacionXConvocatoriaController.valorCeConvSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="2. Criterios de Evaluación" id="tabP2" disabled="#{evaluacionXConvocatoriaController.habilitaTab}">
+
+                        <p:dataTable id="dataTableCriterios" value="#{evaluacionXConvocatoriaController.porConvocaList}" var="critEv" paginator="true" 
+                                     rendered="#{not empty evaluacionXConvocatoriaController.porConvocaList}" 
+                                     rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron resultados">
+                            <p:ajax event="rowToggle" listener="#{evaluacionXConvocatoriaController.onRowToggleCriterio}" />
+
+                            <p:column style="width: 2%">
+                                <p:rowToggler/>
+                            </p:column>
+                            <p:column headerText="Ord." style="width: 3%">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Convocatoria" style="width: 30%;text-align: left" >
+                                <h:outputText value="#{critEv.convocaId.convocaCodigo} #{critEv.convocaId.convocaTitulo}" style="text-transform: uppercase; font-size: xx-small;white-space: pre-line"/>
+                            </p:column>
+                            <p:column headerText="Criterio de Evaluación" style="width: 30%;text-align: left" >
+                                <h:outputText value="#{critEv.sceId.sceNombre}" style="text-transform: uppercase; font-size: xx-small;white-space: pre-line"/>
+                            </p:column>
+                            <p:column headerText="% Evaluación" style="width: 10%;text-align: center; white-space: pre-line" >
+                                <h:outputText value="#{critEv.spxccPorcentaje}" style="text-transform: uppercase; font-size: xx-small;white-space: pre-line"/>
+                            </p:column>
+
+                            <p:rowExpansion>
+                                <p:panelGrid columns="1" style="border:none;margin:0 auto;width:95%; text-align: left" >
+                                    <p:dataTable id="dtCriteHijo" value="#{evaluacionXConvocatoriaController.criterioCrList}" var="crH" paginator="true"
+                                                 rendered="#{not empty evaluacionXConvocatoriaController.criterioCrList}"
+                                                 rows="10" rowIndexVar="index" resizableColumns="true" style="width: 100%" editable="true" emptyMessage="No se encontraron resultados">
+
+                                        <p:ajax event="rowToggle" listener="#{evaluacionXConvocatoriaController.onRowToggleConvCr}" />
+                                        <p:column style="width: 2%">
+                                            <p:rowToggler/>
+                                        </p:column>
+
+                                        <p:column headerText="Ord." style="width:3%">
+                                            <h:outputText value="#{index + 1}" />
+                                        </p:column>
+                                        <p:column headerText="Nombre" style="width: 30%;text-align: left" >
+                                            <h:outputText value="#{crH.sceNombre}" style="text-transform: uppercase; font-size: xx-small;white-space: pre-line"/>
+                                        </p:column>
+                                        <p:rowExpansion>
+                                            <p:panelGrid columns="1" style="border:none;margin:0 auto;width:95%; text-align: left" >
+                                                <p:dataTable id="dtCriteCr" value="#{evaluacionXConvocatoriaController.convCriCrList}" var="convCR" paginator="true"
+                                                             rendered="#{not empty evaluacionXConvocatoriaController.convCriCrList}"
+                                                             rows="10" rowIndexVar="index" resizableColumns="true" style="width: 100%" editable="true" emptyMessage="No se encontraron resultados">
+
+                                                    <p:column headerText="Ord." style="width:3%">
+                                                        <h:outputText value="#{index + 1}" />
+                                                    </p:column>
+                                                    <p:column headerText="Nombre" style="width: 30%;text-align: left" >
+                                                        <h:outputText value="#{convCR.sceNombre}" style="text-transform: uppercase; font-size: xx-small;white-space: pre-line"/>
+                                                    </p:column>
+                                                    <p:column headerText="Agrega Evaluación" style="width: 15%;text-align: center">
+                                                        <p:commandButton id="btnNuevoE" icon="ui-icon-clipboard" onclick="PF('dialogCritEval').show();" process="@this" update=":formPrincipal:fmEvaluación:puntEval,:formPrincipal:fmEvaluación:justif">
+                                                            <f:setPropertyActionListener value="#{convCR}" target="#{evaluacionXConvocatoriaController.criterioEvaluaSelected}"/>
+                                                        </p:commandButton>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:panelGrid>
+                                        </p:rowExpansion>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                            </p:rowExpansion>
+
+                        </p:dataTable>
+
+                    </p:tab>
+                    <p:tab title="3. Reporte Notas Conceptuales" id="tabP3">
+                        <h:panelGrid columns="1" width="95%" id="h3">
+                            <p:commandButton id="btnReporte" value="Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Presenta Reporte" update=":formPrincipal:tabP:pdf,:formPrincipal:tabP:h3" actionListener="#{evaluacionXConvocatoriaController.generarReportePDF}">
+                            </p:commandButton>
+                            <p:panel id="pdf" visible="#{evaluacionXConvocatoriaController.controlPDF}">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/notasConcept.pdf" width="90%" height="600px" ></object>
+                            </p:panel>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+
+        <p:dialog header="Evaluación" widgetVar="dialogCritEval" resizable="false" width="400" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+            <h:form id="fmEvaluación" enctype="multipart/form-data" >
+                <p:outputPanel>
+                    <h:panelGrid columns="2" cellpadding="1">
+                        <h:outputLabel for="puntEval" value="Evaluación:" style=" float: right"/>
+                        <p:spinner id="puntEval" size="1" value="#{evaluacionXConvocatoriaController.puntaje}" valueChangeListener="#{evaluacionXConvocatoriaController.updateValor}" min="0" stepFactor="0.1" autocomplete="off">
+                            <p:ajax event="change" update=":formPrincipal:fmEvaluación:btnGrabarEvaluacion"/>
+                        </p:spinner>
+                        <h:outputLabel for="justif" value="Justificación:" style="float: right" />
+                        <p:inputTextarea id="justif"  cols="35" rows="3" value="#{evaluacionXConvocatoriaController.justificacion}">
+                            <p:ajax event="keyup" update=":formPrincipal:fmEvaluación:btnGrabarEvaluacion" listener="#{evaluacionXConvocatoriaController.validarVaciosEvaluacion}"/>
+                        </p:inputTextarea>
+                    </h:panelGrid>
+                    <p:spacer height="5"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnGrabarEvaluacion" value="Grabar" icon="ui-icon-locked" style="margin: 0"
+                                             onclick="PF('dialogCritEval').hide();" disabled="#{evaluacionXConvocatoriaController.validaVaciosEvalu}">
+                                <p:ajax update=":formPrincipal:tabP:dataTableCriterios:dtCriteHijo:dtCriteCr" listener="#{evaluacionXConvocatoriaController.registraEvaluacion}"/>
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="deleteDlgP1" header="Eliminar Registro" widgetVar="deleteDialogP1" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+            <h:form id="deleteFormP1">
+                <p:outputPanel id="panelDeleteRegistroP1">
+                    <center>
+                        <h:panelGrid id="displayDeleteP1" columns="1">
+                            <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminarP1" value="Eliminar" style="margin: 0"
+                                onclick="PF('deleteDialogP1').hide();">
+                                <p:ajax update=":formPrincipal:tabP:dtValoCeConvoca" listener="#{evaluacionXConvocatoriaController.eliminarP1()}"/>
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

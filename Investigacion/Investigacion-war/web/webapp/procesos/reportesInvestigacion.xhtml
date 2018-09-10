@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Reportes Oficina Virtual de Investigación" style="text-align: left; border: hidden; margin-bottom: 80px; ">
+                    <p:tabView scrollable="false" orientation="left" id="tabP" style="border: hidden; " activeIndex="#{reportesInvestigacionController.indexTabs}" dynamic="false" cache="false">
+                        <p:ajax event="tabChange" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" update=":formPrincipal:tabP" listener="#{reportesInvestigacionController.onTabChange}"/>
+
+                        <p:tab title="Proyectos" id="tabProyectos">
+                            <p:fieldset legend="Reporte: Proyectos" style="margin-left: 20px">
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <p:outputLabel value="Convocatoria:" style="font-weight: bold"/>
+                                    <p:selectOneMenu  
+                                        value="#{reportesInvestigacionController.idConvocatoria4}"
+                                        effect="fade"
+                                        filter="false">
+                                        <f:selectItem itemLabel="[-TODOS-]"/>
+                                        <f:selectItems value="#{reportesInvestigacionController.convocatoriaList}" var="conv4" itemValue="#{conv4.convocaId}" itemLabel="#{conv4.convocaTitulo}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:dtTFormatoLargo" listener="#{reportesInvestigacionController.listarFormatoExtenso}"
+                                                onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+                                    </p:selectOneMenu>       
+
+                                </h:panelGrid>    
+
+                            </p:fieldset>                            
+
+                            <p:dataTable id="dtTFormatoLargo" widgetVar="dtTFormatoLargo" value="#{reportesInvestigacionController.formatoLargoList}" var="frmLrg"
+                                         style="margin-left: 20px"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados"
+                                         paginatorPosition="top"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  Nro. items por página: {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="Registros del {startRecord}-{endRecord} , total: {totalRecords}"
+                                         rowsPerPageTemplate="5,10,15,20,30,50,100" >
+
+                                <p:column headerText="Ord." width="20">
+                                    <h:outputText value="#{index + 1}"/>
+                                </p:column>
+                                <p:column headerText="Proyecto" style="white-space: pre-line" sortBy="#{frmLrg.nombre}" filterBy="#{frmLrg.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{frmLrg.nombre}" style="text-transform: uppercase"/>
+                                </p:column>
+                                <p:column headerText="Director" style="white-space: pre-line" width="200" sortBy="#{frmLrg.nombresCompletosUsuario}" filterBy="#{frmLrg.nombresCompletosUsuario}" filterMatchMode="contains">
+                                    <h:outputText value="#{frmLrg.nombresCompletosUsuario}"/>
+                                </p:column>
+                                <p:column headerText="Estado" style="white-space: pre-line" width="120" sortBy="#{frmLrg.estado}" filterBy="#{frmLrg.datgeproyId.datgeproyEstado}" filterMatchMode="exact">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('dtTFormatoLargo').filter()" >
+                                            <f:selectItem itemLabel="--Seleccione--" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="INGRESO" itemValue="A"/>
+                                            <f:selectItem itemLabel="EN ACEPTACION DIRECTOR DEPARTAMENTO" itemValue="C"/>
+                                            <f:selectItem itemLabel="NEGADO POR DIRECTOR DEPARTAMENTO" itemValue="D"/>
+                                            <f:selectItem itemLabel="EN APROBACION POR COMISION" itemValue="E"/>
+                                            <f:selectItem itemLabel="NEGADO POR COMISION" itemValue="F"/>
+                                            <f:selectItem itemLabel="ASIGNACION DE PARES" itemValue="G"/>
+                                            <f:selectItem itemLabel="EN EVALUACION POR PARES" itemValue="H"/>
+                                            <f:selectItem itemLabel="EN APROBACION POR CONSEJO ACADEMICO" itemValue="I"/>
+                                            <f:selectItem itemLabel="NEGADO POR CONSEJO ACADEMICO" itemValue="J"/>
+                                            <f:selectItem itemLabel="EN EJECUCION" itemValue="K"/>
+                                            <f:selectItem itemLabel="ELIMINADO" itemValue="B"/>
+                                        </p:selectOneMenu>
+                                    </f:facet>                            
+
+                                    <h:outputText value="#{frmLrg.estado}"/>
+                                </p:column>
+                                <p:column headerText="Reporte" style="text-align: center" width="40">
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generarReporteFormatoLPdf2('PDF', frmLrg)}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/>
+                                    </h:commandLink>
+                                </p:column>
+                                <p:column headerText="Seleccione" style="text-align: center" width="50">
+                                    <p:button outcome="proyectoContenido" icon="ui-icon-circle-check">
+                                        <f:param name="id" value="#{frmLrg.datgeproyId.datgeproyId}" />
+                                        <f:param name="op" value="rep" />
+                                    </p:button>                                    
+
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:tab>
+
+                        <p:tab title="Catálogos de Investigación" id="tabCatalogos">
+                            <p:fieldset legend="Reporte: Catálogos de Investigación" style="margin-left: 20px">
+                                <h:panelGrid columns="1" cellpadding="7" cellspacing="0" id="pInput21" style="text-align: justify; margin-left: 10px">
+                                    <p:outputLabel for="catalog" value="Seleccione el tipo de catálogo:" style="text-align: left"/>
+                                    <p:selectOneRadio id="catalog" value="#{reportesInvestigacionController.catalogoInvest}" layout="grid" columns="1" style="margin-left: 10px">
+                                        <f:selectItem itemLabel="Líneas / Sub líneas" itemValue="L"/>
+                                        <f:selectItem itemLabel="Estrategias" itemValue="E"/>
+                                        <f:selectItem itemLabel="Objetivos del buen Vivir" itemValue="O"/>
+                                        <f:selectItem itemLabel="Políticas" itemValue="P"/>
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="3" id="h21" style="margin-left: 20px">
+                                    <p:commandButton rendered="false" id="btnReporteCatalogos" value="Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Reporte Catálogos de Investigación" update=":formPrincipal:tabP:pdfCatalog,:formPrincipal:tabP:h21" actionListener="#{reportesInvestigacionController.generaReporteCatalogos2}">
+                                    </p:commandButton>
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteCatalogos2('PDF')}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png"/>
+                                    </h:commandLink>
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteCatalogos2('XLS')}"
+                                                   title="Exportar a Excel">
+                                        <p:graphicImage url="../../resources/images/excel2.png" width="33"/>
+                                    </h:commandLink>
+                                    <h:commandLink rendered="true" target="_blank" actionListener="#{reportesInvestigacionController.generaReporteCatalogos2('WORD')}"
+                                                   title="Exportar a Word">
+                                        <p:graphicImage url="../../resources/images/word.png" width="40"/>
+                                    </h:commandLink>                            
+                                </h:panelGrid>                                
+                            </p:fieldset>
+
+                            <p:panel id="pdfCatalog" visible="#{reportesInvestigacionController.controlPDF}">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/Catalogos_Investigacion/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%" height="600px" ></object>
+                            </p:panel>                       
+                        </p:tab>
+
+
+
+                        <p:tab title="Convocatoria" id="tabConvocatorias">
+                            <p:fieldset legend="Reporte: Convocatorias" style="margin-left: 20px">
+                                <p:dataTable id="dtTConvocatoria" value="#{reportesInvestigacionController.convocatoriaList}" var="convoc" style="margin-top: 20px" 
+                                             paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Ord." width="20">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Título Convocatoria" style="white-space: pre-line" width="300" sortBy="#{convoc.convocaTitulo}">
+                                        <h:outputText value="#{convoc.convocaTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Resumen Convocatoria" style="white-space: pre-line" sortBy="#{convoc.convocaDocNombre}">
+                                        <h:outputText value="#{convoc.convocaDocNombre}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Generar Reporte" style="text-align: center" width="80">
+                                        <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteConvocatoria2('PDF', convoc)}"
+                                                       title="Exportar a PDF">
+                                            <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/>
+                                        </h:commandLink>
+
+                                        <p:commandButton id="btnSeleccioneConv" rendered="false" icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Seleccione Convocatoria" update=":formPrincipal:tabP" 
+                                                         action="#{reportesInvestigacionController.generaReporteConvocatoria()}">
+                                            <f:setPropertyActionListener value="#{convoc}" target="#{reportesInvestigacionController.convocaSelected}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:fieldset>
+                        </p:tab>
+
+
+
+                        <p:tab title="Listado de Proyectos por Convocatoria" id="tabProyectosConvocatoria">
+                            <p:fieldset legend="Reporte: Listado de Proyectos por Convocatoria" style="margin-left: 20px">
+                                <h:panelGrid style="margin-left: 10px">
+                                    <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                        <p:outputLabel value="Convocatoria:"/>
+                                        <p:selectOneMenu  
+                                            value="#{reportesInvestigacionController.idConvocatoria1}"
+                                            effect="fade"
+                                            filter="false">
+                                            <f:selectItem itemLabel="[-TODOS-]"/>
+                                            <f:selectItems value="#{reportesInvestigacionController.convocatoriaList}" var="conv1" itemValue="#{conv1.convocaId}" itemLabel="#{conv1.convocaTitulo}"
+                                                           >
+                                            </f:selectItems>
+                                        </p:selectOneMenu>       
+
+                                    </h:panelGrid>
+                                    <h:commandLink rendered="true" target="_blank" action="#{reportesInvestigacionController.generaReporteProyectosXConvoca2('PDF')}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png"/>
+                                    </h:commandLink>
+                                </h:panelGrid>                                
+                            </p:fieldset>
+                            <p:panel id="pdfConvProy" visible="#{reportesInvestigacionController.controlPDF}" style="margin-left: 20px">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/listado_proyectos/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%" height="600px"></object>
+                            </p:panel>
+
+                        </p:tab>
+
+
+                        <p:tab rendered="false" title="Notas Conceptuales" id="tabP1">
+                            <p:fieldset legend="Reporte: Notas conceptuales" style="margin-left: 20px">
+                                <h:panelGrid style="margin-left: 10px">
+                                    <h:panelGrid columns="2" cellpadding="7" cellspacing="0" id="pInput1" style="text-align: justify">
+                                        <p:outputLabel value="Convocatoria:"/>
+                                        <p:selectOneMenu  
+                                            value="#{reportesInvestigacionController.idConvocatoria2}" 
+                                            effect="fade"
+                                            filter="false">
+                                            <f:selectItem itemLabel="[-TODOS-]"/>
+                                            <f:selectItems value="#{reportesInvestigacionController.convocatoriaList}" var="conv2" itemValue="#{conv2.convocaId}" itemLabel="#{conv2.convocaTitulo}"
+                                                           >
+                                            </f:selectItems>
+                                        </p:selectOneMenu>       
+
+                                        <p:outputLabel for="ntC" value="Estado:" style="text-align: left"/>
+                                        <p:selectOneRadio id="ntC" value="#{reportesInvestigacionController.estadoNotaConceptual}">
+                                            <f:selectItem itemLabel="Ingresadas" itemValue="0"/>
+                                            <f:selectItem itemLabel="Terminadas" itemValue="2"/>
+                                        </p:selectOneRadio>                                    
+
+                                    </h:panelGrid>
+                                    <p:commandButton value="Listar Notas Conceptuales" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Listar Notas Conceptuales" update=":formPrincipal:tabP:pGrid1"  action="#{reportesInvestigacionController.listarNotasConceptuales}">
+                                    </p:commandButton>     
+
+
+
+                                </h:panelGrid>
+                            </p:fieldset>
+
+
+                            <p:panelGrid id="pGrid1" columns="1" style="border:hidden;margin-left: 10px;width:100%; text-align: left"  >
+                                <p:dataTable id="dtTNotasConceptaules" value="#{reportesInvestigacionController.notaConceptualList}" var="nCIng" paginator="true"
+                                             rows="10" rowIndexVar="index" resizableColumns="true" 
+                                             emptyMessage="No se encontraron resultados">
+
+                                    <p:column headerText="Ord." width="20">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column rendered="false" headerText="Convocatoria" style="white-space: pre-line" width="300" sortBy="#{nCIng.convocaId.convocaTitulo}">
+                                        <h:outputText value="#{nCIng.convocaId.convocaTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column rendered="false" headerText="Cód. Proyecto" style="white-space: pre-line" width="80" sortBy="#{nCIng.datgeproyId}">
+                                        <h:outputText value="#{nCIng.datgeproyId}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Título del Proyecto" style="white-space: pre-line" sortBy="#{nCIng.datgeproyTitulo}">
+                                        <h:outputText value="#{nCIng.datgeproyTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column rendered="true" headerText="Director" style="white-space: pre-line" width="220">
+                                        <h:outputText value="#{nCIng.usuId.usuCc.concat('-').concat(nCIng.usuId.nombresCompletos)}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Presupuesto total" style="white-space: pre-line" sortBy="#{nCIng.datgeproyMontoTotal}" width="110">
+                                        <h:outputText value="#{nCIng.datgeproyMontoTotal}" style="text-transform: uppercase; font-size: xx-small; float: right">
+                                            <f:convertNumber locale="es"  pattern="###,###,##0.00" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Generar Reporte" style="text-align: center" width="80">
+                                        <p:commandButton rendered="false" id="btnSeleccione" icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                         title="Generar Reporte Nota Conceptual" update=":formPrincipal:tabP" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         action ="#{reportesInvestigacionController.generaReporteNotasCPDF}">
+                                            <f:setPropertyActionListener value="#{nCIng}" target="#{reportesInvestigacionController.datGeneralProySelected}"/>
+                                        </p:commandButton>
+                                        <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteNotasCPDF2('PDF', nCIng)}"
+                                                       title="Exportar a PDF" >
+                                            <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/></h:commandLink>
+
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>    
+                        </p:tab> 
+
+                        <p:tab title="Presupuesto Nota Conceptual" id="tabPresupuesto">
+                            <p:fieldset legend="Reporte: Presupuesto Nota Conceptual" style="margin-left: 20px">
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <p:outputLabel value="Convocatoria:"/>
+                                    <p:selectOneMenu  
+                                        value="#{reportesInvestigacionController.idConvocatoria3}"
+                                        effect="fade"
+                                        filter="false">
+                                        <f:selectItem itemLabel="[-TODOS-]"/>
+                                        <f:selectItems value="#{reportesInvestigacionController.convocatoriaList}" var="conv3" itemValue="#{conv3.convocaId}" itemLabel="#{conv3.convocaTitulo}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>       
+
+                                </h:panelGrid>    
+                                <p:commandButton value="Listar Notas Conceptuales" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left; margin-bottom: 20px"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Listar Notas Conceptuales" update=":formPrincipal:tabP:dtTPresupestoNC"  action="#{reportesInvestigacionController.listarNotasConceptualesPresupuesto}">
+                                </p:commandButton>     
+
+                            </p:fieldset>
+
+                            <p:dataTable id="dtTPresupestoNC" value="#{reportesInvestigacionController.notaConceptualList}" var="presupNC" style="margin-left: 20px"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                <p:column headerText="Ord." width="20">
+                                    <h:outputText value="#{index + 1}"/>
+                                </p:column>
+                                <p:column rendered="false" headerText="Convocatoria" style="white-space: pre-line" width="300" sortBy="#{presupNC.convocaId.convocaTitulo}">
+                                    <h:outputText value="#{presupNC.convocaId.convocaTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                                </p:column>
+                                <p:column headerText="Título del Proyecto" style="white-space: pre-line" sortBy="#{presupNC.datgeproyTitulo}">
+                                    <h:outputText value="#{presupNC.datgeproyTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                                </p:column>
+                                <p:column headerText="Director" style="white-space: pre-line" width="220">
+                                    <h:outputText value="#{presupNC.usuId.usuCc.concat('-').concat(presupNC.usuId.nombresCompletos)}" style="text-transform: uppercase; font-size: xx-small"/>
+                                </p:column>
+
+
+                                <p:column headerText="Generar Reporte" style="text-align: center" width="80">
+                                    <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generarReportePresupuestoNC(presupNC, 'pdf')}"
+                                                     ajax="false" title="Exportar a PDF" icon="ui-icon-arrowthickstop-1-s" > 
+                                        <p:graphicImage value="/resources/images/pdf-icon.png" width="30"/>
+                                        <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                    </p:commandButton>
+                                    <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generarReportePresupuestoNC(presupNC, 'xls')}"
+                                                     ajax="false" title="Exportar a Excel" icon="ui-icon-arrowthickstop-1-s" > 
+                                        <p:graphicImage value="/resources/images/export-to-excel.gif" width="30"/>
+                                        <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                    </p:commandButton>
+
+
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generarReportePresupuestoNC2('PDF', presupNC)}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/>
+                                    </h:commandLink>
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generarReportePresupuestoNC2('XLS', presupNC)}"
+                                                   title="Exportar a Excel">
+                                        <p:graphicImage url="../../resources/images/excel2.png" width="20" height="20"/>
+                                    </h:commandLink>
+
+                                </p:column>
+                            </p:dataTable>                            
+
+                        </p:tab>
+
+
+                        <p:tab title="Notas Conceptuales Aprobadas" id="tabAprobacion"> 
+                            <p:fieldset legend="Reporte: Notas Conceptuales Aprobadas" style="margin-left: 20px">
+                                <h:panelGrid columns="1" width="95%" id="h3" style="margin-top: 20px; margin-bottom: 20px">
+                                    <p:commandButton rendered="false" id="btnReporteNotasCAceptadas" value="Generar Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Reporte Notas Conceptuales Aceptadas" update=":formPrincipal:tabP:pdfNAcept,:formPrincipal:tabP:h3" actionListener="#{reportesInvestigacionController.generaReporteNotasAceptadas}">
+                                    </p:commandButton>
+                                    <h:commandLink rendered="true" target="_blank" actionListener="#{reportesInvestigacionController.generaReporteNotasAceptadas2('PDF')}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png"/>
+                                    </h:commandLink>                                    
+                                </h:panelGrid>
+                            </p:fieldset>
+                        </p:tab>
+
+
+
+                        <p:tab title="Investigadores por Proyecto" id="tabInvestigadores">
+                            <p:fieldset legend="Reporte: Investigadores por Proyecto" style="margin-left: 20px">
+                                <h:panelGrid columns="1" width="95%" id="h5" style="margin-bottom: 20px; margin-top: 20px">
+                                    <p:commandButton id="btnReporteInvestProy" value="Generar Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Reporte Investigadores por Proyecto" update=":formPrincipal:tabP:pdfInvestP,:formPrincipal:tabP:h5" actionListener="#{reportesInvestigacionController.generaReporteInvestigadorXProy}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:panel id="pdfInvestP" visible="#{reportesInvestigacionController.controlPDF}" style="margin-left: 20px">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/investigadores_por_proyecto/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%" height="600px" ></object>
+                            </p:panel>
+
+
+                        </p:tab>
+
+
+                        <p:tab title="Proyectos por Departamento" id="tabProyectosDepartamento">
+                            <p:fieldset legend="Reporte: Proyectos por Departamento" style="margin-left: 20px">
+                                <h:panelGrid columns="1" width="95%" id="h6" style="margin-bottom: 20px; margin-top: 20px">
+                                    <p:commandButton id="btnReporteProyDpto" value="Generar Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Proyectos por Departamento" update=":formPrincipal:tabP:pdfPryDpto,:formPrincipal:tabP:h6" actionListener="#{reportesInvestigacionController.generaReporteProyectoXDpto}">
+                                    </p:commandButton>
+
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:panel id="pdfPryDpto" visible="#{reportesInvestigacionController.controlPDF}" style="margin-left: 20px">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/proyectos_por_departamento/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%" height="600px" ></object>
+                            </p:panel>
+                        </p:tab>
+
+                        <p:tab title="Total Investigadores por Género" id="tabInvestigadoresGenero">
+                            <p:fieldset legend="Reporte: Total Investigadores por Género" style="margin-left: 20px">
+                                <h:panelGrid columns="1" width="95%" id="h7" style="margin-bottom: 20px; margin-top: 20px">
+                                    <p:commandButton id="btnReporteInvestGenero" value="Generar Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Total Investigadores por Genero" update=":formPrincipal:tabP:pdfInvtGenr,:formPrincipal:tabP:h7" actionListener="#{reportesInvestigacionController.generaReporteInvestigadorXGenero}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:panel id="pdfInvtGenr" visible="#{reportesInvestigacionController.controlPDF}" style="margin-left: 20px">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/total_investigadores_genero/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%" height="600px" ></object>
+                            </p:panel>
+
+                        </p:tab>
+
+                        <p:tab title="Total Estudiantes por Género" id="tabEstudiantesGenero">
+                            <p:fieldset legend="Reporte: Total Investigadores por Género" style="margin-left: 20px">
+                                <h:panelGrid columns="1" width="95%" id="h8" style="margin-bottom: 20px; margin-top: 20px">
+                                    <p:commandButton id="btnReporteEstudGenero" value="Reporte" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Total Estudiantes por Genero" update=":formPrincipal:tabP:pdfEstGenr,:formPrincipal:tabP:h8" actionListener="#{reportesInvestigacionController.generaReportEstudiantesXGenero}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </p:fieldset>
+                            <p:panel id="pdfEstGenr" visible="#{reportesInvestigacionController.controlPDF}" style="margin-left: 20px">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/total_estudiantes_genero/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%" height="600px" ></object>
+                            </p:panel>
+
+                        </p:tab>
+                        <p:tab title="Presupuesto por Partida" id="tabPresupuestoPartida">
+                            <p:fieldset legend="Reporte: Presupuesto por Partida" style="margin-left: 20px">
+                                <p:dataTable id="dtTPresupestoXPartida" value="#{reportesInvestigacionController.directFormatoLargoList}" var="presPartd" style="margin-top: 20px"
+                                             paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Ord." width="20">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Título en Español" style="white-space: pre-line" sortBy="#{presPartd.sflTituloEspaniol}">
+                                        <h:outputText value="#{presPartd.sflTituloEspaniol}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Director del Proyecto" style="white-space: pre-line" sortBy="#{presPartd.usuApellidos} #{presPartd.usuNombres}" width="200">
+                                        <h:outputText value="#{presPartd.usuApellidos} #{presPartd.usuNombres}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Generar Reporte" style="text-align: center" width="80">
+                                        <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generaReportePresupuestoXPartida(presPartd, 'pdf')}"
+                                                         ajax="false" title="Exportar a PDF" icon="ui-icon-arrowthickstop-1-s" >
+                                            <p:graphicImage value="/resources/images/pdf-icon.png" width="30"/>
+                                            <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                        </p:commandButton>
+                                        <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generaReportePresupuestoXPartida(presPartd, 'xls')}"
+                                                         ajax="false" title="Exportar a Excel" icon="ui-icon-arrowthickstop-1-s" > 
+                                            <p:graphicImage value="/resources/images/export-to-excel.gif" width="30"/>
+                                            <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                        </p:commandButton>
+
+
+                                        <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReportePresupuestoXPartida2('PDF', presPartd)}"
+                                                       title="Exportar a PDF" >
+                                            <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/></h:commandLink>
+                                        <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReportePresupuestoXPartida2('XLS', presPartd)}"
+                                                       title="Exportar a Excel">
+                                            <p:graphicImage url="../../resources/images/excel2.png" width="20" height="20"/>
+                                        </h:commandLink>
+
+
+                                    </p:column>
+                                </p:dataTable>
+                            </p:fieldset>
+
+                        </p:tab>
+                        <p:tab rendered="false" title="Programa Anual de Inversión" id="tabP10">
+                            <p:fieldset legend="Reporte: Programa Anual de Inversión" style="margin-left: 20px">
+                                <p:dataTable id="dtTProgramaInversion" value="#{reportesInvestigacionController.directFormatoLargoList}" var="progrInv" style="margin-top: 20px"
+                                             paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Ord." width="20">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Título en Español" style="white-space: pre-line">
+                                        <h:outputText value="#{progrInv.sflTituloEspaniol}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Director del Proyecto" style="white-space: pre-line" width="200">
+                                        <h:outputText value="#{progrInv.usuApellidos} #{progrInv.usuNombres}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Generar Reporte" style="text-align: center" width="80">
+                                        <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generaReporteProgramAnualInversion(progrInv, 'pdf')}"
+                                                         ajax="false" title="Exportar a PDF" icon="ui-icon-arrowthickstop-1-s" >
+                                            <p:graphicImage value="/resources/images/pdf-icon.png" width="30"/>
+                                            <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                        </p:commandButton>
+                                        <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generaReporteProgramAnualInversion(progrInv, 'xls')}"
+                                                         ajax="false" title="Exportar a Excel" icon="ui-icon-arrowthickstop-1-s" > 
+                                            <p:graphicImage value="/resources/images/export-to-excel.gif" width="30"/>
+                                            <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                        </p:commandButton>
+
+                                        <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteProgramAnualInversion2('PDF', progrInv)}"
+                                                       title="Exportar a PDF" >
+                                            <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/></h:commandLink>
+                                        <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteProgramAnualInversion2('XLS', progrInv)}"
+                                                       title="Exportar a Excel">
+                                            <p:graphicImage url="../../resources/images/excel2.png" width="20" height="20"/>
+                                        </h:commandLink>
+
+                                    </p:column>
+                                </p:dataTable>
+                            </p:fieldset>
+
+                        </p:tab>
+                        <p:tab title="Seguimiento Técnico de Proyectos" id="tabSeguimientoTecnico">
+                            <p:fieldset legend="Reporte: Seguimiento Técnico de Proyectos" style="margin-left: 20px">
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <p:outputLabel value="Convocatoria:"/>
+                                    <p:selectOneMenu  
+                                        value="#{reportesInvestigacionController.idConvocatoria5}"
+                                        effect="fade"
+                                        filter="false">
+                                        <f:selectItem itemLabel="[-TODOS-]"/>
+                                        <f:selectItems value="#{reportesInvestigacionController.convocatoriaList}" var="conv5" itemValue="#{conv5.convocaId}" itemLabel="#{conv5.convocaTitulo}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>       
+
+                                </h:panelGrid>    
+                                <p:commandButton value="Listar Proyectos" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left; margin-bottom: 20px"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Listar Formato Extenso" update=":formPrincipal:tabP:dtTSeguimientoProy"  action="#{reportesInvestigacionController.listarFormatoExtensoSeguimientoTecnico}">
+                                </p:commandButton>                                   
+
+
+                            </p:fieldset>
+                            <p:dataTable id="dtTSeguimientoProy" value="#{reportesInvestigacionController.directFormatoLargoList}" var="segProy" style="margin-left: 20px"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                <p:column headerText="Ord." width="20">
+                                    <h:outputText value="#{index + 1}"/>
+                                </p:column>
+                                <p:column headerText="Título en Español" style="white-space: pre-line">
+                                    <h:outputText value="#{segProy.sflTituloEspaniol}" style="text-transform: uppercase; font-size: xx-small"/>
+                                </p:column>
+                                <p:column headerText="Director del Proyecto" style="white-space: pre-line" width="200">
+                                    <h:outputText value="#{segProy.usuApellidos} #{segProy.usuNombres}" style="text-transform: uppercase; font-size: xx-small"/>
+                                </p:column>
+                                <p:column headerText="Generar Reporte" style="text-align: center" width="80">
+                                    <p:commandButton rendered="false" id="btnSeguimientoPry" icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Formato Largo" update=":formPrincipal:tabP"
+                                                     action="#{reportesInvestigacionController.generaReporteSeguimiento}">
+                                        <f:setPropertyActionListener value="#{segProy}" target="#{reportesInvestigacionController.directFrmtLargoSelected}"/>
+                                    </p:commandButton>
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReporteSeguimiento2('PDF', segProy)}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png" width="20" height="20"/>
+                                    </h:commandLink>
+
+                                </p:column>
+                            </p:dataTable>                            
+
+                        </p:tab>
+                        <p:tab title="Listado de Proyectos" id="tabProyectosConsolidado">
+                            <p:fieldset legend="Reporte: Listado de Proyectos" style="margin-left: 20px">
+                                <h:panelGrid rendered="false" columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <p:outputLabel value="Convocatoria:"/>
+                                    <p:selectOneMenu  
+                                        value="#{reportesInvestigacionController.idConvocatoria6}"
+                                        effect="fade"
+                                        filter="false">
+                                        <f:selectItem itemLabel="[-TODOS-]"/>
+                                        <f:selectItems value="#{reportesInvestigacionController.convocatoriaList}" var="conv6" itemValue="#{conv6.convocaId}" itemLabel="#{conv6.convocaTitulo}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>       
+
+                                </h:panelGrid>                                  
+                                <h:panelGrid columns="2" cellpadding="7" id="h12" style="margin-top: 20px">
+                                    <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generaReportePortafolioPry('pdf')}"
+                                                     ajax="false" title="Exportar a PDF" icon="ui-icon-arrowthickstop-1-s">
+                                        <p:graphicImage value="/resources/images/pdf-icon.png" width="30"/>
+                                        <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                    </p:commandButton>
+                                    <p:commandButton rendered="false" actionListener="#{reportesInvestigacionController.generaReportePortafolioPry('xls')}"
+                                                     ajax="false" title="Exportar a Excel"  icon="ui-icon-arrowthickstop-1-s">
+                                        <p:graphicImage value="/resources/images/export-to-excel.gif" width="30"/>
+                                        <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                    </p:commandButton>
+
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReportePortafolioPry2('PDF')}"
+                                                   title="Exportar a PDF">
+                                        <p:graphicImage url="../../resources/images/pdf.png"/>
+                                    </h:commandLink>
+                                    <h:commandLink target="_blank" actionListener="#{reportesInvestigacionController.generaReportePortafolioPry2('XLS')}"
+                                                   title="Exportar a Excel">
+                                        <p:graphicImage url="../../resources/images/excel2.png" width="33"/>
+                                    </h:commandLink>
+
+                                </h:panelGrid>
+                            </p:fieldset>
+
+                        </p:tab>
+                        <p:tab title="Portafolio de Proyectos" id="tabPortafolioProyectos">
+                            <p:fieldset legend="Reporte: Portafolio de Proyectos" style="margin-left: 20px">
+                                <h:panelGrid columns="1" cellpadding="7" width="95%" id="h27" style="margin-top: 20px">
+                                    <h:outputLabel value="Generar Reporte"/>
+                                    <p:commandButton actionListener="#{reportesInvestigacionController.generaReporteProyectosPortafolio('pdf')}"
+                                                     ajax="false" title="Exportar a PDF" icon="ui-icon-arrowthickstop-1-s">
+                                        <p:graphicImage value="/resources/images/pdf-icon.png" width="30"/>
+                                        <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                    </p:commandButton>
+                                    <p:commandButton actionListener="#{reportesInvestigacionController.generaReporteProyectosPortafolio('xls')}"
+                                                     ajax="false" title="Exportar a Excel"  icon="ui-icon-arrowthickstop-1-s">
+                                        <p:graphicImage value="/resources/images/export-to-excel.gif" width="30"/>
+                                        <p:fileDownload value="#{reportesInvestigacionController.archivoAdjunto}" />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </p:fieldset>
+
+                        </p:tab>
+                        <p:tab title="Acta de Liquidación del Proyecto" id="tabActaLiquidacion">
+                            <p:fieldset legend="Reporte: Acta de Liquidación del Proyecto" style="margin-left: 20px" rendered="#{!reportesInvestigacionController.controlPDF}">
+                                <p:dataTable id="dtTLiquidacionProy" value="#{reportesInvestigacionController.formatoLargoList}" var="liqProy" style="margin-top: 20px"
+                                             paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Ord." width="20">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Título en Español" style="white-space: pre-line" width="400" sortBy="#{liqProy.sflTituloEspaniol}">
+                                        <h:outputText value="#{liqProy.sflTituloEspaniol}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Título en Inglés" style="white-space: pre-line" sortBy="#{liqProy.sflTituloIngles}">
+                                        <h:outputText value="#{liqProy.sflTituloIngles}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Seleccione" style="text-align: center" width="80">
+                                        <p:commandButton id="btnLiquidacionProy" icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Acta de Liquidación del Proyecto" update=":formPrincipal:tabP"
+                                                         action="#{reportesInvestigacionController.generaReporteActaLiquidacion}">
+                                            <f:setPropertyActionListener value="#{liqProy}" target="#{reportesInvestigacionController.formatoLargoSelected}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:fieldset>
+                            <p:panel id="pdfLiquiP" rendered="#{reportesInvestigacionController.controlPDF}" style="background: #f5f3e5">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/liquidacion_proyecto/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%"  height="600px"></object>
+                            </p:panel>
+
+
+                        </p:tab>
+                        <p:tab title="Acta de Cierre del Proyecto" id="tabActaCierre">
+                            <p:fieldset legend="Reporte: Acta de Cierre del Proyecto" style="margin-left: 20px" rendered="#{!reportesInvestigacionController.controlPDF}">
+                                <p:dataTable id="dtTActaCierra" value="#{reportesInvestigacionController.formatoLargoList}" var="actCierr" style="margin-top: 20px"
+                                             paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                                    <p:column headerText="Ord." width="20">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Título en Español" style="white-space: pre-line" width="400" sortBy="#{actCierr.sflTituloEspaniol}">
+                                        <h:outputText value="#{actCierr.sflTituloEspaniol}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Título en Inglés" style="white-space: pre-line" sortBy="#{actCierr.sflTituloIngles}">
+                                        <h:outputText value="#{actCierr.sflTituloIngles}" style="text-transform: uppercase; font-size: xx-small"/>
+                                    </p:column>
+                                    <p:column headerText="Seleccione" style="text-align: center" width="80">
+                                        <p:commandButton id="btnActaCierre" icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Acta de Cierre" update=":formPrincipal:tabP"
+                                                         action="#{reportesInvestigacionController.generaReporteActaCierre}">
+                                            <f:setPropertyActionListener value="#{actCierr}" target="#{reportesInvestigacionController.formatoLargoSelected}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable> 
+                            </p:fieldset>
+                            <p:panel id="pdfActaC" rendered="#{reportesInvestigacionController.controlPDF}" style="background: #f5f3e5">
+                                <object type="application/pdf" data="/Investigacion-war/faces/reportes/acta_cierre_proyecto/#{reportesInvestigacionController.nombreArchivoPdf}" width="100%"  height="600px"></object>
+                            </p:panel>
+
+
+                        </p:tab>
+                    </p:tabView>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

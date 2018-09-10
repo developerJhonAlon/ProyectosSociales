@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="plazo_ejecucion" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="e555cff5-710e-42ac-9571-7946ca9b4ce7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_FORMATO_LARGO.SFL_FECHA_PRESENTA AS FECHA_PRESENTACION,
+       SEA_FORMATO_LARGO.SFL_FECHA_INICIO AS FECHA_INICIO,
+       SEA_FORMATO_LARGO.SFL_FECHA_FINALIZA AS FECHA_FIN,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION AS ESTADO,
+       SEA_DAT_GENERAL_PROY.DATGEPROY_TIEMPO_EJECUCION ||'  meses'  AS MESES
+  FROM SEA_FORMATO_LARGO, SEA_PARAMETROS_DET, SEA_DAT_GENERAL_PROY
+ WHERE (SEA_FORMATO_LARGO.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_FORMATO_LARGO.DATGEPROY_ID =
+               SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="FECHA_PRESENTACION" class="java.sql.Timestamp"/>
+	<field name="FECHA_INICIO" class="java.sql.Timestamp"/>
+	<field name="FECHA_FIN" class="java.sql.Timestamp"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="MESES" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="38a941d0-5884-4adc-adec-c53ea99ad74a" positionType="Float" x="0" y="0" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[PLAZO DE EJECUCIÓN]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f6d97872-83be-43e9-92bc-147a02de2a5b" positionType="Float" x="0" y="0" width="175" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Fecha de presentación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ced91d16-8a81-418a-98f6-ca4dd139c95c" positionType="Float" x="175" y="0" width="175" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Fecha de inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="79fc6fba-ec75-468d-9f63-7f3f8bb55859" positionType="Float" x="350" y="0" width="205" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Fecha de finalización]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement uuid="20369711-e4e4-40fd-8ecc-57a031ff3ab7" positionType="Float" x="0" y="19" width="175" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_PRESENTACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement uuid="18d83856-347a-40bb-81f7-5605247c75d6" positionType="Float" x="175" y="19" width="175" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_INICIO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement uuid="27ed6599-f89f-43d1-b70e-3a127f3a8b85" positionType="Float" x="350" y="19" width="205" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_FIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b2fccc80-da0c-4722-86cf-2590c2b5e7a7" positionType="Float" x="0" y="39" width="175" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Duración en meses:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d60c1bc6-67e1-4195-be20-c354f2c36060" positionType="Float" x="175" y="39" width="380" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2839bb7b-20a4-4b20-a9f1-919d7374a587" positionType="Float" stretchType="RelativeToTallestObject" x="175" y="58" width="380" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5782f8be-55b2-4dc5-b571-0316bf1ec387" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="58" width="175" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MESES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

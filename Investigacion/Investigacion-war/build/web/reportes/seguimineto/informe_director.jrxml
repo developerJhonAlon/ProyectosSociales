@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="informe_director" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="10530cef-301d-4180-ae8c-3102fcf1a52e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SEA_INFORME_DIRECTOR_FORMATO.SIDF_PORCENTAJE_PROGRAM,
+       SEA_INFORME_DIRECTOR_FORMATO.SIDF_PORCETAJE_REALIZADA,
+       SEA_INFORME_DIRECTOR_FORMATO.SIDF_OBSERVACION,
+       SEA_INFORME_DIRECTOR_FORMATO.SIDF_ANALISIS
+  FROM SEA_FORMATO_LARGO,
+       SEA_INFORME_DIRECTOR_FORMATO,
+       SEA_SEGUIMIENTO_FORMATO,
+       SEA_PARAMETROS_DET
+ WHERE (SEA_SEGUIMIENTO_FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_INFORME_DIRECTOR_FORMATO.SSEF_ID =
+               SEA_SEGUIMIENTO_FORMATO.SSEF_ID)
+       AND (SEA_INFORME_DIRECTOR_FORMATO.PRD_ID_EJECUCION =
+               SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="SIDF_PORCENTAJE_PROGRAM" class="java.math.BigDecimal"/>
+	<field name="SIDF_PORCETAJE_REALIZADA" class="java.math.BigDecimal"/>
+	<field name="SIDF_OBSERVACION" class="java.lang.String"/>
+	<field name="SIDF_ANALISIS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1b0e5890-98e6-4f50-92d7-569b06ab5fa1" positionType="Float" x="0" y="0" width="83" height="42"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ejecución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="75cbc38b-9084-47df-ac73-023e485e9f25" positionType="Float" x="83" y="0" width="82" height="42"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Porcentaje de ejecución programada %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd30250d-d89a-4fed-a09d-cbbacd3849a1" positionType="Float" x="165" y="0" width="82" height="42"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Porcentaje de ejecución realizada %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c2e7355-0c9d-4bb1-9ea3-7e1d81d39690" positionType="Float" x="247" y="0" width="161" height="42"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ee7b6c11-808f-455b-b15e-4756372c92f9" positionType="Float" x="408" y="0" width="147" height="42"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Análisis]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f3694b54-f858-4e5e-bb8b-c707b27900c3" positionType="Float" x="0" y="0" width="83" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRD_DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="f9adf55e-e925-402a-869a-9713259bc1e5" positionType="Float" x="83" y="0" width="82" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SIDF_PORCENTAJE_PROGRAM}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9ea6ee2d-e696-4d74-9afc-ce4aad5ff194" positionType="Float" x="165" y="0" width="82" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SIDF_PORCETAJE_REALIZADA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="11fb10bb-2553-499f-83dd-5446c7f8895d" positionType="Float" x="247" y="0" width="161" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SIDF_OBSERVACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b73765e5-1f71-4692-a8b0-b8f82e12e77c" positionType="Float" stretchType="RelativeToTallestObject" x="408" y="0" width="147" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SIDF_ANALISIS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

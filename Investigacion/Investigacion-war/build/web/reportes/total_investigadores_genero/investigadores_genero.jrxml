@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="investigadores_genero" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f8d3ebee-16ab-42c3-9792-a6f18ddfcc82">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO "TITULO DEL PROYECTO",
+            SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION "FECHA DE CREACION",
+           SEG_USUARIO.USU_NOMBRES||'  '||SEG_USUARIO.USU_APELLIDOS "PARTICIPANTES DEL PROYECTO",
+           SEA_TIPO_RESPONS.TIPRES_DESCRIP "TIPO DE RESPONSABILIDAD",
+           SEA_TIPO_RESPONS.TIPRES_ORDEN,
+           SEA_PARAMETROS_DET.PRD_DESCRIPCION "TIPO DE INVESTIGACION",
+           SPBPERS.SPBPERS_SEX "GENERO",
+           COUNT(SPBPERS.SPBPERS_SEX) AS TOTAL_FEMENINO,
+           0 AS TOTAL_DEFINIR,
+           0 AS TOTAL_MASCULINO
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_RESPONSABLE_PROG,
+       SEG_USUARIO,
+       SEA_TIPO_RESPONS,
+       SEA_PARAMETROS_DET,
+       SATURN.SPBPERS
+ WHERE (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_DAT_GENERAL_PROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID(+))
+       AND (SEG_USUARIO.SPRIDEN_PIDM = SPBPERS.SPBPERS_PIDM(+))
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '0')
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '1')
+       AND(SPBPERS.SPBPERS_SEX ='F')
+GROUP BY
+(SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO ,
+       SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION ,
+       SEG_USUARIO.USU_NOMBRES||'  '||SEG_USUARIO.USU_APELLIDOS,
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP,
+       SEA_TIPO_RESPONS.TIPRES_ORDEN,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SPBPERS.SPBPERS_SEX)
+
+UNION
+SELECT  SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO "TITULO DEL PROYECTO",
+       SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION "FECHA DE CREACION",
+       SEG_USUARIO.USU_NOMBRES||'  '||SEG_USUARIO.USU_APELLIDOS "PARTICIPANTES DEL PROYECTO",
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP "TIPO DE RESPONSABILIDAD",
+       SEA_TIPO_RESPONS.TIPRES_ORDEN,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION "TIPO DE INVESTIGACION",
+       SPBPERS.SPBPERS_SEX "GENERO",
+       0,
+       0,
+       COUNT(SPBPERS.SPBPERS_SEX) AS TOTAL_MASCULINO
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_RESPONSABLE_PROG,
+       SEG_USUARIO,
+       SEA_TIPO_RESPONS,
+       SEA_PARAMETROS_DET,
+       SATURN.SPBPERS
+ WHERE (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_DAT_GENERAL_PROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID(+))
+       AND (SEG_USUARIO.SPRIDEN_PIDM = SPBPERS.SPBPERS_PIDM(+))
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '0')
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '1')
+       AND(SPBPERS.SPBPERS_SEX ='M')
+GROUP BY
+(SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO,
+        SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION,
+       SEG_USUARIO.USU_NOMBRES||'  '||SEG_USUARIO.USU_APELLIDOS,
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP,
+       SEA_TIPO_RESPONS.TIPRES_ORDEN,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SPBPERS.SPBPERS_SEX)
+UNION
+SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO "TITULO DEL PROYECTO",
+       SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION "FECHA DE CREACION",
+       SEG_USUARIO.USU_NOMBRES||'  '||SEG_USUARIO.USU_APELLIDOS "PARTICIPANTES DEL PROYECTO",
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP "TIPO DE RESPONSABILIDAD",
+       SEA_TIPO_RESPONS.TIPRES_ORDEN,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION "TIPO DE INVESTIGACION",
+       SPBPERS.SPBPERS_SEX "GENERO",
+      0,
+       COUNT( CASE WHEN SPBPERS.SPBPERS_SEX IS NULL THEN 'A' ELSE 'E' END) AS TOTAL_DEFINIR,
+      0
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_RESPONSABLE_PROG,
+       SEG_USUARIO,
+       SEA_TIPO_RESPONS,
+       SEA_PARAMETROS_DET,
+       SATURN.SPBPERS
+ WHERE (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_DAT_GENERAL_PROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID(+))
+       AND (SEG_USUARIO.SPRIDEN_PIDM = SPBPERS.SPBPERS_PIDM(+))
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '0')
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '1')
+       AND(SPBPERS.SPBPERS_SEX  IS NULL)
+GROUP BY
+(SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO,
+       SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION ,
+       SEG_USUARIO.USU_NOMBRES||'  '||SEG_USUARIO.USU_APELLIDOS ,
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP,
+       SEA_TIPO_RESPONS.TIPRES_ORDEN,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SPBPERS.SPBPERS_SEX)
+ORDER BY 2 DESC, 5]]>
+	</queryString>
+	<field name="TITULO DEL PROYECTO" class="java.lang.String"/>
+	<field name="FECHA DE CREACION" class="java.sql.Timestamp"/>
+	<field name="PARTICIPANTES DEL PROYECTO" class="java.lang.String"/>
+	<field name="TIPO DE RESPONSABILIDAD" class="java.lang.String"/>
+	<field name="TIPRES_ORDEN" class="java.math.BigDecimal"/>
+	<field name="TIPO DE INVESTIGACION" class="java.lang.String"/>
+	<field name="GENERO" class="java.lang.String"/>
+	<field name="TOTAL_FEMENINO" class="java.math.BigDecimal"/>
+	<field name="TOTAL_DEFINIR" class="java.math.BigDecimal"/>
+	<field name="TOTAL_MASCULINO" class="java.math.BigDecimal"/>
+	<variable name="GENERO_1" class="java.lang.Integer" resetType="Page" calculation="Count">
+		<variableExpression><![CDATA[$F{GENERO}]]></variableExpression>
+	</variable>
+	<variable name="GENERO_2" class="java.lang.Integer" resetType="Group" resetGroup="TITULO" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{GENERO}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_FEMENINO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="TITULO" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_FEMENINO}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_MASCULINO_1" class="java.math.BigDecimal" resetType="Group" resetGroup="TITULO" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_MASCULINO}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_DEFINIR_1" class="java.math.BigDecimal" resetType="Group" resetGroup="TITULO" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_DEFINIR}]]></variableExpression>
+	</variable>
+	<group name="TITULO">
+		<groupExpression><![CDATA[$F{TITULO DEL PROYECTO}]]></groupExpression>
+		<groupHeader>
+			<band height="72">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="12" width="555" height="20" uuid="80e2b145-0d41-4a27-b575-c654da0ff0ce"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TITULO DEL PROYECTO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="414" y="32" width="141" height="20" uuid="9ae31243-2d3a-4b18-b64c-0b8e54d5b0ee"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FECHA DE CREACION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="118" y="32" width="194" height="20" uuid="ab5ddef9-0a2b-4c14-aa51-bbd1ca99f58d"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO DE INVESTIGACION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="32" width="118" height="20" uuid="a7fe4645-17b3-40fe-b82b-220dc8177c88"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipo de investigación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="312" y="32" width="102" height="20" uuid="d2c5a9d9-6869-4b56-864c-61ecef463f61"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha de creación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="52" width="241" height="20" uuid="45d58e76-438e-4dcf-bc7b-14fc7c2359a8"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Participantes del proyecto (Femenino)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="241" y="52" width="173" height="20" uuid="a4f092fc-5a3a-432f-b31c-69c027902814"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipo de Responsabilidad]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="414" y="52" width="141" height="20" uuid="b59dd19c-c999-498b-ae4c-446f108eaae4"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Genero]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="285" height="20" uuid="64d56a02-2ec9-4f92-8cdd-e2fa628db140"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total integrantes del proyecto por genero:]]></text>
+				</staticText>
+				<textField>
+					<reportElement positionType="Float" x="341" y="0" width="30" height="20" uuid="20a8cb0c-6c9b-485b-bc64-dcd3b7b32d88"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_FEMENINO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" x="428" y="0" width="30" height="20" uuid="930cd12e-798f-4feb-86fe-578263c7873b"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_MASCULINO_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement positionType="Float" x="525" y="0" width="30" height="20" uuid="437abd9e-7819-43cd-a3f8-71f6ccb3e602"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_DEFINIR_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="285" y="0" width="56" height="20" uuid="2e7ded7f-6d91-4732-9d87-330a68dc1815"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Femenino:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="371" y="0" width="57" height="20" uuid="a70d3c4f-fb77-41fe-a35e-5409118b28be"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Masculino:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="458" y="0" width="67" height="20" uuid="dbd62c16-ac55-45bd-8b79-4418ffa329af"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Por definir:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="61" uuid="a3327ce3-9350-4250-9632-4ae14379f0a5"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="33" uuid="b1428aa2-22b0-4d61-849f-fa8235a610e8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA
+INVESTIGADORES POR POYECTO POR GENERO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="241" height="20" isPrintWhenDetailOverflows="true" uuid="bc436eef-3c0b-41bb-98b8-f447ffd1feab"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARTICIPANTES DEL PROYECTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="241" y="0" width="173" height="20" isPrintWhenDetailOverflows="true" uuid="1ad3beab-c33c-4527-85a9-0b883bfa7189"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO DE RESPONSABILIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="414" y="0" width="141" height="20" isPrintWhenDetailOverflows="true" uuid="84426bef-a11a-4e07-90e4-1d77c5e60c26"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{GENERO} == "F" ? "Femenino" : $F{GENERO} == "M" ? "Masculino" : "Por definir ")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<textField pattern="">
+				<reportElement x="428" y="17" width="80" height="20" uuid="798eff56-a328-4300-8c28-1f7f94feedc4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="508" y="17" width="40" height="20" uuid="226bed58-2ad0-4d68-a411-f9b7e08cad96"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

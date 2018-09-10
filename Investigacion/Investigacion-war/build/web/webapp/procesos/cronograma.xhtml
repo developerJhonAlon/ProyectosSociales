@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Cronograma de Ejecución del Proyecto" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >                   
+                    <p:selectBooleanButton id="value2" value="#{cronogramaController.botonInicio}" onLabel="Formatos Largos"  disabled="#{cronogramaController.botonInicio}" offLabel="Formatos Largos" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:150px">
+                        <p:ajax update=":formPrincipal:panelBase" listener="#{cronogramaController.inicioFormatoLargo}" />
+                    </p:selectBooleanButton>
+                </h:panelGrid>    
+
+                <p:panel id="inicio"  visible="#{cronogramaController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                    <p:dataTable id="dtFormatoLargo" value="#{cronogramaController.formatoLargoList}" var="formatoLargo"
+                                 paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                 emptyMessage="No se encontraron resultados"  style="text-align: left">
+
+                        <p:column headerText="Ord." style="width:5%">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Formato Largo" style="width: 35%">
+                            <h:outputText value="#{formatoLargo.sflTituloEspaniol}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                        </p:column>
+<!--                        <p:column headerText="Título Convocatoria" style="width: 40%">
+                            <h:outputText value="#{formatoLargo.datgeproyId.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Tipo de Investigación" style="width: 10%">
+                            <h:outputText value="#{formatoLargo.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>-->
+                        <p:column headerText="Categoria" style="width: 10%">
+                            <h:outputText value="#{formatoLargo.prdIdCategoria.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+<!--                        <p:column headerText="Plan" style="width: 15%">
+                            <h:outputText value="#{formatoLargo.obplabvId.obplabvNombre}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>-->
+
+                        <p:column headerText="Seleccione" style="width:5%;text-align: center">
+                            <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Selecciona Formato Largo" action="#{cronogramaController.seleccionaConvo}" 
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{formatoLargo}" target="#{cronogramaController.formatoLargoSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                </p:panel>
+
+                <!--                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" > 
+                                    <p:tab title="1. Datos Generales" id="tabP1">-->
+                <!--<p:panel id="pcomision" visible="#{!cronogramaController.botonInicio}">-->
+                <p:tabView scrollable="true"  id="tabP" rendered="#{!cronogramaController.botonInicio}"> 
+                    <p:tab title="1. Cronograma" >
+                        <p:growl id="messages" showDetail="true" />
+                        <p:separator />
+                        <p:schedule id="schedule" value="#{cronogramaController.eventModel}" widgetVar="myschedule" timeZone="GMT+2" style="width: 80%" >
+
+                            <p:ajax event="dateSelect" listener="#{cronogramaController.onDateSelect}" update=":formPrincipal:eventDetails" oncomplete="PF('eventDialog').show();" />
+                            <p:ajax event="eventSelect" listener="#{cronogramaController.onEventSelect}" update=":formPrincipal:eventDetails" oncomplete="PF('eventDialog').show();" />
+                            <p:ajax event="eventMove" listener="#{cronogramaController.onEventMove}" update="messages" />
+                            <p:ajax event="eventResize" listener="#{cronogramaController.onEventResize}" update="messages" />
+
+                        </p:schedule>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+
+            <p:dialog widgetVar="eventDialog" header="Datos Actividad" style="font-size: 11px; text-align: left; font-weight: bold" >
+                <h:panelGrid id="eventDetails" columns="2">
+                    <h:outputLabel for="actividad" value="Actividad:" />
+                    <p:inputText id="actividad" value="#{cronogramaController.event.title}" >
+                        <p:ajax event="keyup" update=":formPrincipal:btnGrabarP1" listener="#{cronogramaController.validarVaciosP1}" />
+                    </p:inputText>
+
+                    <h:outputLabel for="fechaInicio" value="Fecha Inicio:" />
+                    <p:calendar id="fechaInicio" value="#{cronogramaController.event.startDate}" locale="es" pattern="dd/MM/yyyy" >
+                        <p:ajax event="dateSelect" update=":formPrincipal:btnGrabarP1,:formPrincipal:fechaFin" listener="#{cronogramaController.validarVaciosP1}" />
+                    </p:calendar>
+
+<!--                    <p:inputMask id="fechaInicio" value="#{cronogramaController.event.startDate}" mask="99/99/9999">
+    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
+</p:inputMask>-->
+
+                    <h:outputLabel for="fechaFin" value="Fecha Fin:" />
+                    <p:calendar id="fechaFin" value="#{cronogramaController.event.endDate}" locale="es" pattern="dd/MM/yyyy" >
+                        <p:ajax event="dateSelect" update=":formPrincipal:btnGrabarP1,:formPrincipal:duracion" listener="#{cronogramaController.validarVaciosP1}"/>
+                    </p:calendar>
+
+<!--                    <p:inputMask id="fechaFin" value="#{cronogramaController.event.endDate}" mask="99/99/9999">
+    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
+    <p:ajax event="change" update=":formPrincipal:duracion" listener="#{cronogramaController.calculaDuracion()}"/>
+</p:inputMask>-->
+
+                    <h:outputLabel for="duracion" value="Duración:" />
+                    <p:spinner id="duracion" value="#{cronogramaController.duracion}" >                        
+                        <p:ajax event="change" update=":formPrincipal:btnGrabarP1,:formPrincipal:fechaFin" listener="#{cronogramaController.validarVaciosP1}"/>
+                    </p:spinner>
+
+
+
+                    <h:outputLabel for="res" value="Responsable:"/>
+                    <p:selectOneMenu id="res" value="#{cronogramaController.responsable}" required="false"  >
+                        <f:selectItem itemLabel="Seleccione Responsabilidad" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{cronogramaController.responsableFormatoList}" var="resFor"
+                                       itemLabel="#{resFor.usuApellidos} #{resFor.usuNombres}" itemValue="#{resFor.usuId}" />                                            
+                        <p:ajax event="change" update=":formPrincipal:btnGrabarP1" listener="#{cronogramaController.validarVaciosP1}" />
+                    </p:selectOneMenu>
+
+
+                    <!--
+                                        <h:outputLabel for="allDay" value="All Day:" />
+                                        <h:selectBooleanCheckbox id="allDay" value="#{cronogramaController.event.allDay}" />-->
+
+<!--                    <p:commandButton id="addButton" value="Save" actionListener="#{cronogramaController.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                    <p:commandButton type="reset" value="Reset" oncomplete="PF('eventDialog').hide();"/>-->
+
+
+
+
+
+                    <!--                    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        </p:confirmDialog>-->
+
+
+                    <h:panelGroup layout="block" >
+                        <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "  disabled="#{cronogramaController.validaVaciosP1}"
+                                         onstart="PF('blockUIWidget').block()" 
+                                         title="Graba Información" update=":formPrincipal:tabP" 
+                                         actionListener="#{cronogramaController.addEvent}"
+                                         oncomplete="PF('blockUIWidget').unblock();PF('myschedule').update();PF('eventDialog').hide();">                            
+                        </p:commandButton>
+
+                        <p:commandButton id="btnEliminarP1" value="Eliminar" icon="ui-icon-circle-minus" style="margin: 0; font-size: 11px; float: left " 
+                                         title="Graba Información" update=":formPrincipal:tabP" >                            
+                            <p:ajax listener="#{cronogramaController.eliminarP1}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                        </p:commandButton>                    
+                    </h:panelGroup>                    
+                    <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                     title="Graba Información" update=":formPrincipal:tabP"  >
+                        <p:ajax listener="#{cronogramaController.cancelarP1}" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock(); PF('eventDialog').hide();" />
+                    </p:commandButton>
+
+
+                </h:panelGrid>
+            </p:dialog> 
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <style>
+                    .inputNumber2 input
+                    {
+                        width: 50px;
+                    }
+                    .col1_puntaje {
+                        width: 190px ;
+                    }
+                </style>  
+                    <h:panelGrid id="panelBase" style="width: 100%">
+                    <p:panel header="Evaluación de Proyecto Extenso" style="margin-bottom: 35px" rendered="#{evaluacionXParController.parEvaluacionSelected==null}">
+                        <p:dataTable value="#{evaluacionXParController.parEvaluacionList}" var="parEva" 
+                                     paginator="true" rows="15" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." style="text-align: center" width="20">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Proyecto" style="white-space: pre-line" sortBy="#{parEva.notaConceptual.datgeproyTitulo}">
+                                <h:outputText value="#{parEva.notaConceptual.datgeproyTitulo}" />
+                            </p:column>
+                            <p:column headerText="Estado" style="white-space: pre-line" width="400" sortBy="#{parEva.notaConceptual.estado}">
+                                <h:outputText value="#{parEva.notaConceptual.estado}"/>
+                            </p:column>
+                            <p:column rendered="false" headerText="Etapa" style="white-space: pre-line" sortBy="#{parEva.prdId.prdDescripcion}">
+                                <h:outputText value="#{parEva.prdId.prdDescripcion}"/>
+                            </p:column>
+                            <p:column headerText="Seleccione" style="text-align: center" width="50">
+                                <p:commandButton icon="ui-icon-circle-check" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Seleccionar Nota Conceptual" action="#{evaluacionXParController.seleccionarParEvaluacion()}"
+                                                 update=":formPrincipal:panelBase">
+                                    <f:setPropertyActionListener value="#{parEva}" target="#{evaluacionXParController.parEvaluacionSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+
+                    </p:panel>
+                    <p:panel header="Evaluación Proyecto Extenso: #{evaluacionXParController.parEvaluacionSelected.notaConceptual.datgeproyTitulo}" style="margin-bottom: 35px" rendered="#{evaluacionXParController.parEvaluacionSelected!=null}">
+                        <p:commandButton value="Listar Proyectos Extensos" title="Editar" icon="ui-icon-arrowreturnthick-1-w"
+                                         style="margin-top: 10px"
+                                         action="#{evaluacionXParController.init()}"
+                                         update=":formPrincipal:panelBase" >
+                        </p:commandButton>
+
+                        <p:tabView orientation="horizontal" id="tabP" style="margin-top: 10px">
+                            <p:tab title="Reporte Proyecto Extenso">
+                                <p:panel id="pdf">
+                                    <object type="application/pdf" data="/Investigacion-war/faces/reportes/proyecto_largo/#{evaluacionXParController.nombreArchivoPdf}" width="90%" height="600px" ></object>
+                                </p:panel>
+
+                            </p:tab>
+                            <p:tab title="Evaluación">
+                                <h:panelGrid id="panelEvaluacion" >
+                                    <h:panelGrid rendered="#{!evaluacionXParController.modoEdicion}" columns="2">
+                                        <p:commandButton value="Editar evaluación" title="Editar" icon="ui-icon-pencil"
+                                                         action="#{evaluacionXParController.editar}"
+                                                         disabled="#{evaluacionXParController.evaluacionParSelected.estadoFinalizado=='S'}"
+                                                         update=":formPrincipal:panelBase" >
+                                        </p:commandButton>
+                                        <p:commandButton value="Finalizar" title="Finalizar evaluación" icon="ui-icon-check" 
+                                                         update=":formPrincipal:panelBase, :formPrincipal:message1"
+                                                         action ="#{evaluacionXParController.finalizar}"
+                                                         disabled="#{evaluacionXParController.evaluacionParSelected.estadoFinalizado=='S'}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()">
+                                            <p:confirm header="Confirmación" message="Confirma que desea finalizar la evaluación ?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid rendered="#{evaluacionXParController.modoEdicion}" columns="2">
+                                        <p:commandButton id="btnGrabarEvaluacion" value="Grabar" title="Grabar Información" icon="ui-icon-locked" 
+                                                         update=":formPrincipal:panelBase, :formPrincipal:message1" 
+                                                         action ="#{evaluacionXParController.grabar()}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()">
+                                        </p:commandButton>
+                                        <p:commandButton value="Cancelar" title="Cancela Información" icon="ui-icon-arrowreturnthick-1-w" 
+                                                         update=":formPrincipal:panelBase" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         action="#{evaluacionXParController.cancelar()}">
+                                        </p:commandButton>
+                                    </h:panelGrid>                                          
+
+                                    <p:dataTable id="dtParametroEvaluacion" value="#{evaluacionXParController.configParametrosEvaluacionSelected.parametroEvaluacionList}" var="paramEvaluacion"
+                                                 style="margin-bottom: 20px"
+                                                 expandedRow="true"
+                                                 resizableColumns="true"
+                                                 emptyMessage="No se encontraron Resultados"> 
+                                        <p:column width="20" >
+                                            <p:rowToggler rendered="#{(paramEvaluacion.parametroEvaluacionList!=null and paramEvaluacion.parametroEvaluacionList.size()>0) or (paramEvaluacion.valoracionList!=null and paramEvaluacion.valoracionList.size()>0)}"/>
+                                        </p:column>
+                                        <p:column headerText="Nro." width="40" style="text-align: center">
+                                            <h:outputText value="#{paramEvaluacion.orden}" />
+                                        </p:column>
+                                        <p:column headerText="Descripción" style="white-space: pre-line">
+                                            <h:outputText value="#{paramEvaluacion.descripcion}" ></h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Puntaje" width="220" style="text-align: center">
+                                            <h:panelGroup style="border: hidden" rendered="#{paramEvaluacion.valoracionList!=null and paramEvaluacion.valoracionList.size()>0}">
+                                                <h:panelGrid columns="2" style="border: hidden" columnClasses="col1_puntaje">
+                                                    <p:selectOneMenu id="selOpcionValoracion1"
+                                                                     disabled="#{!evaluacionXParController.modoEdicion}"
+                                                                     converter="omnifaces.SelectItemsConverter"
+                                                                     required="#{not empty param['formPrincipal:btnGrabarEvaluacion']}"
+                                                                     value="#{paramEvaluacion.valoracionParametroEvaluacion}" 
+                                                                     style="width: 93%"
+                                                                     >
+                                                        <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{paramEvaluacion.valoracionList}" var="valorCalificacion" itemLabel="#{valorCalificacion.descripcion}" itemValue="#{valorCalificacion}"/>
+                                                        <p:ajax event="change" update=":formPrincipal:tabP:dtParametroEvaluacion" process=":formPrincipal:tabP:dtParametroEvaluacion"/>
+                                                    </p:selectOneMenu>
+                                                    <h:outputLabel value="#{paramEvaluacion.puntaje}"> 
+                                                        <f:convertNumber locale="es"  pattern="#,###,##0.00" />
+                                                    </h:outputLabel>
+                                                </h:panelGrid>
+                                                <p:message for="selOpcionValoracion1"/>
+                                            </h:panelGroup>
+                                            <h:panelGroup style="border: hidden" rendered="#{(paramEvaluacion.parametroEvaluacionList==null || paramEvaluacion.parametroEvaluacionList.size()==0) and (paramEvaluacion.valoracionList==null or paramEvaluacion.valoracionList.size()==0)}">
+                                                <pe:inputNumber id="txtPuntaje1"
+                                                                value="#{paramEvaluacion.puntaje}" 
+                                                                disabled="#{!evaluacionXParController.modoEdicion}"
+                                                                required="#{not empty param['formPrincipal:btnGrabarEvaluacion']}"
+                                                                decimalPlaces="2" minValue="0" maxlength="2" maxValue="99" styleClass="inputNumber2"
+                                                                >
+                                                    <p:ajax event="change" update=":formPrincipal:tabP:dtParametroEvaluacion" process=":formPrincipal:tabP:dtParametroEvaluacion"/>
+                                                </pe:inputNumber>
+                                                <p:message for="txtPuntaje1"/>
+                                            </h:panelGroup>
+                                            <h:outputText value="#{paramEvaluacion.puntaje}" rendered="#{(paramEvaluacion.parametroEvaluacionList!=null and paramEvaluacion.parametroEvaluacionList.size()>0)}">
+                                                <f:convertNumber locale="es"  pattern="#,###,##0.00" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Justificación" width="580" style="text-align: center">
+                                            <h:panelGroup style="border: hidden" rendered="#{(paramEvaluacion.parametroEvaluacionList==null || paramEvaluacion.parametroEvaluacionList.size()==0) and (paramEvaluacion.valoracionList==null or paramEvaluacion.valoracionList.size()==0)}">
+                                                <p:inputTextarea id="txtJustificacion1"
+                                                                 style="width: 90%" rows="2"
+                                                                 value="#{paramEvaluacion.justificacion}"
+                                                                 disabled="#{!evaluacionXParController.modoEdicion}"
+                                                                 required="#{not empty param['formPrincipal:btnGrabarEvaluacion']}"
+                                                                 >
+                                                </p:inputTextarea>
+                                                <p:message for="txtJustificacion1"/>
+                                            </h:panelGroup>
+
+                                        </p:column>
+                                        <p:rowExpansion rendered="#{(paramEvaluacion.parametroEvaluacionList!=null and paramEvaluacion.parametroEvaluacionList.size()>0) or (paramEvaluacion.valoracionList!=null and paramEvaluacion.valoracionList.size()>0)}">
+                                            <p:panel style="border:hidden;width:98%; padding-left: 30px"  rendered="#{paramEvaluacion.tieneSubitems=='S'}">
+                                                <h:outputLabel value="Parámetros de evaluación:" style="font-weight: bold"/>
+                                                <p:dataTable id="dtParametroEvaluacionHijo" value="#{paramEvaluacion.parametroEvaluacionList}" var="paramEvaluacionHijo"
+                                                             resizableColumns="true"
+                                                             emptyMessage="No se encontraron Resultados"> 
+                                                    <p:column headerText="Nro." width="40" style="text-align: center">
+                                                        <h:outputText value="#{paramEvaluacion.orden}.#{paramEvaluacionHijo.orden}" />
+                                                    </p:column>
+                                                    <p:column headerText="Descripción" style="white-space: pre-line">
+                                                        <h:outputText value="#{paramEvaluacionHijo.descripcion}" ></h:outputText>
+                                                    </p:column>
+                                                    <p:column headerText="Puntaje" width="250" style="text-align: center">
+                                                        <h:panelGroup style="border: hidden" rendered="#{paramEvaluacionHijo.valoracionList!=null and paramEvaluacionHijo.valoracionList.size()>0}">
+                                                            <h:panelGrid columns="2" style="border: hidden" columnClasses="col1_puntaje">
+                                                                <p:selectOneMenu id="selOpcionValoracion2"
+                                                                                 required="#{not empty param['formPrincipal:btnGrabarEvaluacion']}"
+                                                                                 disabled="#{!evaluacionXParController.modoEdicion}"
+                                                                                 converter="omnifaces.SelectItemsConverter"
+                                                                                 value="#{paramEvaluacionHijo.valoracionParametroEvaluacion}" 
+                                                                                 style="width: 93%"
+                                                                                 >
+                                                                    <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                                                    <f:selectItems value="#{paramEvaluacionHijo.valoracionList}" var="valorCalificacionHijo" itemLabel="#{valorCalificacionHijo.descripcion}" itemValue="#{valorCalificacionHijo}"/>
+                                                                    <p:ajax event="change" update=":formPrincipal:tabP:dtParametroEvaluacion" process=":formPrincipal:tabP:dtParametroEvaluacion"/>
+                                                                </p:selectOneMenu>
+                                                                <h:outputLabel value="#{paramEvaluacionHijo.puntaje}">
+                                                                    <f:convertNumber locale="es"  pattern="#,###,##0.00" />
+                                                                </h:outputLabel>
+                                                            </h:panelGrid>
+                                                            <p:message for="selOpcionValoracion2"/>
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup rendered="#{paramEvaluacionHijo.valoracionList==null or paramEvaluacionHijo.valoracionList.size()==0}">
+                                                            <pe:inputNumber id="txtPuntaje2"
+                                                                            value="#{paramEvaluacionHijo.puntaje}" 
+                                                                            disabled="#{!evaluacionXParController.modoEdicion}"
+                                                                            required="#{not empty param['formPrincipal:btnGrabarEvaluacion']}"
+                                                                            decimalPlaces="2" minValue="0" maxlength="2" maxValue="99" styleClass="inputNumber2"
+                                                                            >
+                                                                <p:ajax event="change" update=":formPrincipal:tabP:dtParametroEvaluacion" process=":formPrincipal:tabP:dtParametroEvaluacion"/>
+                                                            </pe:inputNumber>
+                                                            <p:message for="txtPuntaje2"/>
+                                                        </h:panelGroup>
+                                                    </p:column>
+                                                    <p:column headerText="Justificación" width="580" style="text-align: center">
+                                                        <h:panelGroup style="border: hidden" rendered="#{paramEvaluacionHijo.valoracionList==null or paramEvaluacionHijo.valoracionList.size()==0}">
+                                                            <p:inputTextarea id="txtJustificacion2" 
+                                                                             style="width: 90%" rows="2"
+                                                                             value="#{paramEvaluacionHijo.justificacion}"
+                                                                             disabled="#{!evaluacionXParController.modoEdicion}"
+                                                                             required="#{not empty param['formPrincipal:btnGrabarEvaluacion']}"
+                                                                             >
+                                                            </p:inputTextarea>
+                                                            <p:message for="txtJustificacion2"/>
+                                                        </h:panelGroup>
+
+                                                    </p:column>
+
+                                                </p:dataTable>
+                                            </p:panel>                                                               
+                                        </p:rowExpansion>                                        
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="3" style="text-align:right" footerText="PUNTAJE TOTAL EVALUACION:" />
+                                                <p:column footerText="#{evaluacionXParController.configParametrosEvaluacionSelected.puntajeStr}" style="text-align: center" >
+                                                </p:column>
+                                                <p:column/>
+                                            </p:row>
+                                        </p:columnGroup>                              
+                                    </p:dataTable>
+                                </h:panelGrid>
+                            </p:tab>
+
+                        </p:tabView>
+
+                    </p:panel>    
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bienes" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="31dd78ba-0c48-4168-a65c-7b579dcdaa3e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_ID,
+            SEA_FORMATO_LARGO.SFL_ID,
+            SZDTABIENPROY.SZDTABIENPROY_DESC
+FROM    SEA_DAT_GENERAL_PROY,
+            SEA_FORMATO_LARGO,
+            SZDTABIENPROY
+WHERE  (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = SEA_FORMATO_LARGO.DATGEPROY_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = SZDTABIENPROY .SFL_ID)
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='0')
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='1')
+      AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="DATGEPROY_ID" class="java.math.BigDecimal"/>
+	<field name="SFL_ID" class="java.math.BigDecimal"/>
+	<field name="SZDTABIENPROY_DESC" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="0719b0aa-d3f7-437a-8bc1-348802ad39d4"/>
+				<box topPadding="2" leftPadding="45" bottomPadding="2" rightPadding="5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SZDTABIENPROY_DESC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

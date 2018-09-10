@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="memo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e6dd19a4-a861-4e94-b2b9-b2183316ecef">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="92"/>
+	<parameter name="proy" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="respo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO,
+       SEG_USUARIO.USU_NOMBRES,
+SEG_USUARIO.USU_APELLIDOS,
+       SEA_CONVOCA.CONVOCA_CODIGO,
+       SEA_CONVOCA.CONVOCA_TITULO,
+       STVSUBJ.STVSUBJ_DESC,
+       SEA_DAT_GENERAL_PROY.DATGEPROY_MONTO_TOTAL
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_CONVOCA,
+       SEA_RESPONSABLE_PROG,
+       SEG_USUARIO,
+       SATURN.STVSUBJ
+ WHERE (SEA_DAT_GENERAL_PROY.CONVOCA_ID = SEA_CONVOCA.CONVOCA_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID)
+       AND (SEA_RESPONSABLE_PROG.DATGEPROY_ID =
+               SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (STVSUBJ.STVSUBJ_CODE = SEA_RESPONSABLE_PROG.STVSUBJ_CODE_DPTO)
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = $P{proy})
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = $P{respo})]]>
+	</queryString>
+	<field name="DATGEPROY_TITULO" class="java.lang.String"/>
+	<field name="USU_NOMBRES" class="java.lang.String"/>
+	<field name="USU_APELLIDOS" class="java.lang.String"/>
+	<field name="CONVOCA_CODIGO" class="java.lang.String"/>
+	<field name="CONVOCA_TITULO" class="java.lang.String"/>
+	<field name="STVSUBJ_DESC" class="java.lang.String"/>
+	<field name="DATGEPROY_MONTO_TOTAL" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<image>
+				<reportElement x="168" y="7" width="232" height="57" uuid="54f6ed1c-85ae-4d1b-80c2-a1f40a82976f"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "logo_espe.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="279" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="20" y="12" width="524" height="20" uuid="20ae3fa5-9e9f-48af-81bd-5f69ac246222"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Certifico que el proyecto de investigación titulado:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="22" y="79" width="522" height="20" uuid="c4f24682-50c4-4c42-b18a-f58c3ce30952"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Presentado por el señor(a): <b>" + $F{USU_NOMBRES} + " " + $F{USU_APELLIDOS} + "</b>, en la Convocatoria de Proyectos de Investigación " + $F{CONVOCA_CODIGO} +  " - " + $F{CONVOCA_TITULO} + ", por un monto de " + $F{DATGEPROY_MONTO_TOTAL} + " USD. tiene el auspicio del Departamento de " + $F{STVSUBJ_DESC} + "."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="20" y="43" width="524" height="20" isPrintWhenDetailOverflows="true" uuid="4dbee3ea-3728-4f97-947b-4429505d8f73"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATGEPROY_TITULO}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="EEEEE, dd  MMMMM  yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="93" y="163" width="199" height="20" uuid="227b4ce2-95f8-47a7-890d-b56aa651d842"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="21" y="207" width="554" height="20" uuid="c0e35083-277a-4240-b3a3-b36cc746ad17"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Director del Departamento]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="210" y="206" width="179" height="1" uuid="5ed41156-ea0b-4bdd-8124-ad5510cd24eb"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="183" y="227" width="57" height="20" uuid="70a152cd-1df9-4285-b927-2dba6aeadb8c"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="183" y="247" width="57" height="20" uuid="76c965f7-0a07-48ee-9657-21d89654a0c2"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[C.I.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="240" y="227" width="161" height="20" uuid="f489c035-bec8-4a83-98b1-8e073f152cbe"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="240" y="247" width="161" height="20" uuid="cf395fd5-a5ef-4126-885e-dcb0cd9c0541"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEEEE, dd  MMMMM  yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="22" y="163" width="71" height="20" uuid="74df226a-6505-47d2-88ff-a0df5ec85b05"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sangolquí,"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="14" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="678" y="6" width="80" height="20" uuid="5e822307-449b-42bb-abd0-94c64c8a6dce"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="761" y="6" width="40" height="20" uuid="3fcf765d-7bf8-4c16-beed-7a65e5276704"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="12" splitType="Stretch"/>
+	</summary>
+</jasperReport>

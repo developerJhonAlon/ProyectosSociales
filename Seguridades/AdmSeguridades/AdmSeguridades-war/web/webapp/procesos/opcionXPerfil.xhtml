@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/vista/plantilla.xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:param name="backingBean" value="#{opcionesXPerfilController}" />
+    <ui:param name="tituloPagina" value="Opciones por Perfil"/>
+    <ui:define name="editar"/>
+    <ui:define name="contenido">
+        <h:form id="formPrincipal1" enctype="multipart/form-data" >
+            <p:growl id="growl" showDetail="true" autoUpdate="true" showSummary="false"/>
+            <p:panel id="panelBase" header="Opciones por Perfiles" style="margin-bottom:10px; text-align: center;font-size: x-small" >
+                <p:dataTable id="dataTableOpcionPerfil" value="#{opcionesXPerfilController.opcionPerfiList}" var="oPerf" editable="true" style="width: 100%; text-align: left"
+                             paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" emptyMessage="No se encontraron resultados">
+                    <p:ajax event="rowEdit" listener="#{opcionesXPerfilController.onRowEditP1}" update=":formPrincipal:formPrincipal1:dataTableOpcionPerfil"/>
+                    <p:ajax event="rowEditCancel" listener="#{opcionesXPerfilController.onRowCancelP1}" update=":formPrincipal:formPrincipal1:dataTableOpcionPerfil"/>
+                    
+                    <p:column headerText="Ord." style="width: 5%">
+                        <h:outputText value="#{index + 1}" />
+                    </p:column>
+
+                    <p:column headerText="Sistema" filterBy="#{oPerf.segOpcion.segSistemas.sisNombre}" filterMatchMode="contains" style="width: 20%" >
+                        <h:outputText value="#{oPerf.segOpcion.segSistemas.sisNombre}" style="text-transform: uppercase"/>
+                    </p:column>  
+                    <p:column headerText="Opción" filterBy="#{oPerf.segOpcion.opcNombre}" filterMatchMode="contains" style="width: 20%" >
+                        <h:outputText value="#{oPerf.segOpcion.opcNombre}"/>
+                    </p:column>                      
+                    <p:column headerText="Estado" style="width: 15%;white-space: pre-line">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="ACTIVO" style="text-transform: uppercase; font-size: xx-small" rendered="#{oPerf.oppActInact=='1'}"/><h:outputText value="INACTIVO" style="text-transform: uppercase; font-size: xx-small" rendered="#{oPerf.oppActInact=='0'}"/> </f:facet>
+                            <f:facet name="input">
+                                <h:selectOneRadio value="#{oPerf.oppActInact}">                                    
+                                    <f:selectItem itemLabel="Activo" itemValue="1" />
+                                    <f:selectItem itemLabel="Inactivo" itemValue="0"/>
+                                </h:selectOneRadio>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Perfíl" style="width: 25%" filterBy="#{oPerf.segPerfil.perNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{oPerf.segPerfil.perNombre}" style="text-transform: uppercase" />
+                    </p:column> 
+                    <p:column headerText="Editar" style="width: 10%">
+                        <p:rowEditor/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+

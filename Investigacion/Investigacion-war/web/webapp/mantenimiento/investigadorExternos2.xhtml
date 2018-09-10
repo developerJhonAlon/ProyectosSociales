@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Administración de Personal Externo" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                    <p:fieldset legend="Listado de Personal Externo" rendered="#{investigadorExternosController2.inicio}" >
+                        <p:commandButton value="Agregar" icon="ui-icon-plus"
+                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                         title="Agregar Información" update=":formPrincipal:panelBase" 
+                                         action="#{investigadorExternosController2.nuevo}" 
+                                         >
+                        </p:commandButton>
+
+                        <p:dataTable id="dtPersonalExterno" value="#{investigadorExternosController2.personalExternoList}" var="per" paginator="true"
+                                     paginator="true" rows="5" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  Nro. items por página: {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="Registros del {startRecord}-{endRecord} , total: {totalRecords}"
+                                     rowsPerPageTemplate="5,10,15,20,30,50,100" >
+                            <p:column headerText="Ord." width="20">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Cédula" width="100">
+                                <h:outputText value="#{per.usuCc}" style="white-space: pre-line; " />
+                            </p:column>
+                            <p:column headerText="Nombres" width="200">
+                                <h:outputText value="#{per.usuNombres}" style="white-space: pre-line; " />
+                            </p:column>
+                            <p:column headerText="Apellidos" >
+                                <h:outputText value="#{per.usuApellidos}" style="white-space: pre-line" />
+                            </p:column>
+                            <p:column headerText="Email" width="100">
+                                <h:outputText value="#{per.usuEmail}" style="white-space: pre-line;" />
+                            </p:column>
+                        </p:dataTable>                    
+                    </p:fieldset>
+
+
+                    <p:fieldset legend="#{investigadorExternosController2.personalExternoSelected.usuId==null?'Creación de personal externo':'Edició de personal externo'}" rendered="#{!investigadorExternosController2.inicio}" >
+
+                        <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                            <p:commandButton value="Grabar" icon="ui-icon-locked" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" 
+                                             update=":formPrincipal:panelBase" 
+                                             action="#{investigadorExternosController2.grabar}">
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Cancelar Información" 
+                                             update=":formPrincipal:panelBase" 
+                                             action="#{investigadorExternosController2.cancelar}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="8" cellpadding="2" cellspacing="0" style="text-align: left">
+                            <h:outputLabel for="identUsu" value="CI/Pasporte:"  style=" float: left;white-space: pre-line"/>
+                            <p:inputText id="identUsu" value="#{investigadorExternosController2.identificacion}" required="false" autocomplete="off" style="width: 150px">
+                            </p:inputText>
+                            <h:outputLabel for="nomUsu" value="Nombres:"  style=" float: left;white-space: pre-line"/>
+                            <p:inputText id="nomUsu" value="#{investigadorExternosController2.nombres}" required="false" autocomplete="off" style="width: 200px">
+                            </p:inputText>
+                            <h:outputLabel for="apeUsu" value="Apellidos:"  style=" float: left;white-space: pre-line"/>
+                            <p:inputText id="apeUsu" value="#{investigadorExternosController2.apellidos}" required="false" autocomplete="off" style="width: 200px">
+                            </p:inputText>
+                            <h:outputLabel for="emailUsu" value="Email:"  style=" float: left;white-space: pre-line"/>
+                            <p:inputText id="emailUsu" value="#{investigadorExternosController2.email}" required="false" autocomplete="off" style="width: 200px">
+                            </p:inputText>
+                            <p:outputLabel for="persoExt" value="Personal Externo:" />
+                            <p:selectOneRadio id="persoExt" value="#{investigadorExternosController2.personalExterno}" layout="grid" columns="2">
+                                <f:selectItem itemLabel="Miembro Comisión Externo" itemValue="M" />
+                                <f:selectItem itemLabel="Pares Externos" itemValue="P" />
+                                <f:selectItem itemLabel="Investigador Externo" itemValue="I" />
+                            </p:selectOneRadio>
+                        </h:panelGrid>                        
+                    </p:fieldset>
+
+                </p:panel>
+
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

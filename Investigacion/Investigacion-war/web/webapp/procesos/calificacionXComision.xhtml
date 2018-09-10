@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <h:panelGrid id="panelBase" style="width: 100%">
+                    <p:panel header="Calificación de Nota Conceptual por Comisión" rendered="#{calificacionXComisionController.notaConceptualSelected==null}">
+                        <h:panelGrid id="panelListadoNotasConceptuales" >
+                            <p:dataTable id="dtNotasAprobadas" value="#{calificacionXComisionController.notaConceptualList}" var="notaConceptual" style="width: 100%"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                         emptyMessage="No se encontraron resultados"   >
+                                <p:column headerText="Ord." width="20">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Convocatoria" width="450" >
+                                    <h:outputText value="#{notaConceptual.convocaId.convocaTitulo}" style="white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Titulo del Proyecto" >
+                                    <h:outputText value="#{notaConceptual.datgeproyTitulo}" style="white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Estado Aprobación Comisión" width="130" style="white-space: pre-line">
+                                    <h:outputText value="#{notaConceptual.estadoAprobacionComision}" style="white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Seleccione" style="text-align: center" width="80">
+                                    <p:commandButton icon="ui-icon-circle-check" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Selecciona Nota Conceptaul" update=":formPrincipal:panelBase" 
+                                                     action="#{calificacionXComisionController.seleccionarNotaConceptual(notaConceptual)}">
+                                    </p:commandButton>
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:panel>
+
+
+                    <p:panel header="Calificación Nota Conceptual: #{calificacionXComisionController.notaConceptualSelected.datgeproyTitulo} - ESTADO: #{calificacionXComisionController.notaConceptualSelected.estado}" style="margin-bottom: 35px" rendered="#{calificacionXComisionController.notaConceptualSelected!=null}">
+                        <p:commandButton value="Listar Notas Conceptuales" title="Editar" icon="ui-icon-arrowreturnthick-1-w"
+                                         style="margin-top: 10px"
+                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                         action="#{calificacionXComisionController.init()}"
+                                         update=":formPrincipal:panelBase" >
+                        </p:commandButton>
+
+                        <p:tabView orientation="horizontal" id="tabP" style="margin-top: 10px">
+                            <p:tab title="Reporte Nota Conceptual">
+                                <p:panel id="pdf">
+                                    <object type="application/pdf" data="/Investigacion-war/faces/reportes/notasConcept.pdf" width="90%" height="600px" ></object>
+                                </p:panel>
+
+                            </p:tab>
+                            <p:tab title="Calificación">
+                                <h:panelGrid id="panelEvaluacion" >    
+                                    <h:panelGrid columns="2" cellpadding="5" >
+                                        <p:commandButton value="Editar" title="Editar" icon="ui-icon-pencil"
+                                                         update=":formPrincipal:tabP:panelEvaluacion" 
+                                                         action="#{calificacionXComisionController.setModoEdicion(true)}" 
+                                                         rendered="#{!calificacionXComisionController.modoEdicion}"
+                                                         disabled="#{calificacionXComisionController.notaConceptualSelected.calificacionComision.id!=null}"
+                                                         >
+                                        </p:commandButton>
+
+                                        <p:commandButton id="btnGrabar" value="Grabar" icon="ui-icon-locked"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" update=":formPrincipal:panelBase, :formPrincipal:message1" 
+                                                         rendered="#{calificacionXComisionController.modoEdicion}"
+                                                         action="#{calificacionXComisionController.guardarAprobacion()}">
+                                        </p:commandButton>
+                                        <p:commandButton value="Cancelar" icon="ui-icon-arrowreturnthick-1-w"
+                                                         rendered="#{calificacionXComisionController.modoEdicion}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" 
+                                                         action="#{calificacionXComisionController.cancelar()}" 
+                                                         update=":formPrincipal:tabP:panelEvaluacion">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" cellpadding="5" >
+                                        <p:outputLabel for="selAprobacion" value="Estado:" />
+                                        <h:panelGrid columns="2">
+                                            <p:selectOneMenu id="selAprobacion" value="#{calificacionXComisionController.notaConceptualSelected.calificacionComision.estado}" 
+                                                             disabled="#{!calificacionXComisionController.modoEdicion}">
+                                                <f:selectItem itemLabel="Pendiente Aprobación" itemValue="" />
+                                                <f:selectItem itemLabel="Aprobado" itemValue="5" />
+                                                <f:selectItem itemLabel="Rechazado" itemValue="6" />
+                                            </p:selectOneMenu>
+                                            <p:message for="selAprobacion"></p:message>
+
+
+                                        </h:panelGrid>
+
+                                        <p:outputLabel for="txtJustificacion" value="Justificación:" />
+                                        <h:panelGrid columns="2">
+
+                                            <p:inputTextarea id="txtJustificacion" value="#{calificacionXComisionController.notaConceptualSelected.calificacionComision.justificacion}" 
+                                                             rows="4"  cols="120" maxlength="250"
+                                                             disabled="#{!calificacionXComisionController.modoEdicion}">
+                                                <p:message for="txtJustificacion"></p:message>
+                                            </p:inputTextarea>
+
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </p:panel>
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

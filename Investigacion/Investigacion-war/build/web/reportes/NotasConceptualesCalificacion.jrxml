@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="NotasConceptualesCalificacion" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f9c25610-a72e-4979-bbfb-9d779f3d352a">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="384"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="ff8892d9-e7a5-487d-990c-1731142d79fb"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Administrador\\Documents\\NetBeansProjects\\APP\\Investigacion\\trunk\\Investigacion\\Investigacion-war\\web\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     SEA_PROGRAMA."PROG_DESCRIP" AS SEA_PROGRAMA_PROG_DESCRIP,
+     SEA_PARAMETROS_DET."PRD_DESCRIPCION" AS SEA_PARAMETROS_DET_PRD_DESCRIP,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_TITULO" AS SEA_DAT_GENERAL_PROY_DATGEPROY,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_TIEMPO_EJECUCION" AS SEA_DAT_GENERAL_PROY_TIEMPO,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_MONTO_TOTAL" AS SEA_DAT_GENERAL_PROY_MTOTAL,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_MONTO_OTRA_INST" AS SEA_DAT_GENERAL_PROY_MOTRAS,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_RESUMEN" AS SEA_DAT_GENERAL_PROY_RESUMEN,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_DESCRIP" AS SEA_DAT_GENERAL_PROY_PRODS,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_OBJETIVO" AS SEA_DAT_GENERAL_PROY_OBJUST,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_METODOLOGIA" AS SEA_DAT_GENERAL_PROY_METODOL,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_RESULTADO_ESPERA" AS SEA_DAT_GENERAL_PROY_RESPERA,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_CONSIDERACIONES" AS SEA_DAT_GENERAL_PROY_CONGENERO,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_MONITOREO_EVALUA" AS SEA_DAT_GENERAL_PROY_MONIEVA,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_CONSECUENCIAS" AS SEA_DAT_GENERAL_PROY_CONSENOIN,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_TRANSFER_RESULT" AS SEA_DAT_GENERAL_PROY_TRANSRESU,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_IMPACTO_RESULT" AS SEA_DAT_GENERAL_PROY_IMPRESU,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_PAGILEG_NOMBRE",
+     SEA_DAT_GENERAL_PROY."DATGEPROY_PLANT_NOMBRE"
+FROM SEA_PROGRAMA INNER JOIN SEA_DAT_GENERAL_PROY ON SEA_PROGRAMA."PROG_ID" = SEA_DAT_GENERAL_PROY."PROG_ID"
+     INNER JOIN SEA_PARAMETROS_DET ON SEA_DAT_GENERAL_PROY."PRD_ID" = SEA_PARAMETROS_DET."PRD_ID"
+WHERE
+     SEA_DAT_GENERAL_PROY."DATGEPROY_ID" = $P{DATGEPROY_ID}]]>
+	</queryString>
+	<field name="SEA_PROGRAMA_PROG_DESCRIP" class="java.lang.String"/>
+	<field name="SEA_PARAMETROS_DET_PRD_DESCRIP" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_DATGEPROY" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_TIEMPO" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_MTOTAL" class="java.math.BigDecimal"/>
+	<field name="SEA_DAT_GENERAL_PROY_MOTRAS" class="java.math.BigDecimal"/>
+	<field name="SEA_DAT_GENERAL_PROY_RESUMEN" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_PRODS" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_OBJUST" class="oracle.sql.CLOB"/>
+	<field name="SEA_DAT_GENERAL_PROY_METODOL" class="oracle.sql.CLOB"/>
+	<field name="SEA_DAT_GENERAL_PROY_RESPERA" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_CONGENERO" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_MONIEVA" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_CONSENOIN" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_TRANSRESU" class="java.lang.String"/>
+	<field name="SEA_DAT_GENERAL_PROY_IMPRESU" class="java.lang.String"/>
+	<field name="DATGEPROY_PAGILEG_NOMBRE" class="java.lang.String"/>
+	<field name="DATGEPROY_PLANT_NOMBRE" class="java.lang.String"/>
+	<group name="header1">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="header 2">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="header 3">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="header 4">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="header 5">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="header 6">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="header 7">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+		<groupHeader>
+			<band height="167">
+				<staticText>
+					<reportElement uuid="79351165-353d-45ac-ac51-2a4eb33b9d97" positionType="Float" x="2" y="1" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[F.   RESUMEN DEL PROYECTO]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="5ad94d8d-bf07-4cc2-8d2e-116fede2ec60" positionType="Float" x="0" y="18" width="546" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="36270759-8b32-4c8e-806e-8206a1b3d9cd" positionType="Float" x="0" y="76" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[G.   DESCRIPCIÓN DEL PROYECTO]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="4408b545-c29a-4ac7-a140-df57a7d18521" positionType="Float" x="-2" y="93" width="546" height="1"/>
+				</line>
+				<rectangle>
+					<reportElement uuid="af88e3c7-a056-45f3-ab79-15264356d4de" positionType="Float" mode="Opaque" x="1" y="100" width="546" height="20" forecolor="#666666" backcolor="#999999"/>
+				</rectangle>
+				<staticText>
+					<reportElement uuid="a6d4e9fe-b3d6-4ec8-b3b7-e0ede1a9a895" positionType="Float" x="7" y="100" width="531" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[OBJETIVOS Y JUSTIFICACION DE LA INVESTIGACION]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="752a5f7e-08bf-4848-9270-852321721719" positionType="Float" x="1" y="120" width="546" height="29" forecolor="#000000"/>
+					<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_OBJUST}.stringValue()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="e9a30396-5086-48f8-a0e4-0c098301467f" positionType="Float" x="3" y="25" width="535" height="35" forecolor="#000000"/>
+					<box leftPadding="5" bottomPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_RESUMEN}]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement uuid="c2c2551d-b989-44b8-a615-60f7a2140ba0" positionType="Float" x="5" y="60" width="532" height="12"/>
+					<subreportParameter name="DATGEPROY_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROY_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "imagenes_resumen.jasper"]]></subreportExpression>
+				</subreport>
+				<subreport>
+					<reportElement uuid="415fb2e7-4148-486c-9e9f-14971e48fac9" positionType="Float" x="3" y="152" width="534" height="12"/>
+					<subreportParameter name="DATGEPROY_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROY_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "imagenes_descripcion.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 8">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+		<groupHeader>
+			<band height="170">
+				<rectangle>
+					<reportElement uuid="a2cd4c03-0603-4959-a73c-61c8a0c2cf7e" positionType="Float" mode="Opaque" x="1" y="117" width="546" height="20" forecolor="#666666" backcolor="#999999"/>
+				</rectangle>
+				<rectangle>
+					<reportElement uuid="1d4bbc60-46d3-4c35-a132-945c3bd53076" positionType="Float" mode="Opaque" x="1" y="2" width="546" height="20" forecolor="#666666" backcolor="#999999"/>
+				</rectangle>
+				<staticText>
+					<reportElement uuid="7edcd123-8d1d-4e99-97c9-85463f42adaa" positionType="Float" x="6" y="2" width="532" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[METODOLOGÍA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="5bc9bc81-c7a1-4287-a524-4bd33d254284" positionType="Float" x="6" y="117" width="532" height="20" forecolor="#FFFFFF" backcolor="#CCCC00"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[RESULTADOS ESPERADOS]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="8e28c146-759c-44b6-a7f6-f2aa033297a2" positionType="Float" x="1" y="137" width="546" height="32"/>
+					<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_RESPERA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="0a362bf0-5724-4be0-9bc2-906256695f91" positionType="Float" x="1" y="22" width="546" height="32"/>
+					<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_METODOL}.stringValue()]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement uuid="e53a5904-ce28-4a73-bd50-970885b176b3" positionType="Float" mode="Opaque" x="1" y="59" width="546" height="20" forecolor="#666666" backcolor="#999999"/>
+				</rectangle>
+				<staticText>
+					<reportElement uuid="34d469e5-8263-4181-a1fc-d101479155da" positionType="Float" x="7" y="59" width="532" height="20" forecolor="#FFFFFF" backcolor="#CCCC00"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[PLAN DE TRABAJO]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="b34357c1-b0fa-49f2-9ea2-a21d627554e1" positionType="Float" x="1" y="79" width="546" height="20"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROY_PLANT_NOMBRE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 9">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+		<groupHeader>
+			<band height="220">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="0404ffa2-4774-45cf-adc5-6c1243621631" positionType="Float" x="7" y="24" width="537" height="45"/>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_CONGENERO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="ea0a537e-61e0-4d38-8aac-747dbc5cd701" positionType="Float" x="7" y="101" width="531" height="42"/>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_MONIEVA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="91ed3add-add6-4f35-81c0-0a228daf2163" positionType="Float" x="8" y="175" width="531" height="36"/>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_CONSENOIN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="bb41445a-e7dd-4ca4-8dae-b7b8f16f197f" positionType="Float" x="1" y="0" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[H.   CONSIDERACIONES DE GÉNERO Y CONOCIMIENTO ANCESTRAL]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="16b27202-8b77-4055-882a-b34cbac77ee9" positionType="Float" x="1" y="17" width="546" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="ea3f0f53-7b03-4447-9851-8d26e9f48a37" positionType="Float" x="1" y="150" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[J.   CONSECUENCIAS NO INTENCIONALES]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="0b2d752b-e3d1-4850-a6d2-b5c1e5686ef8" positionType="Float" x="1" y="167" width="546" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="20985b72-ddc1-4776-a65f-7dcaa2dca666" positionType="Float" x="1" y="76" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[I.   MONITOREO Y EVALUACIÓN]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="240e3145-e971-4076-9f1a-f527812ef013" positionType="Float" x="1" y="93" width="546" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 10">
+		<groupExpression><![CDATA[$F{SEA_PROGRAMA_PROG_DESCRIP}]]></groupExpression>
+		<groupHeader>
+			<band height="228">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="773ea645-663a-480c-8cd9-47262fc57a02" positionType="Float" x="7" y="25" width="531" height="47"/>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_TRANSRESU}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="6a7c3043-1c2f-4a97-922b-d9ea8de98c0c" positionType="Float" x="7" y="103" width="531" height="47"/>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_IMPRESU}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="ca7a47be-4381-49c3-a92d-24189ea8f511" positionType="Float" x="1" y="17" width="546" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="67b8989d-9bc3-4387-849d-9aa4d9ecc976" positionType="Float" x="1" y="0" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[K.   TRANSFERENCIA DE RESULTADOS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c1deaf1f-ae1f-4b70-b85d-5a2cce9f6194" positionType="Float" x="1" y="76" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[L.   IMPACTO DE RESULTADOS]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="eae3f0c5-081a-493f-ba3b-75430841694d" positionType="Float" x="1" y="93" width="546" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="71fdd214-de8a-4279-8168-9384abe8bb0f" positionType="Float" x="2" y="183" width="546" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="42ddf6fa-3df4-42e2-bf78-fb1ed2705b8a" positionType="Float" x="2" y="166" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[M.   PÁGINA LEGAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="573fd7fc-225d-4140-8efe-fa3c84947a7a" positionType="Float" x="8" y="186" width="530" height="25" forecolor="#999999"/>
+					<textElement textAlignment="Justified">
+						<font size="8" isItalic="true" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Esta sección se adjuntará la declaración de autoría del proyecto y respeto de derechos de propiedad intelectual, la cual puede ser descargada de MI ESPE, pestaña docente formato de PÁGINA LEGAL]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="1e42f0fc-90b0-45df-9199-deb1df63280a" positionType="Float" x="8" y="211" width="529" height="17"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROY_PAGILEG_NOMBRE}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="58">
+				<subreport>
+					<reportElement uuid="3ed6a568-0fac-4da1-a6b5-91158f3ea334" positionType="Float" x="2" y="11" width="545" height="39"/>
+					<subreportParameter name="DATGEPROY_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROY_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "firmas_responsabilidad.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="51" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement uuid="33593844-787e-4002-afb2-9a62188b8f3e" x="0" y="0" width="555" height="50"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="44bc17f6-0f6b-4dac-ba81-c555958327c3" x="64" y="10" width="427" height="36"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOTAS CONCEPTUALES  PARA LA PRESENTACIÓN DE PROYECTOS DE INVESTIGACIÓN BÁSICA Y APLICADA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement uuid="09dd0e97-fad3-4bb1-8f66-b20de878fa25" positionType="Float" x="225" y="5" width="279" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="eeb29692-e52c-449d-93fe-191adda80ef2" positionType="Float" x="508" y="5" width="40" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="7" splitType="Stretch"/>
+	</summary>
+</jasperReport>

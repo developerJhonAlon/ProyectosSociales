@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Presupuesto Nota Conceptual" style="margin-bottom:10px; text-align: center; font-size: xx-small; margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >                   
+                    <p:selectBooleanButton id="value2" value="#{presupuestoNotaConceptualController.botonInicio}" onLabel="Notas Conceptuales"  disabled="#{presupuestoNotaConceptualController.botonInicio}" offLabel="Notas Conceptuales" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                        <p:ajax update=":formPrincipal:panelBase" listener="#{presupuestoNotaConceptualController.inicioNotaConceptual}" />
+                    </p:selectBooleanButton>
+                </h:panelGrid>                
+
+                <p:panel id="inicio"  visible="#{presupuestoNotaConceptualController.botonInicio}">
+
+                    <p:dataTable id="dtDatGenProyConv" value="#{presupuestoNotaConceptualController.datGenProyList}" var="datProy" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                 emptyMessage="No se encontraron Resultados">
+                        <p:column headerText="Ord." style="width:5%;text-align: center">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Código Convocatoria" style="width: 10%; white-space: pre-line; font-size: 11px; font-weight: bold">
+                            <h:outputText value="#{datProy.convocaId.convocaCodigo}"/>
+                        </p:column>
+                        <p:column headerText="Título Proyecto" style="width: 35%; white-space: pre-line">
+                            <h:outputText value="#{datProy.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Título Convocatoria" style="width: 25%; white-space: pre-line">
+                            <h:outputText value="#{datProy.convocaId.convocaTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Tipo de Investigación" style="width: 15%; white-space: pre-line">
+                            <h:outputText value="#{datProy.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Seleccione" style="width: 10%; text-align: center">
+                            <p:commandButton id="btnSeleccione" icon="ui-icon-circle-check" style="margin: 0; font-size: 11px" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Seleccione Convocatoria" action="#{presupuestoNotaConceptualController.seleccionaConvo()}"
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{datProy}" target="#{presupuestoNotaConceptualController.datGenProySelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+
+                </p:panel>
+
+                <!--                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" > 
+                                    <p:tab title="1. Datos Generales" id="tabP1">-->
+                <!--<p:panel id="pcomision" visible="#{!presupuestoNotaConceptualController.botonInicio}">-->
+
+                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" rendered="#{!presupuestoNotaConceptualController.botonInicio}"> 
+                    <p:tab title="1. Programación Presupuesto" >
+                        <h:panelGrid columns="1" cellpadding="5"  id="h1" >
+                            <p:commandButton id="btnAgregar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1"   action="#{presupuestoNotaConceptualController.agregarP1}" rendered="#{!presupuestoNotaConceptualController.controlGrabarP1}" >
+                            </p:commandButton>
+                        </h:panelGrid>
+
+
+                        <p:panel id="p1" style="border: hidden" visible="#{presupuestoNotaConceptualController.controlGrabarP1}" >
+                            <p:messages id="messages" />
+                            <h:panelGrid columns="2" cellpadding="5"  >
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "  disabled="#{presupuestoNotaConceptualController.validaVaciosP1}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dtPresuNotC,:formPrincipal:tabP:pInputP1" action="#{presupuestoNotaConceptualController.registraP1}">
+
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{presupuestoNotaConceptualController.cancelarP1}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4" cellpadding="5"  id="pInputP1" rendered="#{presupuestoNotaConceptualController.controlGrabarP1}" 
+                                         style="text-align: left">
+
+                                <h:outputLabel for="anio" value="Año:"/>
+                                <p:selectOneMenu id="anio" value="#{presupuestoNotaConceptualController.anio}" required="false" style="width: 200px">
+                                    <f:selectItem itemLabel="Seleccione Año" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{presupuestoNotaConceptualController.anioList}" var="a" itemLabel="#{a.saniDetalle}" itemValue="#{a.saniId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{presupuestoNotaConceptualController.validarVaciosP1}"/>
+                                </p:selectOneMenu>                                
+                                <h:outputLabel for="tipoRecurso" value="Tipo Recurso:"/>
+                                <p:selectOneMenu id="tipoRecurso" value="#{presupuestoNotaConceptualController.tipoRecurso}" required="false" style="width: 350px">
+                                    <f:selectItem itemLabel="Seleccione Recurso" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{presupuestoNotaConceptualController.tipoRecursoList}" var="tr" itemLabel="#{tr.srcDescripcion}" itemValue="#{tr.srcId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{presupuestoNotaConceptualController.validarVaciosP1}"/>
+                                </p:selectOneMenu>     
+
+                                <p:outputLabel for="rubro" value="Detalle del Rubro:" />
+                                <p:inputTextarea id="rubro" maxlength="1000" value="#{presupuestoNotaConceptualController.rubro}"  rows="2" cols="40" >                                
+                                    <p:ajax event="keyup" listener="#{presupuestoNotaConceptualController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputTextarea>                                
+                                <h:outputLabel/>
+                                <h:outputLabel/>
+                                <p:outputLabel for="valorEspe" value="Valor Espe:" />
+                                <p:inputText id="valorEspe" maxlength="9" value="#{presupuestoNotaConceptualController.valorEspe}"  onkeypress="return justNumbers(event);" >                                
+                                    <p:ajax event="keyup" listener="#{presupuestoNotaConceptualController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1,:formPrincipal:tabP:valorTotal"/>
+                                </p:inputText>
+
+                                <p:outputLabel for="valorOtros" value="Valor Otros:" />
+                                <p:inputText id="valorOtros" maxlength="9" value="#{presupuestoNotaConceptualController.valorOtros}"  onkeypress="return justNumbers(event);" >                                
+                                    <p:ajax event="keyup" listener="#{presupuestoNotaConceptualController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1,:formPrincipal:tabP:valorTotal"/>
+                                </p:inputText>
+
+                                <p:outputLabel for="valorTotal" value="Valor Total:" />
+                                <p:inputText id="valorTotal" maxlength="9" value="#{presupuestoNotaConceptualController.valorTotal}" disabled="true">                                                                    
+                                </p:inputText>                                
+
+                            </h:panelGrid>	
+
+                        </p:panel>   
+
+
+
+                        <p:dataTable id="dtPresuNotC" value="#{presupuestoNotaConceptualController.presupuestoNotasCList}" var="pre" editable="true" style="width: auto"
+                                     paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                     sortBy="#{pre.saniId.saniDetalle},#{pre.srcId.srcDescripcion}"
+                                     emptyMessage="No se encontraron resultados"   >
+                            <p:ajax event="rowEdit" listener="#{presupuestoNotaConceptualController.onRowEditP1}" update=":formPrincipal:tabP:dtPresuNotC"/>
+                            <p:ajax event="rowEditCancel" listener="#{presupuestoNotaConceptualController.onRowCancelP1}" update=":formPrincipal:tabP:dtPresuNotC"/>
+
+                            <p:column headerText="Ord." style="width: 10%; font-size: 11px; font-weight: bold">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+
+                            <p:column headerText="Año" style="width: 10%; font-size: 11px; font-weight: bold" >
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pre.saniId.saniDetalle}" style="text-transform: uppercase"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:selectOneMenu id="anion" value="#{pre.saniId.saniId}" required="false" style="width: 200px">
+                                            <f:selectItem itemLabel="#{pre.saniId.saniDetalle}" itemValue="#{pre.saniId.saniId}" />
+                                            <f:selectItems value="#{presupuestoNotaConceptualController.anioList}" var="a" itemLabel="#{a.saniDetalle}" itemValue="#{a.saniId}"/>
+                                        </p:selectOneMenu>                                
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Rubro" style="width: 25%; font-size: 11px; font-weight: bold">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pre.spncRubro}" style="text-transform: uppercase"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:inputTextarea id="rubron" maxlength="200" value="#{pre.spncRubro}"  rows="2" cols="40" /> 
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>                            
+                            <p:column headerText="Tipo Rubro" style="width: 20%; font-size: 11px; font-weight: bold">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pre.srcId.srcDescripcion}" style="text-transform: uppercase"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:selectOneMenu id="tipoRecurson" value="#{pre.srcId.srcId}" required="false" style="width: 200px">
+                                            <f:selectItem itemLabel="#{pre.srcId.srcDescripcion}" itemValue="#{pre.srcId.srcId}" />
+                                            <f:selectItems value="#{presupuestoNotaConceptualController.tipoRecursoList}" var="tr" itemLabel="#{tr.srcDescripcion}" itemValue="#{tr.srcId}"/>
+                                        </p:selectOneMenu>     
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Valor Espe" style="width: 10%; font-size: 11px; font-weight: bold">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pre.spncEspe}" style="text-transform: uppercase"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:inputText id="valorEspeN" maxlength="9" value="#{pre.spncEspe}"  onkeypress="return justNumbers(event);" />                                
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Valor Otros" style="width: 10%; font-size: 11px; font-weight: bold">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pre.spncOtros}" style="text-transform: uppercase"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:inputText id="valorOtrosN" maxlength="9" value="#{pre.spncOtros}"  onkeypress="return justNumbers(event);" />
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Valor Total" style="width: 10%; font-size: 11px; font-weight: bold">
+                                <h:outputText value="#{pre.spncTotal}" style="text-transform: uppercase"/>
+                            </p:column>
+                            <p:summaryRow>
+                                <p:column colspan="4" style="text-align:right;font-weight: bold">
+                                    <h:outputText value="Total:" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{presupuestoNotaConceptualController.obtenerRubro(pre.srcId.srcId, 0)}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{presupuestoNotaConceptualController.obtenerRubro(pre.srcId.srcId, 1)}"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{presupuestoNotaConceptualController.obtenerRubro(pre.srcId.srcId, 2)}"/>
+                                </p:column>
+                            </p:summaryRow>
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+
+                            <p:column headerText="Eliminar" style="width: 5%; font-size: 11px; font-weight: bold">
+                                <p:commandButton id="btnEliminar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                 onclick="PF('deleteDialog').show();" process="@this" >
+                                    <f:setPropertyActionListener value="#{pre}" target="#{presupuestoNotaConceptualController.presupuestoNotasCSelected}" />                                    
+                                </p:commandButton>   
+                            </p:column>
+
+                        </p:dataTable>  
+
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+
+            <script>
+                function justNumbers(e) {
+                    var keynum = window.event ? window.event.keyCode : e.which;
+                    if ((keynum == 8) || (keynum == 46))
+                        return true;
+                    return /\d/.test(String.fromCharCode(keynum));
+                }
+            </script>
+
+
+
+
+        <p:dialog id="deleteDlg" header="Eliminar Registro" widgetVar="deleteDialog" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+            <h:form id="deleteForm">
+                <p:outputPanel id="panelDeleteRegistro">
+                    <center>
+                        <h:panelGrid id="displayDelete" columns="1" >                          
+                            <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminar"  value="Eliminar" style="margin:0"
+                                             onclick="PF('deleteDialog').hide();">
+                                <p:ajax update=":formPrincipal:tabP:dtPresuNotC" listener ="#{presupuestoNotaConceptualController.eliminarP1()}" />
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+
+
+                </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

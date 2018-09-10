@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="programa" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1544545f-a952-40bb-bf99-6c900225fd51">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="144"/>
+	<parameter name="dirPhoto" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATGEPROG_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Administrador\\Documents\\NetBeansProjects\\APP\\Investigacion5\\trunk\\Investigacion\\Investigacion-war\\web\\reportes\\programas\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROG.DATGEPROG_ID,
+       SEA_PROGRAMA.PROG_DESCRIP,
+       SEA_DAT_GENERAL_PROG.DATGEPROG_NOMBRE_INGLES,
+       SEA_DAT_GENERAL_PROG.DATGEPROG_FECHA_PRESENTA,
+       SEA_DAT_GENERAL_PROG.DATGEPROG_FECHA_INICIO,
+       SEA_DAT_GENERAL_PROG.DATGEPROG_FECHA_FIN,
+       SEA_DAT_GENERAL_PROG.DATGEPROG_RESUMEN,
+       SEA_VIABILIDAD_PROG.VIAPROG_VIABILIDAD_TECNICA,
+       SEA_VIABILIDAD_PROG.VIAPROG_PERDERIA_PAIS,
+       SEA_VIABILIDAD_PROG.VIAPROG_IMPACT_ESPERADO,
+       SEA_VIABILIDAD_PROG.VIAPROG_IMPACT_AMBIENTAL
+  FROM SEA_DAT_GENERAL_PROG, SEA_PROGRAMA, SEA_VIABILIDAD_PROG
+ WHERE (SEA_DAT_GENERAL_PROG.PROG_ID = SEA_PROGRAMA.PROG_ID)
+   AND (SEA_VIABILIDAD_PROG.DATGEPROG_ID = SEA_DAT_GENERAL_PROG.DATGEPROG_ID)
+       AND (SEA_DAT_GENERAL_PROG.DATGEPROG_ID =$P{DATGEPROG_ID} )]]>
+	</queryString>
+	<field name="DATGEPROG_ID" class="java.math.BigDecimal"/>
+	<field name="PROG_DESCRIP" class="java.lang.String"/>
+	<field name="DATGEPROG_NOMBRE_INGLES" class="java.lang.String"/>
+	<field name="DATGEPROG_FECHA_PRESENTA" class="java.sql.Timestamp"/>
+	<field name="DATGEPROG_FECHA_INICIO" class="java.sql.Timestamp"/>
+	<field name="DATGEPROG_FECHA_FIN" class="java.sql.Timestamp"/>
+	<field name="DATGEPROG_RESUMEN" class="java.lang.String"/>
+	<field name="VIAPROG_VIABILIDAD_TECNICA" class="java.lang.String"/>
+	<field name="VIAPROG_PERDERIA_PAIS" class="java.lang.String"/>
+	<field name="VIAPROG_IMPACT_ESPERADO" class="java.lang.String"/>
+	<field name="VIAPROG_IMPACT_AMBIENTAL" class="java.lang.String"/>
+	<group name="header 1">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="119">
+				<staticText>
+					<reportElement uuid="d6e05afa-6cae-4807-9ce7-c44976046469" positionType="Float" x="5" y="4" width="543" height="15"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[1. DATOS GENERALES]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="0d7b8851-fba3-4332-91ca-e0b12efac511" positionType="Float" x="5" y="20" width="546" height="1"/>
+				</line>
+				<rectangle>
+					<reportElement uuid="3c137004-13dc-44d8-94cd-86c81e73b269" positionType="Float" x="6" y="28" width="543" height="20" forecolor="#666666" backcolor="#999999"/>
+				</rectangle>
+				<rectangle>
+					<reportElement uuid="d93c4ed2-30fb-430a-9489-69020aecf5d3" positionType="Float" x="6" y="48" width="543" height="20" isPrintWhenDetailOverflows="true" forecolor="#666666"/>
+				</rectangle>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="2871c77d-20b3-4816-bca8-2c08de471b50" positionType="Float" x="12" y="49" width="526" height="20"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PROG_DESCRIP}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="cbf03d96-ca69-41ed-97e8-04844d03bebb" positionType="Float" x="13" y="28" width="532" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre del Programa (Español):]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement uuid="d5b6905b-5535-46e2-aac0-858a96986533" positionType="Float" x="6" y="73" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+				</rectangle>
+				<rectangle>
+					<reportElement uuid="33e37eb3-d5e2-41b3-9fef-d0f376a5269e" positionType="Float" x="6" y="93" width="542" height="20" isPrintWhenDetailOverflows="true" forecolor="#666666"/>
+				</rectangle>
+				<staticText>
+					<reportElement uuid="186116c1-d91f-475b-a292-fdfdb13e3c48" positionType="Float" x="13" y="73" width="523" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre del Programa (Inglés):]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="a9a3fdce-7004-44e0-8d4e-a827a2d411e0" positionType="Float" x="12" y="93" width="527" height="20"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROG_NOMBRE_INGLES}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 2">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<subreport>
+					<reportElement uuid="c1b280a3-af1b-49e9-94ca-88d4fa77b2c9" x="5" y="5" width="544" height="45"/>
+					<subreportParameter name="DATGEPROG_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROG_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lineas_investigacion_prog.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 3">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<subreport>
+					<reportElement uuid="669d8b2b-84e8-4932-bb16-ecc595bed76e" x="5" y="5" width="542" height="44"/>
+					<subreportParameter name="DATGEPROG_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROG_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "cobertura_programa.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 4">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<subreport>
+					<reportElement uuid="61d0aaab-f4d1-4655-aef1-78b6573f8696" x="5" y="5" width="542" height="44"/>
+					<subreportParameter name="DATGEPROG_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROG_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "objetivos_buen_vivir_prog.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 5">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="58">
+				<subreport>
+					<reportElement uuid="edc340b3-9a9c-4302-a9cf-05f434bdcee3" x="5" y="5" width="542" height="50"/>
+					<subreportParameter name="DATGEPROG_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROG_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "institucionesParticipantesProg.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 6">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="63">
+				<staticText>
+					<reportElement uuid="32e8c730-3eae-40a4-9794-3971b2aa5e0e" x="5" y="2" width="543" height="15"/>
+					<textElement>
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[PLAZO DE EJECUCIÓN]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="a15cedab-138a-4a1d-9e09-d96cfc5ee1c8" x="5" y="19" width="543" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="d58d656c-785a-4c37-b4b7-b3eb00c21fe4" x="7" y="21" width="183" height="20" forecolor="#000000"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha de presentación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="9641f304-0a23-4341-87df-9abd1e7c480a" x="190" y="21" width="173" height="20" forecolor="#000000"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha de inicio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="bb79a84c-d29f-4267-b44a-75c42ce93215" x="363" y="21" width="182" height="20"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha de finalización]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="82ea8f2f-b182-4260-91d2-f8897705312d" x="7" y="41" width="183" height="20"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROG_FECHA_PRESENTA}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="9826f4e7-6eb7-4928-9f5a-60ff801ef34f" x="190" y="41" width="173" height="20"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROG_FECHA_INICIO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="c42086ca-79a6-478b-a03a-1277ea1f6e36" x="363" y="41" width="182" height="20"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROG_FECHA_FIN}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="haeder 7">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="67">
+				<subreport>
+					<reportElement uuid="c40cba44-5d33-4f4a-89fd-382932277783" x="5" y="5" width="542" height="55"/>
+					<subreportParameter name="DATGEPROG_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROG_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "personalPrograma.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 8">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="55">
+				<staticText>
+					<reportElement uuid="e93c2de0-dd64-4844-8787-993e7a578fdd" x="6" y="1" width="543" height="15"/>
+					<textElement>
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[RESUMEN DEL PROGRAMA]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="7763f381-3a2e-4361-a73b-e12a3cd53138" positionType="Float" x="6" y="21" width="543" height="32"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DATGEPROG_RESUMEN}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 9">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="64">
+				<subreport>
+					<reportElement uuid="2f5c0f5f-5f0d-4d0f-8f4b-c22b0e15463e" x="6" y="0" width="539" height="53"/>
+					<subreportParameter name="DATGEPROG_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROG_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "objetivos_programa.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="header 10">
+		<groupExpression><![CDATA[$F{DATGEPROG_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="87">
+				<staticText>
+					<reportElement uuid="8225b72f-eb5e-4853-a5df-7253faf15caf" x="6" y="25" width="543" height="15"/>
+					<textElement>
+						<font isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[Viabilidad Técnica]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="e54fd35c-6726-48a7-b1b8-7ed0b6027ac5" x="6" y="1" width="543" height="15"/>
+					<textElement>
+						<font isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[VIABILIDAD Y PLAN DE SOSTENIBILIDAD]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="b3a475ab-bff2-4ba8-92bb-15b060830591" x="7" y="18" width="543" height="1"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="306ae3f9-839b-4646-9580-c83e5e4dc511" positionType="Float" x="6" y="43" width="543" height="39"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{VIAPROG_VIABILIDAD_TECNICA}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="62">
+				<staticText>
+					<reportElement uuid="e198c45d-ad73-4f06-b4a1-2c07e3f227af" x="6" y="1" width="543" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Que perdería el país si el Programa no se ejecutara?]]></text>
+				</staticText>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement uuid="9b1d3f7d-c66a-4211-bc08-f91eb74421cf" positionType="Float" x="7" y="24" width="543" height="38"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{VIAPROG_PERDERIA_PAIS}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="40b234cf-e310-426f-84ea-5a5dc8aa89a5" x="8" y="18" width="543" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="68">
+				<staticText>
+					<reportElement uuid="f60fd268-bcba-46f1-8842-e7d3fc83897e" x="6" y="1" width="543" height="15"/>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cuáles son los resultados o impactos esperados del Programa?]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="6cfe6a20-1255-4363-bd74-ca850387a51d" x="7" y="17" width="543" height="1"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="634f4182-c75b-4b7c-bbc7-bc3dfc4edb14" positionType="Float" x="8" y="22" width="541" height="46"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{VIAPROG_IMPACT_ESPERADO}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="64">
+				<staticText>
+					<reportElement uuid="a395ae5b-7596-485d-8349-cf08486f6bf4" x="6" y="1" width="543" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Analisis de impacto ambiental]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="b1acb9f8-5e74-43e9-9aa7-a6261d70ef53" x="6" y="17" width="543" height="1"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="82e348a3-f4a9-4fc9-adbf-6f9294c6e164" positionType="Float" x="8" y="21" width="543" height="43"/>
+					<textElement textAlignment="Justified">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{VIAPROG_IMPACT_AMBIENTAL}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="52" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement uuid="3dfb3bc5-3832-4481-a478-1573e7763c35" x="0" y="0" width="555" height="50"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d9c2a4c7-1625-4214-9d42-f9a4e382d8f7" x="64" y="10" width="427" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORMATO PARA LA PRESENTACIÓN DE PROGRAMAS DE INVESTIGACIÓN]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch"/>
+	</columnHeader>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement uuid="229b20e7-32ee-4dc9-b3b2-ffb65aa3e9f1" positionType="Float" x="226" y="29" width="279" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="bad31d3a-69af-4496-9540-69b4fcdbc0d6" positionType="Float" x="509" y="29" width="40" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="8" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Registro de Procesos" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <h:panelGrid columns="1" cellpadding="5" id="h1">
+                    <p:commandButton id="btnAgregar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                     title="Agregra Información" update=":formPrincipal" action="#{catalogoProcesoController.agregarP1()}" rendered="#{!catalogoProcesoController.controlGrabar}">
+                    </p:commandButton>
+                </h:panelGrid>
+                <p:panel id="p1" visible="#{catalogoProcesoController.controlGrabar}" style="border: hidden">
+                     <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                         <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoProcesoController.validaVacios}"
+                                          onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                          title="Graba Información" update=":formPrincipal" action="#{catalogoProcesoController.registra()}">
+                        </p:commandButton>
+                        <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                         title="Cancelar Información" update=":formPrincipal" action="#{catalogoProcesoController.cancelar()}">
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left">
+                    <h:outputLabel for="descT" value="Nombre del Proceso:"  />
+                    <p:inputText id="descT" value="#{catalogoProcesoController.proDescrip}" required="false" autocomplete="off"  style="width: 400px">
+                        <p:ajax event="keyup" listener="#{catalogoProcesoController.validarVacios}" update=":formPrincipal:btnGrabarP1"/>
+                    </p:inputText>
+                    
+                </h:panelGrid>
+                </p:panel>
+                <p:dataTable id="dataTablePro" value="#{catalogoProcesoController.seaProcesoList}" var="proceso"
+                                     paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                     emptyMessage="No se encontraron resultados"  style="width: 60%; text-align: left; font-size: 11px; font-weight: bold ">
+                    <p:ajax event="rowEdit" listener="#{catalogoProcesoController.onRowEdit}" update=":formPrincipal:dataTablePro"/>
+                    <p:ajax event="rowEditCancel" listener="#{catalogoProcesoController.onRowCancel}" update=":formPrincipal:dataTablePro"/>
+                    <p:column headerText="Ord." style="width: 1%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                     
+                    <p:column headerText="Nombre Proceso" style="width:50%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{proceso.proDescrip}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput32" value="#{proceso.proDescrip}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                     <p:column headerText="Editar" style="width:5%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                <p:commandButton id="btnEliminar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                 onclick="PF('deleteDialog').show();" process="@this">
+                                    <f:setPropertyActionListener value="#{proceso}" target="#{catalogoProcesoController.seaProcesoSelected}"/>
+                                </p:commandButton>     
+                            </p:column>
+                </p:dataTable>
+                
+                
+            </p:panel>
+  
+        <p:dialog id="deleteDlg" header="Eliminar Registro" widgetVar="deleteDialog" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+            <h:form id="deleteForm">
+                <p:outputPanel id="panelDeleteRegistro">
+                    <center>
+                        <h:panelGrid id="displayDelete" columns="1" >                          
+                            <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminar"  value="Eliminar" style="margin:0"
+                                             onclick="PF('deleteDialog').hide();">
+                                <p:ajax update=":formPrincipal:dataTablePro" listener ="#{catalogoProcesoController.eliminarP1()}" />
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+        
+                </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

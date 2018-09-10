@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <h:panelGrid id="panelBase">
+                    <p:panel header="Listado de Proyectos" style="text-align: left; border: hidden; margin-bottom: 80px">
+                        <p:panel style="text-align: left; border: hidden; ">
+                            <h:panelGrid>
+                                <p:button value="Agregar" outcome="proyectoContenido" icon="ui-icon-plus"></p:button>     
+                            </h:panelGrid>
+                            <p:dataTable id="dtProyNotasC" value="#{perfilProyectoController.datGeneralProyList}" var="con" paginator="true" rows="15" rowIndexVar="index" resizableColumns="true"
+                                         emptyMessage="No se encontraron resultados" >
+                                <p:column headerText="Ord." style="text-align: center" width="20">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Cód. Convocatoria" style="white-space: pre-line" width="100">
+                                    <h:outputText value="#{con.convocaId.convocaCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Título Convocatoria" style="white-space: pre-line" width="250">
+                                    <h:outputText value="#{con.convocaId.convocaTitulo}" style="white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Título del Proyecto" style="white-space: pre-line">
+                                    <h:outputText value="#{con.datgeproyTitulo}" style="white-space: pre-line"/>
+                                </p:column>
+                                <p:column rendered="false" headerText="Tipo de Investigación" style="white-space: pre-line" width="200">
+                                    <h:outputText value="#{con.convocaId.prdId.prdDescripcion}" style="white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Tipo de Investigación" style="white-space: pre-line" width="140">
+                                    <h:outputText value="#{con.prdId.prdDescripcion}" style="white-space: pre-line"/>
+                                </p:column>
+
+                                <p:column headerText="Fecha Creación" style="white-space: pre-line; text-align: center" width="80">
+                                    <h:outputText value="#{con.datgeproyFechaCreacion}" style="white-space: pre-line">
+                                        <f:convertDateTime locale="es" pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Estado" style="white-space: pre-line; text-align: center" width="160">
+                                    <h:outputText value="#{con.estado}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Seleccione" style="text-align: center" width="50">
+                                    <p:button outcome="proyectoContenido" icon="ui-icon-circle-check">
+                                        <f:param name="id" value="#{con.datgeproyId}" />
+                                    </p:button>                                    
+
+                                </p:column>
+
+                                <p:column headerText="Eliminar" style="text-align: center" width="50">
+                                    <p:commandButton title="Eliminar" icon="ui-icon-trash" 
+                                                     action="#{perfilProyectoController.eliminarP1()}"
+                                                     update=":formPrincipal:dtProyNotasC"
+                                                     >
+                                        <f:setPropertyActionListener value="#{con}" target="#{perfilProyectoController.datGeneralProy}" />
+                                        <p:confirm header="Confirmación" message="Confirma que desea eliminar el item seleccionado ?" icon="ui-icon-alert" />
+                                    </p:commandButton>   
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:panel>
+
+                </h:panelGrid>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

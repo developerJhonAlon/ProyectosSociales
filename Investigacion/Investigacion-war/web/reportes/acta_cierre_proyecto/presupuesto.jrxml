@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="presupuesto" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="ac07e4a6-1a0c-44d8-9f92-f1c7b963a8ff">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_FORMATO_LARGO.SFL_ID,
+       SEA_CLASIFICADOR_PRESUP.SCP_NOMBRE,
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_VALOR,
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_UTILIZADO,
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_VALOR_UTILIZADO
+  FROM SEA_FORMATO_LARGO, SEA_PRESUPUESTO_X_PARTIDA, SEA_CLASIFICADOR_PRESUP
+ WHERE (SEA_PRESUPUESTO_X_PARTIDA.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_PRESUPUESTO_X_PARTIDA.SCP_ID = SEA_CLASIFICADOR_PRESUP.SCP_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="SFL_ID" class="java.math.BigDecimal"/>
+	<field name="SCP_NOMBRE" class="java.lang.String"/>
+	<field name="SPXP_VALOR" class="java.math.BigDecimal"/>
+	<field name="SPXP_UTILIZADO" class="java.lang.String"/>
+	<field name="SPXP_VALOR_UTILIZADO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement uuid="16144354-f444-49b6-b3ff-0ca63311085d" positionType="Float" x="0" y="0" width="250" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partidas Presupuestarias Asignadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="47612724-01ea-40d9-b04e-6aa9a371715f" positionType="Float" x="250" y="0" width="85" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b2becb51-72c6-4581-a3f9-b3cb4e94726b" positionType="Float" x="335" y="0" width="146" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partidas Presupuestarias Utilizadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2cbff2aa-9c82-440a-8c1c-6f403f8393c1" positionType="Float" x="481" y="0" width="74" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b888ce23-dda2-43d3-bff6-992bd6ea6805" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="250" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SCP_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="71152fff-4c34-4ea2-9c25-569d7bd4bb77" positionType="Float" stretchType="RelativeToTallestObject" x="250" y="0" width="85" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SPXP_VALOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="35bb036c-f973-4424-8372-f563cfb45312" positionType="Float" stretchType="RelativeToTallestObject" x="335" y="0" width="146" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{SPXP_UTILIZADO}=='S' ? "SI" : "NO" )]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="e9a158f9-afde-454e-97c4-846d94f41db6" positionType="Float" stretchType="RelativeToTallestObject" x="481" y="0" width="74" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SPXP_VALOR_UTILIZADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Asignación de Pares por Proyecto Extenso">
+                    <h:panelGrid id="panelListadoNotasConceptuales" rendered="#{comisionProyectoController.notaconceptualSelected==null}">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="Filtrar por Convocatoria:"/>
+                            <p:selectOneMenu  
+                                value="#{comisionProyectoController.idConvocatoria}"
+                                effect="fade"
+                                filter="false">
+                                <f:selectItem itemLabel="[-TODOS-]"/>
+                                <f:selectItems value="#{comisionProyectoController.convocatoriaList}" var="conv" itemValue="#{conv.convocaId}" itemLabel="#{conv.convocaTitulo}"
+                                               >
+                                </f:selectItems>
+                                <p:ajax listener="#{comisionProyectoController.listarNotasConceptuales}" update=":formPrincipal:dtNotaConceptual" 
+                                        onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+                            </p:selectOneMenu>       
+
+                        </h:panelGrid>
+                        <p:dataTable id="dtNotaConceptual" value="#{comisionProyectoController.notaConceptualList}" var="notaConceptual"
+                                     paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." width="20">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column rendered="false" headerText="Convocatoria" style="white-space: pre-line" width="300" sortBy="#{notaConceptual.convocaId.convocaTitulo}">
+                                <h:outputText value="#{notaConceptual.convocaId.convocaTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Título del Proyecto" style="white-space: pre-line" sortBy="#{notaConceptual.datgeproyTitulo}">
+                                <h:outputText value="#{notaConceptual.datgeproyTitulo}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Director" style="white-space: pre-line" width="220">
+                                <h:outputText value="#{notaConceptual.usuId.usuCc.concat('-').concat(notaConceptual.usuId.nombresCompletos)}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+
+                            <p:column headerText="Seleccione" style="text-align: center" width="80">
+                                <p:commandButton icon="ui-icon-circle-check" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Seleccionar Nota Conceptual" update=":formPrincipal:panelBase"
+                                                 action="#{comisionProyectoController.cancelaPar()}"
+                                                 >
+                                    <f:setPropertyActionListener value="#{notaConceptual}" target="#{comisionProyectoController.notaconceptualSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>                           
+                    </h:panelGrid>
+
+                    <h:panelGrid id="panelNotaConceptual" rendered="#{comisionProyectoController.notaconceptualSelected!=null}">
+                        <p:commandButton value="Proyectos Extensos"
+                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                         title="Listar Notas Conceptuales" update=":formPrincipal:panelBase" 
+                                         action="#{comisionProyectoController.listarNotasConceptuales()}"
+                                         >
+                        </p:commandButton>
+                        <p:panel style="width: 100%; margin-top: 20px" >
+                            <p:outputLabel value="Título de Proyecto: #{comisionProyectoController.notaconceptualSelected.datgeproyTitulo}"></p:outputLabel>
+                        </p:panel>
+                        <p:fieldset id="fsPares" legend="Pares Asignados">
+                            <p:commandButton value="Agregar" icon="ui-icon-plus"  style="margin-top: 10px"                                             
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             rendered="#{comisionProyectoController.parSelected==null}"
+                                             title="Agregar par" update=":formPrincipal:fsPares" action="#{comisionProyectoController.nuevoPar()}" >
+                            </p:commandButton>
+                            <h:panelGrid id="panelEdicionPar" rendered ="#{comisionProyectoController.parSelected!=null}" >
+                                <h:panelGrid columns="2" cellpadding="5"  >
+                                    <p:commandButton id="btnGrabarPar" value="Grabar" icon="ui-icon-locked" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:fsPares, :formPrincipal:message1" 
+                                                     action="#{comisionProyectoController.grabar}">
+                                    </p:commandButton>
+                                    <p:commandButton value="Cancelar" icon="ui-icon-arrowreturnthick-1-w"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar ingreso de información" update=":formPrincipal:fsPares" action="#{comisionProyectoController.cancelaPar}"   >
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:selectOneRadio value="#{comisionProyectoController.tipoPar}" style="text-align: left">
+                                        <f:selectItem itemLabel="Pares Espe" itemValue="L"/>
+                                        <f:selectItem itemLabel="Pares Externos" itemValue="I"/>
+                                        <p:ajax event="change" update=":formPrincipal:panelSeleccionInvestigador"/>
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                                <h:panelGrid id="panelSeleccionInvestigador">
+                                    <h:panelGrid columns="2" cellpadding="5" cellspacing="0" rendered="#{comisionProyectoController.tipoPar=='L'}">
+                                        <p:outputLabel value="Investigador:" for="investigadorEspe"/>
+                                        <h:panelGrid columns="1" cellpadding="0" cellspacing="0">
+                                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                <p:autoComplete id="investigadorEspe" minQueryLength="1" value="#{comisionProyectoController.investigadorEspe}" completeMethod="#{comisionProyectoController.completeTextParEspe}" size="55" 
+                                                                >
+                                                    <p:ajax event="itemSelect" listener="#{comisionProyectoController.onItemSelectParEspe}"/>
+                                                </p:autoComplete>
+                                                <p:message for="investigadorEspe"/>
+                                            </h:panelGrid>
+                                            <h:outputLabel value="(Digite los apellidos y/o nombres a buscar)"></h:outputLabel>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="2" cellpadding="5" cellspacing="0" rendered="#{comisionProyectoController.tipoPar=='I'}">
+                                        <p:outputLabel value="Investigador:" for="investigadorExterno"/>
+                                        <h:panelGrid columns="1" cellpadding="0" cellspacing="0">
+                                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                <p:autoComplete id="investigadorExterno" minQueryLength="1" value="#{comisionProyectoController.investigadorExterno}" completeMethod="#{comisionProyectoController.completeTextParExterno}" size="55" 
+                                                                >
+                                                    <p:ajax event="itemSelect" listener="#{comisionProyectoController.onItemSelectParExterno}"/>
+                                                </p:autoComplete>
+                                                <p:message for="investigadorExterno"/>
+                                            </h:panelGrid>
+                                            <h:outputLabel value="(Digite los apellidos y/o nombres a buscar)"></h:outputLabel>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+
+
+
+
+                                <h:panelGrid columns="4">
+                                    <p:outputLabel for="fasePar" value="Fase:" />
+                                    <p:spacer width="40" height="1"></p:spacer>
+                                    <p:selectOneMenu id="fasePar" value="#{comisionProyectoController.fasePar}" style="width: 280px"
+                                                     required="#{not empty param['formPrincipal:btnGrabarPar']}">
+                                        <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{comisionProyectoController.faseParList}" var="t2"
+                                                       itemLabel="#{t2.prdDescripcion}" itemValue="#{t2.prdId}" />                                            
+                                    </p:selectOneMenu>
+                                    <p:message for="fasePar"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <p:dataTable id="dtComisionPar" value="#{comisionProyectoController.notaconceptualSelected.parEvaluacionList}" var="par" editable="true" style="width: 100%"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                         emptyMessage="No se encontraron resultados"   >
+                                <p:column headerText="Ord." width="20">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Investigador" width="200">
+                                    <h:outputText value="#{par.usuId.usuCc}-#{par.usuId.usuApellidos} #{par.usuId.usuNombres}" style="text-transform: uppercase"/>
+                                </p:column>
+                                <p:column headerText="Fase" width="200">
+                                    <h:outputText value="#{par.prdId.prdDescripcion}" style="text-transform: uppercase"/>
+                                </p:column>   
+                                <p:column headerText="Fecha Creación" width="100" style="text-align: center">
+                                    <h:outputText value="#{par.spcFechaCrea}" style="text-transform: uppercase">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Estado" width="100" rendered="false">
+                                    <h:outputText value="#{par.spcEstado}" style="text-transform: uppercase"/>
+                                </p:column>
+                                <p:column headerText="Eliminar" width="80" style="text-align: center">
+                                    <p:commandButton title="Eliminar el registro" icon="ui-icon-trash"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     update=":formPrincipal:fsPares"
+                                                     action="#{comisionProyectoController.eliminarPar}" >
+                                        <f:setPropertyActionListener value="#{par}" target="#{comisionProyectoController.parSelected}" />
+                                        <p:confirm header="Confirmación" message="Confirma que desea eliminar el item seleccionado ?" icon="ui-icon-alert" />
+                                    </p:commandButton>   
+                                </p:column>                                
+                            </p:dataTable>                        
+                        </p:fieldset>
+
+                    </h:panelGrid>
+
+
+
+
+
+
+                </p:panel>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

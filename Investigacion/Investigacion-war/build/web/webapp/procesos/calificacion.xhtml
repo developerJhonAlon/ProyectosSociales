@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+
+            <p:panel id="panelBase" header="Calificación Comisión Por Convocatoria" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px" >
+                <h:panelGrid columns="2" id="hpCabecera" >                   
+                    <p:selectBooleanButton id="value2" value="#{calificacionController.botonInicio}" onLabel="Convocatorias"  disabled="#{calificacionController.botonInicio}" offLabel="Convocatorias" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                        <p:ajax update=":formPrincipal:panelBase" listener="#{calificacionController.inicioConvocatorias}" />
+                    </p:selectBooleanButton>
+                </h:panelGrid>                
+                <p:panel id="inicio"  visible="#{calificacionController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                    <p:dataTable id="dataTableConvocatorias" value="#{calificacionController.convocatoriaList}" var="convocatorias"
+                                 paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                 emptyMessage="No se encontraron resultados"  style="text-align: left">
+
+                        <p:column headerText="Ord." style="width:3%">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Código Convocatoria" style="width: 20%">
+                            <h:outputText value="#{convocatorias.convocaCodigo}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                        </p:column>
+                        <p:column headerText="Título Convocatoria" style="width: 20%">
+                            <h:outputText value="#{convocatorias.convocaTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Resumen Convocatoria" style="width: 20%">
+                            <h:outputText value="#{convocatorias.convocaDocNombre}" style="text-transform: uppercase; white-space: pre-line"/>
+
+                        </p:column>
+                        <p:column headerText="Tipo de Investigación" style="width: 40%">
+                            <h:outputText value="#{convocatorias.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Seleccione" style="width:10%;text-align: center">
+                            <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Selecciona Convocatoria" action="#{calificacionController.seleccionaConvo}" 
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{convocatorias}" target="#{calificacionController.convocatoriaSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:tabView scrollable="true"  id="tabP" rendered="#{!calificacionController.botonInicio}" activeIndex="#{calificacionController.indice}">  
+                    <p:tab title="Notas Conceptuales Aprobadas" id="tabP1">
+                        <p:dataTable id="dtNotasAprobadas" value="#{calificacionController.apruebaNCLits}" var="notAprob" editable="true" style="width: 100%"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                            emptyMessage="No se encontraron resultados"   >
+                            <p:column headerText="Ord." style="width: 5%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Código Convocatoria" style="width: 10%">
+                                <h:outputText value="#{notAprob.datgeproyId.convocaId.convocaCodigo}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                            </p:column>
+                            <p:column headerText="Titulo del Proyecto" style="width: 40%">
+                                <h:outputText value="#{notAprob.datgeproyId.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                            </p:column>
+                            <p:column headerText="Seleccione" style="width:10%;text-align: center">
+                                <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Selecciona Nota Conceptaul" update=":formPrincipal:tabP" process="@this" action="#{calificacionController.generarReportePDF}">
+                                    <f:setPropertyActionListener value="#{notAprob}" target="#{calificacionController.apruebaNcSelected}"/>
+                            </p:commandButton>
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Visualización Notas Conceptuales" id="tabP2" disabled="#{calificacionController.habilitaTab}">
+                        <p:panel id="p2">
+                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" >
+                                <p:outputLabel for="aprobacion" value="Estado:" />
+                                <p:selectOneRadio id="aprobacion" value="#{calificacionController.aprobacion}" layout="grid" columns="2" disabled="#{calificacionController.calificacionList.size()>0}">
+                                    <f:selectItem itemLabel="Aceptado" itemValue="S" />
+                                    <f:selectItem itemLabel="Rechazado" itemValue="N" />
+                                     <p:ajax update=":formPrincipal:tabP:p2"/>
+                                </p:selectOneRadio>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5" rendered="#{calificacionController.aprobacion!='' and calificacionController.calificacionList.size()==0}"  >
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "  disabled="#{calificacionController.aprobacion=='N' and calificacionController.justificacion==''}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p2" action="#{calificacionController.registraP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" action="#{calificacionController.cancelarP1()}" update=":formPrincipal:tabP:p2">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid  id="pJustifica" columns="2" style="margin-bottom:10px" cellpadding="5">
+                                <h:outputLabel for="justificacion" value="Justificacion:" />
+                                <h:inputTextarea id="justificacion" value="#{calificacionController.justificacion}" rows="3"  cols="80" disabled="#{calificacionController.calificacionList.size()>0}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </h:inputTextarea>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel id="pdf" visible="#{calificacionController.controlPDF}">
+                            <object type="application/pdf" data="/Investigacion-war/faces/reportes/#{calificacionController.nombreArchivoPdf}" width="90%" height="600px" ></object>
+                        </p:panel>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

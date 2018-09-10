@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Programación Presupuesto" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >                   
+                    <p:selectBooleanButton id="value2" value="#{programacionPresupuestoController.botonInicio}" onLabel="Formatos Largos"  disabled="#{programacionPresupuestoController.botonInicio}" offLabel="Formatos Largos" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                        <p:ajax update=":formPrincipal:panelBase" listener="#{programacionPresupuestoController.inicioFormatoLargo}" />
+                    </p:selectBooleanButton>
+                </h:panelGrid>                
+
+                <p:panel id="inicio"  visible="#{programacionPresupuestoController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+
+                    <p:dataTable id="dtFormatoLargo" value="#{programacionPresupuestoController.formatoLargoList}" var="formatoLargo"
+                                 paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                 emptyMessage="No se encontraron resultados"  style="text-align: left">
+
+                        <p:column headerText="Ord." style="width:5%; white-space: pre-line">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Formato Largo" style="width: 45%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.sflTituloEspaniol}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                        </p:column>
+<!--                        <p:column headerText="Título Convocatoria" style="width: 40%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.datgeproyId.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Tipo de Investigación" style="width: 10%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>-->
+                        <p:column headerText="Categoria" style="width: 10%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.prdIdCategoria.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+<!--                        <p:column headerText="Plan" style="width: 15%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.obplabvId.obplabvNombre}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>-->
+
+                        <p:column headerText="Seleccione" style="width:5%;text-align: center; white-space: pre-line">
+                            <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Selecciona Formato Largo" action="#{programacionPresupuestoController.seleccionaConvo}" 
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{formatoLargo}" target="#{programacionPresupuestoController.formatoLargoSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                </p:panel>
+
+                <!--                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" > 
+                                    <p:tab title="1. Datos Generales" id="tabP1">-->
+                <!--<p:panel id="pcomision" visible="#{!programacionPresupuestoController.botonInicio}">-->
+                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" rendered="#{!programacionPresupuestoController.botonInicio}"> 
+                    <p:tab title="1. Programación Presupuesto" >
+                        <p:dataTable id="dtProPre" value="#{programacionPresupuestoController.programacionAnualMesList}" var="pa" editable="true" style="width: auto"
+                                     paginator="true" rows="12" rowIndexVar="index" resizableColumns="true" emptyMessage="No se encontraron resultados">
+                            <p:ajax event="rowEdit" listener="#{programacionPresupuestoController.onRowEditP1}" update=":formPrincipal:tabP:dtProPre"/>
+                            <p:ajax event="rowEditCancel" listener="#{programacionPresupuestoController.onRowCancelP1}" update=":formPrincipal:tabP:dtProPre"/>
+                            <f:facet name="header">
+                                GRUPOS DE GASTO (INVERSIÓN Y CAPITAL)
+                            </f:facet>
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="6" headerText="Ord." style="width: 3%" />
+                                    <p:column rowspan="6" headerText="Mes" style="width: 5%" />
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="3" headerText="Personal Inversión PP Grupo71" style=" white-space: pre-line"/>
+                                    <p:column colspan="3" headerText="Bienes y Servicios Inversion PP Grupo 73" style="white-space: pre-line"/>
+                                    <p:column colspan="3" headerText="Obras Públicas PP Grupo 75" style="white-space: pre-line"/>
+                                    <p:column colspan="3" headerText="Otros Gastos Inversión PP Grupo 77" style="white-space: pre-line"/>
+                                    <p:column colspan="3" headerText="Bienes Larga Duración PP Grupo 84" style="white-space: pre-line"/>
+                                    <p:column colspan="1" headerText="Total" style="white-space: pre-line"/>
+                                    <p:column colspan="1" headerText="Editar" style="white-space: pre-line"/>
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="Partida" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Espe" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Otras Instituciones" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Partida" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Espe" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Otras Instituciones" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Partida" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Espe" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Otras Instituciones" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Partida" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Espe" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Otras Instituciones" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Partida" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Espe" style="white-space: pre-line; font-size: xx-small"/>
+                                    <p:column headerText="Valor Otras Instituciones" style="white-space: pre-line; font-size: xx-small"/>
+                                </p:row>
+                            </p:columnGroup>
+                            <p:column>
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>    
+                            <p:column footerText="Total" style="width: 10%; font-size: 11px; font-weight: bold; white-space: pre-line" >
+                                <h:outputText value="#{pa.seaMeses.semeDetalle}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+                            
+                            <p:column>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.partidaPerInver}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput1" value="#{pa.partidaPerInver}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorEspe}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput2" value="#{pa.valorEspe}"/></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEsp" value="#{programacionPresupuestoController.totalValEspePerInversion}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorOtras}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput3" value="#{pa.valorOtras}"/></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspOtr" value="#{programacionPresupuestoController.totalValOtrosPerInversion}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.partidaBienSer}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput4" value="#{pa.partidaBienSer}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>    
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorEspeBienSer}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput41" value="#{pa.valorEspeBienSer}"/></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspBienSer" value="#{programacionPresupuestoController.totalValEspeBienesServicios}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorOtrasBienSer}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput42" value="#{pa.valorOtrasBienSer}"/></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspOtrBienSer" value="#{programacionPresupuestoController.totalValOtrosBienesServicios}"/>
+                                </f:facet>
+                            </p:column>  
+                            <p:column>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.partidaObrasP}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput5" value="#{pa.partidaObrasP}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorEspeObrasP}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput51" value="#{pa.valorEspeObrasP}" /></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspObrasP" value="#{programacionPresupuestoController.totalValEspeObrasPublicas}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorOtrasObrasP}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput52" value="#{pa.valorOtrasObrasP}" /></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspOtrObrasP" value="#{programacionPresupuestoController.totalValOtrosObrasPublicas}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.partidaOtrosGastos}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput6" value="#{pa.partidaOtrosGastos}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>    
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorEspeGastosIn}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput61" value="#{pa.valorEspeGastosIn}" /></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspGastI" value="#{programacionPresupuestoController.totalValEspeOtrosGastos}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorOtrasGastosIn}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput62" value="#{pa.valorOtrasGastosIn}" /></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValOtrasGastI" value="#{programacionPresupuestoController.totalValOtrosOtrosGastos}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.partidaBienLargaD}"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput7" value="#{pa.partidaBienLargaD}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorEspeLargaD}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput71" value="#{pa.valorEspeLargaD}" /></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValEspLarD" value="#{programacionPresupuestoController.totalValEspeBienesLargaDuracion}"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pa.valorOtrasLargaD}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput72" value="#{pa.valorOtrasLargaD}" /></f:facet>
+                                </p:cellEditor>
+                                <f:facet name="footer">
+                                    <h:outputText id="totValOtrLargD" value="#{programacionPresupuestoController.totalValOtrosBienesLargaDuracion}"/>
+                                </f:facet>
+                            </p:column> 
+                            <p:column style="text-align: right">
+                                <h:outputText value="#{pa.total}" rendered="#{pa.total>0}"/>
+                            </p:column>  
+                            <p:column>
+                                <p:rowEditor/>
+                            </p:column>    
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

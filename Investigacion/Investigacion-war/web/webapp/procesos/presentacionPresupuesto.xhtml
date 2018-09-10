@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+
+            <p:panel id="panelBase" header="Actividades Cronograma del Proyecto" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >                   
+                    <p:selectBooleanButton id="value2" value="#{presentacionPresupuestoController.botonInicio}" onLabel="Formatos Largos"  disabled="#{presentacionPresupuestoController.botonInicio}" offLabel="Formatos Largos" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:auto">
+                        <p:ajax update=":formPrincipal:panelBase" listener="#{presentacionPresupuestoController.inicioCronograma()}" />
+                    </p:selectBooleanButton>
+                </h:panelGrid>                
+
+                <p:panel id="inicio"  visible="#{presentacionPresupuestoController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+
+                    <p:dataTable id="dtFormatoLargo" value="#{presentacionPresupuestoController.formatoCronogramaList}" var="cro"
+                                 paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                 emptyMessage="No se encontraron resultados"  style="text-align: left">
+
+                        <p:column headerText="Ord." style="width:3%">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Título Proyecto" style="width: 30%">
+                            <h:outputText value="#{cro.sflId.sflTituloEspaniol}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small; text-align: justify" styleClass="preformatted"/>                           
+                        </p:column>
+                        <p:column headerText="Actividad" style="width: 30%">
+                            <h:outputText value="#{cro.sfcrActividad}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small"/>                           
+                        </p:column>
+                        <p:column headerText="Responsable" style="width:25%">
+                            <h:outputText value="#{cro.usuId.usuApellidos} #{cro.usuId.usuNombres}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small"/>
+                        </p:column>
+                        <p:column headerText="Fecha Inicio" style="width: 15%">
+                            <h:outputText value="#{cro.sfcrFechaInicio}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Fecha Fin" style="width: 15%">
+                            <h:outputText value="#{cro.sfcrFechaFin}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Duración Días" style="width: 5%; white-space: pre-line">
+                            <h:outputText value="#{cro.sfcrDuracion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+
+                        <p:column headerText="Seleccione" style="width:10%;text-align: center">
+                            <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Selecciona Formato Largo" action="#{presentacionPresupuestoController.seleccionaConvo}" 
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{cro}" target="#{presentacionPresupuestoController.formatoCronogramaSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+<!--                                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" > 
+                                    <p:tab title="1. Datos Generales" id="tabP1">-->
+                <!--<p:panel id="pcomision" visible="#{!presentacionPresupuestoController.botonInicio}">-->
+                <p:tabView scrollable="true"  id="tabP" rendered="#{!presentacionPresupuestoController.botonInicio}"> 
+                    <p:tab title="1. Matriz de Riesgos" >                        
+                        <h:panelGrid columns="1" cellpadding="5"  id="h1" >
+                            <p:commandButton id="btnAgregar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1"   action="#{presentacionPresupuestoController.agregarP1}" rendered="#{!presentacionPresupuestoController.controlGrabarP1}" >
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" style="border: hidden" visible="#{presentacionPresupuestoController.controlGrabarP1}" >
+                            <p:messages id="messages" />
+                            <h:panelGrid columns="2" cellpadding="5"  >
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "  disabled="#{presentacionPresupuestoController.validaVaciosP1}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dtRiesgos,:formPrincipal:tabP:pInputP1" action="#{presentacionPresupuestoController.registraP1}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{presentacionPresupuestoController.cancelarP1}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="6" cellpadding="5"  id="pInputP1" rendered="#{presentacionPresupuestoController.controlGrabarP1}"  style="text-align: left">
+                                <p:outputLabel for="riesgo" value="Riesgo:" />
+                                <p:inputTextarea id="riesgo" rows="3" cols="80" autoResize="true" maxlength="1499" value="#{presentacionPresupuestoController.riesgo}">
+                                     <p:ajax event="keyup" listener="#{presentacionPresupuestoController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputTextarea>
+                                <p:outputLabel for="probabilidad" value="Probabilidad:" />
+                                <p:spinner id="probabilidad" value="#{presentacionPresupuestoController.probabilidad}" maxlength="3" min="0" max="100" size="3"  stepFactor="1">
+                                    <p:ajax event="change" listener="#{presentacionPresupuestoController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:spinner>
+                                <p:outputLabel for="prioridad" value="Prioridad:" />
+                                <p:spinner id="prioridad"  value="#{presentacionPresupuestoController.prioridad}" maxlength="3" min="0" max="1" size="3"  stepFactor="0.1">
+                                    <p:ajax event="change" listener="#{presentacionPresupuestoController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:spinner>
+                                <p:outputLabel for="estrategia" value="Estrategia:" />
+                                <p:inputTextarea id="estrategia" rows="3" cols="80" autoResize="true" maxlength="1499" value="#{presentacionPresupuestoController.estrategia}">
+                                    <p:ajax event="keyup" listener="#{presentacionPresupuestoController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputTextarea>
+                                <p:outputLabel for="presupuesto" value="Presupuesto:" />
+                                <p:inputText id="presupuesto" maxlength="9" value="#{presentacionPresupuestoController.presupuesto}"  onkeypress="return justNumbers(event);" >
+                                    <p:ajax event="keyup" listener="#{presentacionPresupuestoController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:panel>   
+                        <p:dataTable id="dtRiesgos" value="#{presentacionPresupuestoController.matrizRiesgosList}" var="ri" editable="true" style="width: auto"
+                                     paginator="tru" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                     emptyMessage="No se encontraron resultados"   >
+                            <p:ajax event="rowEdit" listener="#{presentacionPresupuestoController.onRowEdit}" update=":formPrincipal:tabP:dtRiesgos"/>
+                            <p:ajax event="rowEditCancel" listener="#{presentacionPresupuestoController.onRowCancel}" update=":formPrincipal:tabP:dtRiesgos"/>
+
+                            <p:column headerText="Ord." style="width: 5%; font-size: 11px; font-weight: bold">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Riesgo" style="width: 25%; font-size: 11px; font-weight: bold">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ri.smrRiesgo}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:inputTextarea rows="3" cols="80" autoResize="true" maxlength="1499" value="#{ri.smrRiesgo}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Probabilidad de Riesgo" style="width: 5%; font-size: 11px; font-weight: bold; white-space: pre-line; text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ri.smrProbabilidad}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:spinner id="probabilidad" value="#{ri.smrProbabilidad}" maxlength="3" min="0" max="100" size="3"  stepFactor="1"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Prioridad de Riesgo" style="width: 5%; font-size: 11px; font-weight: bold; white-space: pre-line; text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ri.smrPrioridad}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:spinner id="prioridad"  value="#{ri.smrPrioridad}" maxlength="3" min="0" max="1" size="3"  stepFactor="0.1" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Estrategia a ser Implementada" style="width: 25%; font-size: 11px; font-weight: bold" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ri.smrEstrategia}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:inputTextarea rows="3" cols="80" autoResize="true" maxlength="1499" value="#{ri.smrEstrategia}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Presupuesto" style="width: 10%; font-size: 11px; font-weight: bold; text-align: right">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{ri.smrPresupuesto}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="presupuesto" maxlength="9" value="#{ri.smrPresupuesto}"  onkeypress="return justNumbers(event);" /></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%; font-size: 11px; font-weight: bold">
+                                <p:commandButton id="btnEliminar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                 onclick="PF('deleteDialog').show();" process="@this" >
+                                    <f:setPropertyActionListener value="#{ri}" target="#{presentacionPresupuestoController.matrizRiesgosSelected}" />                                    
+                                </p:commandButton>   
+                            </p:column>
+                        </p:dataTable>   
+                        <!--</p:panel>-->
+                    </p:tab>                    
+                </p:tabView>
+            </p:panel>
+            <p:dialog id="deleteDlg" header="Eliminar Registro" widgetVar="deleteDialog" resizable="false" width="500" modal="true" appendTo="@(body)"  style="font-size: 11px; text-align: left; font-weight: bold">
+                <h:form id="deleteForm">
+                    <p:outputPanel id="panelDeleteRegistro">
+                        <center>
+                            <h:panelGrid id="displayDelete" columns="1" >                          
+                                <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                            </h:panelGrid>
+                        </center>
+                        <p:spacer height="10"></p:spacer>
+                        <h:panelGroup>
+                            <center>
+                                <p:commandButton id="btnEliminar"  value="Eliminar" style="margin:0" 
+                                                 onclick="PF('deleteDialog').hide();" >
+                                    <p:ajax update=":formPrincipal:tabP:dtRiesgos" listener ="#{presentacionPresupuestoController.eliminarP1()}" />
+                                </p:commandButton>
+                            </center>
+                        </h:panelGroup>
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>   
+
+        <script>
+            function justNumbers(e) {
+                var keynum = window.event ? window.event.keyCode : e.which;
+                if ((keynum == 8) || (keynum == 46))
+                    return true;
+                return /\d/.test(String.fromCharCode(keynum));
+            }
+        </script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="diagnostico_problema" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="d6a15885-331c-4718-92a9-1a4350dbe721">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+replace(replace(replace(replace(replace(replace(replace(replace(SEA_DIAGNOS_PROBLEMA.SDP_SITUACION_ACTUAL_TEMA, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') SDP_SITUACION_ACTUAL_TEMA,
+replace(replace(replace(replace(replace(replace(replace(replace(SEA_DIAGNOS_PROBLEMA.SDP_IDENTIFICA_DESCRIP_PROBLEM, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') SDP_IDENTIFICA_DESCRIP_PROBLEM
+         FROM SEA_FORMATO_LARGO, SEA_DIAGNOS_PROBLEMA
+ WHERE (SEA_DIAGNOS_PROBLEMA.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="SDP_SITUACION_ACTUAL_TEMA" class="oracle.sql.CLOB"/>
+	<field name="SDP_IDENTIFICA_DESCRIP_PROBLEM" class="oracle.sql.CLOB"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="19" uuid="43b4cdf3-9f96-4669-98e9-b67e055d99df"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[2.1 Descripción de la situación actual del tema a investigar:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="19" width="555" height="20" uuid="ba0cbe93-6d46-4f6d-afab-3ec5933635cc"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{SDP_SITUACION_ACTUAL_TEMA}.stringValue()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="39" width="555" height="19" uuid="0923ea93-50e6-4016-a5a8-9abcb1b89bea"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[2.2 Identificación, descripción y diagnóstico del problema:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="58" width="555" height="20" uuid="9e67fc81-8966-4c41-82be-a7c9d9285210"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{SDP_IDENTIFICA_DESCRIP_PROBLEM}.stringValue()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

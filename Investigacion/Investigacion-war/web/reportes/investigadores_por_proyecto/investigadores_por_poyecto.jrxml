@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="investigadores_por_poyecto" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4da44903-2b06-44d1-820c-32dcc3d61f05">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO "TITULO DEL PROYECTO",
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION "TIPO DE INVESTIGACION",
+       SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION "FECHA DE CREACION",
+       SEG_USUARIO.USU_NOMBRES ||'   '|| SEG_USUARIO.USU_APELLIDOS "PERSONAL DEL PROYECYO",
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP "TIPO DE RESPONSABILIDAD",
+       SEA_TIPO_RESPONS.TIPRES_ORDEN
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_RESPONSABLE_PROG,
+       SEG_USUARIO,
+       SEA_TIPO_RESPONS,
+       SEA_PARAMETROS_DET
+ WHERE (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_DAT_GENERAL_PROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID(+))
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='0')
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='1')
+ORDER BY SEA_DAT_GENERAL_PROY.DATGEPROY_FECHA_CREACION DESC,SEA_TIPO_RESPONS.TIPRES_ORDEN]]>
+	</queryString>
+	<field name="TITULO DEL PROYECTO" class="java.lang.String"/>
+	<field name="TIPO DE INVESTIGACION" class="java.lang.String"/>
+	<field name="FECHA DE CREACION" class="java.sql.Timestamp"/>
+	<field name="PERSONAL DEL PROYECYO" class="java.lang.String"/>
+	<field name="TIPO DE RESPONSABILIDAD" class="java.lang.String"/>
+	<field name="TIPRES_ORDEN" class="java.math.BigDecimal"/>
+	<group name="PROYECTO">
+		<groupExpression><![CDATA[$F{TITULO DEL PROYECTO}]]></groupExpression>
+		<groupHeader>
+			<band height="73">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="13" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="7e633870-b877-4cb6-9fc9-ceba27c8e990"/>
+					<box topPadding="4" leftPadding="5" bottomPadding="4" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TITULO DEL PROYECTO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="116" y="33" width="241" height="20" uuid="00297271-3bbe-421b-8a0d-bf7ebb5f5bc5"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO DE INVESTIGACION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="473" y="33" width="82" height="20" uuid="b35a2e5d-81bc-43e7-8528-6c3bd3010b59"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FECHA DE CREACION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="33" width="116" height="20" uuid="9ace3f31-267e-4c43-9342-b4fa4bd75619"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipo de Investigación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="357" y="33" width="116" height="20" uuid="496c21fa-5b68-4832-aaf3-f5cdb33321d9"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha de creación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="24" y="53" width="333" height="20" uuid="86ea379f-6888-4bdf-bc0a-29f2fa850a49"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Personal del Proyecto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="357" y="53" width="198" height="20" uuid="308c8a06-0efa-4368-b7ea-4f590541df08"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipo de Responsabilidad]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="53" width="24" height="20" uuid="7e3d059d-9f02-4d15-a56e-28b5482a8dc5"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[#]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="67" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="61" uuid="eaaac620-e9ae-4ba7-910c-5d6ac537cd87"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="2" width="555" height="33" uuid="9277e9e5-9b96-46b2-8a2d-0b01b1836fc3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA
+INVESTIGADORES POR POYECTO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="24" y="0" width="333" height="20" isPrintWhenDetailOverflows="true" uuid="e4a64a45-c3a8-4a30-b64c-aa1ef3ceeed0"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PERSONAL DEL PROYECYO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="357" y="0" width="198" height="20" isPrintWhenDetailOverflows="true" uuid="b4d83039-568e-456c-b069-d96695a8410b"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO DE RESPONSABILIDAD}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="24" height="20" isPrintWhenDetailOverflows="true" uuid="aa18a968-4bfe-439f-bec3-db3a97b4adb2"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PROYECTO_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="430" y="4" width="80" height="20" uuid="5ed63f4c-dce2-4aa4-ac5f-09d5412679d1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="510" y="4" width="40" height="20" uuid="b0128377-3080-42a4-a206-51a8aa01dddf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="analisis_comparativo" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="69fcdb73-e280-45c6-a2f0-08c1f41f0e0f">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="paginaLegal" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT replace(replace(replace(replace(replace(replace(replace(replace(SEA_ANALISIS__FORMATO.SAF_ANALISIS_COMPARA, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') SAF_ANALISIS_COMPARA,
+       SEA_ANALISIS__FORMATO.SAF_NUM_HOMBRES_D,
+       SEA_ANALISIS__FORMATO.SAF_NUM_MUJERES_D,
+       SEA_ANALISIS__FORMATO.SAF_TOTAL_NUM_DIRECTOS,
+       SEA_ANALISIS__FORMATO.SAF_TOTAL_NUM_INDIRECTO,
+       SEA_ANALISIS__FORMATO.SAF_NUM_CAPAC_ESPECIALES,
+       SEA_ANALISIS__FORMATO.SAF_NUM_DOC_TOTAL,
+       SEA_ANALISIS__FORMATO.SAF_NUM_DOC_HOMBRES,
+       SEA_ANALISIS__FORMATO.SAF_NUM_DOC_MUJERES,
+       SEA_ANALISIS__FORMATO.SAF_NUM_EST_TOTAL,
+       SEA_ANALISIS__FORMATO.SAF_NUM_EST_HOMBRES,
+       SEA_ANALISIS__FORMATO.SAF_NUM_EST_MUJERES,
+replace(replace(replace(replace(replace(replace(replace(replace(SEA_ANALISIS__FORMATO.SAF_FACTORES_C_EXITO, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') SAF_FACTORES_C_EXITO,
+replace(replace(replace(replace(replace(replace(replace(replace(SEA_ANALISIS__FORMATO.SAF_RESTICCIONES_SUPUESTO, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') SAF_RESTICCIONES_SUPUESTO
+  FROM SEA_FORMATO_LARGO, SEA_ANALISIS__FORMATO
+ WHERE (SEA_ANALISIS__FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="SAF_ANALISIS_COMPARA" class="java.lang.String"/>
+	<field name="SAF_NUM_HOMBRES_D" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_MUJERES_D" class="java.math.BigDecimal"/>
+	<field name="SAF_TOTAL_NUM_DIRECTOS" class="java.math.BigDecimal"/>
+	<field name="SAF_TOTAL_NUM_INDIRECTO" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_CAPAC_ESPECIALES" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_DOC_TOTAL" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_DOC_HOMBRES" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_DOC_MUJERES" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_EST_TOTAL" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_EST_HOMBRES" class="java.math.BigDecimal"/>
+	<field name="SAF_NUM_EST_MUJERES" class="java.math.BigDecimal"/>
+	<field name="SAF_FACTORES_C_EXITO" class="java.lang.String"/>
+	<field name="SAF_RESTICCIONES_SUPUESTO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="348" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="19" uuid="b3122426-0a90-4a70-a935-b3f1ad36929b"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[2.4 Análisis Comparativo]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="19" width="555" height="20" uuid="ca489045-b6a7-4562-b69f-66379e37b0e7"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_ANALISIS_COMPARA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="81" width="555" height="19" uuid="6b48bd76-b56b-4aaf-8f7f-8df1733d1f00"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Identificación y caracterización de la población objetivo (beneficiarios y participantes)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="100" width="108" height="32" uuid="273da7b1-4235-4faa-8b10-910c2a488098"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Número Directos Hombres:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="108" y="100" width="109" height="32" uuid="e46ec71a-0fd4-48ef-8fa9-95c0e27775c4"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Número Directos Mujeres:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="217" y="100" width="119" height="32" uuid="0c75c67d-c9b7-4703-af9e-64aabc02e383"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Total Número Directos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="336" y="100" width="111" height="32" uuid="f035c761-275a-4855-8cf8-85b2383a81e9"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Total Número Inderectos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="447" y="100" width="108" height="32" uuid="89606377-019b-4c6d-a9f7-5df14b9ad181"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Personas con capacidades especiales:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="132" width="108" height="20" uuid="55b55546-0818-4216-bc85-e1a038172bd1"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_HOMBRES_D}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="108" y="132" width="109" height="20" uuid="5a075a4c-c9ea-4705-8510-e4ff2ff4b81f"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_MUJERES_D}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="217" y="132" width="119" height="20" uuid="e1fddd52-cf91-4049-bd1a-f5a40f95eba7"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_TOTAL_NUM_DIRECTOS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="336" y="132" width="111" height="20" uuid="e6438eee-a6b6-489e-8e1c-53f204a847b5"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_TOTAL_NUM_INDIRECTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="447" y="132" width="108" height="20" uuid="3ee029dd-b1b1-45b6-b7d7-5798fab65770"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_CAPAC_ESPECIALES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="152" width="176" height="21" uuid="9b064b72-501b-4c9a-9b0c-62dd248444a5"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Número de docentes participanes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="176" y="152" width="186" height="21" uuid="f16e75ac-2136-47b0-814d-533941ca1610"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Docentes participanes hombres:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="362" y="152" width="193" height="21" uuid="8c3c9f30-825e-4538-8297-dae275295d2e"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Docentes participanes mujeres:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="173" width="176" height="20" uuid="050b53d7-fd2a-4cd3-8c2e-43b11bae377a"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_DOC_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="176" y="173" width="186" height="20" uuid="69029b95-b68d-4bd9-93fe-f545364d3029"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_DOC_HOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="362" y="173" width="193" height="20" uuid="6dc3bce6-f000-4bce-bb29-13c2c6bd963b"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_DOC_MUJERES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="176" y="193" width="186" height="21" uuid="00f08018-c3ce-48b5-8518-1ff23e572c0e"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Estudiantes participanes hombres:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="362" y="193" width="193" height="21" uuid="545cdebf-3af0-42b3-bd22-36f5061f3066"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Estudiantes participanes mujeres:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="193" width="176" height="21" uuid="3197f768-e061-47be-9980-0259043a9240"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Número de estudiantes participanes:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="214" width="176" height="20" uuid="3d717417-452a-4f95-9261-6a4984348866"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_EST_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="176" y="214" width="186" height="20" uuid="723ec2c8-2f5d-4661-b307-7257e9c1db2f"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_EST_HOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="362" y="214" width="193" height="20" uuid="30017160-bcc8-44cf-ab58-f69ac45d2446"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_NUM_EST_MUJERES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="234" width="555" height="21" uuid="f9f75f73-4b48-478e-b7d7-1a3e5208f35c"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Factores críticos de éxito:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="255" width="555" height="20" uuid="fb1db3e2-adda-43cf-a5ac-eb1e064cbf68"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_FACTORES_C_EXITO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="275" width="555" height="21" uuid="dfc57658-2c5a-4d29-ae1c-efc9dfc3ab53"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Restricciones/Supuestos:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="296" width="555" height="20" uuid="dea65799-d1a2-48e5-a230-36ef063c6236"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SAF_RESTICCIONES_SUPUESTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="39" width="555" height="19" uuid="8b9c9cdc-05f5-4bef-875c-ead29c775b80"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[* Adjuntar Página Legal:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="58" width="555" height="23" uuid="03aaffaf-34fc-4c04-a5bd-9ead8a735086"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{paginaLegal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

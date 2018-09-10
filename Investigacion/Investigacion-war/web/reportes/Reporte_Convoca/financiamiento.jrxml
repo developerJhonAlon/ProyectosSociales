@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="financiamiento" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="0" rightMargin="60" topMargin="5" bottomMargin="20" uuid="38aa23e9-1068-47d6-997d-73a518f11dc1">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CONVOCA_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 'Hasta el '||SEA_FINANCIA_CONVOCA.SFC_PORCENTAJE||'%,',
+         SEA_RECURSOS_CONVOCA.SRC_DESCRIPCION,
+((SEA_FINANCIA_CONVOCA.SFC_PORCENTAJE*SEA_CONVOCA.CONVOCA_FINANCIAMIENTO)/100) VALOR
+    FROM SEA_CONVOCA, SEA_RECURSOS_CONVOCA, SEA_FINANCIA_CONVOCA
+   WHERE     (SEA_FINANCIA_CONVOCA.CONVOCA_ID = SEA_CONVOCA.CONVOCA_ID)
+         AND (SEA_FINANCIA_CONVOCA.SRC_ID = SEA_RECURSOS_CONVOCA.SRC_ID)
+         AND (SEA_CONVOCA.CONVOCA_ID = $P{CONVOCA_ID})
+ORDER BY SEA_FINANCIA_CONVOCA.SRC_ID ASC]]>
+	</queryString>
+	<field name="&apos;HASTAEL&apos;||SEA_FINANCIA_CONVOCA.SFC_PORCENTAJE||&apos;%,&apos;" class="java.lang.String"/>
+	<field name="SRC_DESCRIPCION" class="java.lang.String"/>
+	<field name="VALOR" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="85" y="0" width="52" height="20" uuid="811c6fbf-1477-4008-a783-8c941caa98f5"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VALOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="137" y="0" width="323" height="20" uuid="c1da14d4-d58f-40b0-9ae6-9d675a48014c"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[", para " + $F{SRC_DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="29" y="0" width="21" height="20" uuid="95286b77-c3fb-4ede-8080-e09b77a9f5ce"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="50" y="0" width="35" height="20" uuid="ba6f108d-d576-4839-aa40-62fca98efb0f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Hasta   $]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

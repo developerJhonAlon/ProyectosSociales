@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="metodologia_investigacion" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="a887ee06-bd91-4a61-9846-5011142c0a7a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+replace(replace(replace(replace(replace(replace(replace(replace(SEA_DAT_GENERAL_PROY.DATGEPROY_METODOLOGIA, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') DATGEPROY_METODOLOGIA,
+replace(replace(replace(replace(replace(replace(replace(replace(SEA_FORMATO_LARGO.SFL_METODOLOGIA, 'arial', 'Arial'), 'comic sans ms', 'Comic Sans MS'), 'courier new', 'Courier New'), 'georgia','Georgia'), 'lucida sans unicode', 'Lucida Sans Unicode'), 'tahoma','Tahoma'), 'times new roman', 'Times New Roman'), 'verdana', 'Verdana') SFL_METODOLOGIA
+FROM SEA_DAT_GENERAL_PROY, SEA_FORMATO_LARGO
+ WHERE (SEA_FORMATO_LARGO.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="DATGEPROY_METODOLOGIA" class="oracle.sql.CLOB"/>
+	<field name="SFL_METODOLOGIA" class="oracle.sql.CLOB"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="39f26908-d7bf-40df-bff8-3ed64faf160d"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""+$F{DATGEPROY_METODOLOGIA}.stringValue()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

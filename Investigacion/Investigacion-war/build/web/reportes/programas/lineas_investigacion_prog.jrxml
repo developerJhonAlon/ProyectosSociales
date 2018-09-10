@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lineas_investigacion_prog" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6efeb99f-3717-4c1b-b584-223e41e6537a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROG_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT PADRE.LINEA_DESCIP  AS LINEAS,
+       SEA_LINEAINVES.LINEA_DESCIP AS SUBLINEAS
+  FROM SZDTAPROGLIN, SEA_LINEAINVES, SEA_LINEAINVES PADRE
+ WHERE (SZDTAPROGLIN.LINEA_ID = SEA_LINEAINVES.LINEA_ID)
+       AND (PADRE.LINEA_ID = SEA_LINEAINVES.LINEA_ID_PADRE)
+       AND (SZDTAPROGLIN.DATGEPROG_ID = $P{DATGEPROG_ID})]]>
+	</queryString>
+	<field name="LINEAS" class="java.lang.String"/>
+	<field name="SUBLINEAS" class="java.lang.String"/>
+	<group name="header lineas">
+		<groupExpression><![CDATA[$F{LINEAS}]]></groupExpression>
+		<groupHeader>
+			<band height="19">
+				<textField>
+					<reportElement uuid="b38af967-c33c-4520-a88d-8d867a9c72ad" positionType="Float" stretchType="RelativeToTallestObject" x="2" y="0" width="542" height="19"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LINEAS}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7d1ea2c9-164b-4dbe-ba45-6e4cd5033f64" positionType="Float" x="2" y="11" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[LÍNEAS DE INVESTIGACIÓN]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="85921393-5604-4f77-8038-dd60cae8c5ba" x="2" y="28" width="543" height="1"/>
+			</line>
+			<rectangle>
+				<reportElement uuid="b26c116c-fb6f-4282-a2fa-0428b0f3e3da" x="2" y="33" width="543" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="7dce1380-d47e-4471-bf5f-db3cefaad14e" x="11" y="34" width="264" height="20" forecolor="#FFFFFF"/>
+				<box>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Líneas de Investigación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33f0d2f8-7896-45aa-bff9-f28be08aa185" x="275" y="34" width="270" height="20" forecolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sublíneas de Investigación Asociadas]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="cea985d2-657f-443a-9cc8-edd1abb74b21" positionType="Float" stretchType="RelativeToTallestObject" x="275" y="0" width="269" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUBLINEAS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

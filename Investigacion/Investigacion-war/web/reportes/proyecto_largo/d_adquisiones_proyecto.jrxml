@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="d_entregable_proyecto" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="a555b21a-4a9c-4c85-8f34-3959075930db">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+SEA_PARAMETROS_DET.PRD_ID,
+       SEA_OBJ_ENTREGABLES.SOE_DESCRIPCION,
+       SEA_OBJ_ADQUISISIONES.SOA_NACIONAL,
+       SEA_OBJ_ADQUISISIONES.SOA_IMPORTADO,
+       SEA_OBJ_ADQUISISIONES.SOA_DESTALLE_NACIONAL,
+       SEA_OBJ_ADQUISISIONES.SOA_DETALLE_IMPORTADO
+  FROM SEA_OBJ_ENTREGABLES, SEA_OBJ_ADQUISISIONES, SEA_PARAMETROS_DET
+ WHERE     (SEA_OBJ_ADQUISISIONES.SOE_ID(+) = SEA_OBJ_ENTREGABLES.SOE_ID)
+       AND (SEA_OBJ_ENTREGABLES.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_OBJ_ENTREGABLES.SFL_ID = $P{SFL_ID})
+    ORDER BY SEA_PARAMETROS_DET.PRD_ID ASC]]>
+	</queryString>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="PRD_ID" class="java.math.BigDecimal"/>
+	<field name="SOE_DESCRIPCION" class="java.lang.String"/>
+	<field name="SOA_NACIONAL" class="java.math.BigDecimal"/>
+	<field name="SOA_IMPORTADO" class="java.math.BigDecimal"/>
+	<field name="SOA_DESTALLE_NACIONAL" class="java.lang.String"/>
+	<field name="SOA_DETALLE_IMPORTADO" class="java.lang.String"/>
+	<group name="TIPO">
+		<groupExpression><![CDATA[$F{PRD_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="8a367c4c-2b29-4bc4-820d-ac111697c060" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRD_DESCRIPCION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="1248d874-4871-4c91-81e4-7a7e7408326b" x="100" y="0" width="455" height="20"/>
+					<box>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band>
+				<staticText>
+					<reportElement uuid="7fbd0fdc-1c2c-4732-907d-a4b175fc3d25" x="0" y="0" width="100" height="0"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cab9c087-ec66-4072-acef-1174aa23e1fd" positionType="Float" x="0" y="0" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Detalle de adquisiciones del proyecto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afcdb16d-afd3-4b35-96dd-cd0dcc669dce" positionType="Float" x="0" y="19" width="100" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Descripcíon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd5c9392-ff31-4d0f-9706-5b0c10adb219" positionType="Float" x="100" y="19" width="75" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[% Nacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e2051e18-f416-4358-963d-4575ffd08359" positionType="Float" x="175" y="19" width="79" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[% Importado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ffeb1eee-b538-48d0-a7a7-7cbf723cd702" positionType="Float" x="254" y="19" width="145" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Detalle insumo nacional]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a735ec2f-7f55-480a-b900-890b0d0e54c6" positionType="Float" x="399" y="19" width="156" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Detalle insumo importado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="96d3b2b5-6a26-43cd-a80b-3c81184056e4" positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="75" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOA_NACIONAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="f7319d31-4f2d-4ea3-92e6-8f151439d388" positionType="Float" stretchType="RelativeToTallestObject" x="175" y="0" width="79" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOA_IMPORTADO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="787c1974-ab83-4df0-b8a1-5108bfab2e3d" positionType="Float" stretchType="RelativeToTallestObject" x="254" y="0" width="145" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOA_DESTALLE_NACIONAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f7d66657-105d-4cdc-a736-3cc9285a193a" positionType="Float" stretchType="RelativeToTallestObject" x="399" y="0" width="156" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOA_DETALLE_IMPORTADO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6578a191-ad67-4100-a07b-068064c88c92" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

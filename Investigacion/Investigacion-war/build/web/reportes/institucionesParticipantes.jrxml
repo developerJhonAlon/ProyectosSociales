@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="institucionesParticipantes" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3a0ed134-aa1b-43d4-8608-6ec60bad85d5">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     SEA_OPCION_INSTITUCION."OPINSTI_NOMBRE" AS NOMBRE_INSTITUCION,
+     SEA_OPCION_INSTITUCION."OPINSTI_REPRESENTA_LEGAL" AS REPRESENTANTE_LEGAL,
+     SEA_OPCION_INSTITUCION."OPINSTI_CEDULA_RL" AS CEDULA_RL,
+     SEA_OPCION_INSTITUCION."OPINSTI_TELEFONO" AS TELEFONO,
+     SEA_OPCION_INSTITUCION."OPINSTI_MAIL" AS MAIL,
+     SEA_OPCION_INSTITUCION."OPINSTI_DIRECCION" AS DIRECCION,
+     SEA_OPCION_INSTITUCION."OPINSTI_PAGUINA_WEB" AS PAGINA_WEB,
+     SEA_OPCION_INSTITUCION."OPINSTI_ORGANO_EJECUTOR" AS ORGANO_EJECUTOR,
+     SEA_OPCION_INSTITUCION."OPINSTI_FAX" AS FAX
+FROM
+     "SISEAC"."SEA_OPCION_INSTITUCION" SEA_OPCION_INSTITUCION
+WHERE
+     SEA_OPCION_INSTITUCION."DATGEPROY_ID" =$P{DATGEPROY_ID}]]>
+	</queryString>
+	<field name="NOMBRE_INSTITUCION" class="java.lang.String"/>
+	<field name="REPRESENTANTE_LEGAL" class="java.lang.String"/>
+	<field name="CEDULA_RL" class="java.lang.String"/>
+	<field name="TELEFONO" class="java.lang.String"/>
+	<field name="MAIL" class="java.lang.String"/>
+	<field name="DIRECCION" class="java.lang.String"/>
+	<field name="PAGINA_WEB" class="java.lang.String"/>
+	<field name="ORGANO_EJECUTOR" class="java.lang.String"/>
+	<field name="FAX" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="2ff5c2b0-6d2f-479f-9df6-a56df9397287" x="1" y="0" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[D.   INSTITUCIONES PARTICIPANTES]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="4e410506-c159-4a2e-9117-66fe562c23fc" x="1" y="16" width="546" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="131" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="805bfeb7-a079-4c59-b876-77e825471518" x="116" y="104" width="428" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="1feef65b-4fe1-4035-9a87-77c4a058ee03" x="10" y="104" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="e57f5b87-361c-44a3-bbc0-e6beb959d250" x="10" y="84" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="d6eec264-ff2a-445e-82f1-e61b08597890" x="116" y="84" width="428" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="dc157858-8f76-4f69-8de4-b3863b4e298a" x="10" y="64" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="681d4dff-c73c-4f8a-b74f-39aa16cdd789" x="116" y="64" width="428" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="6e4645f0-589e-47b2-b99b-97c87a2ea5e4" x="10" y="44" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="4d0e4378-e2f0-4712-9e8b-761b0333a7b1" x="116" y="44" width="77" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="935807a8-d2b1-4320-8e4f-c856fb2aee57" x="193" y="44" width="23" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="32acc609-74d1-4f71-b29f-9b0b40e3a7bf" x="216" y="44" width="87" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="fff79fa8-362c-4c08-9980-34cae307a395" x="303" y="44" width="94" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="b1ffff25-64c4-4c8a-ba58-2d515163da8c" x="397" y="44" width="147" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="b6498aba-6771-4e0a-b332-0bfc53271ecb" x="397" y="24" width="147" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="544895f0-c26d-4bf0-a859-ffe293cfb5ba" x="303" y="24" width="94" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="2095f28f-b9b9-4dda-8708-d45d274e29a5" x="116" y="24" width="187" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="cbf8bb66-58c7-4d8e-b8f1-c3079c46d064" x="10" y="24" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="9ba39a61-c671-451f-a6a9-f75ca68bda8d" x="10" y="4" width="534" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="5054e537-1f6c-46f8-8a5c-3fe344fe6734" x="25" y="5" width="508" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_INSTITUCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e2d63bc4-a2fd-4984-b7df-00a18219b6bf" x="116" y="24" width="187" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REPRESENTANTE_LEGAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8e9f89fc-ca03-4556-8d72-83ed809df00d" x="14" y="24" width="105" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Representante Legal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e18528e5-e694-44a4-97c1-828e1326e8bb" x="397" y="25" width="147" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CEDULA_RL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2ee575c6-c673-437b-8e12-00f1bbd8573d" x="305" y="24" width="92" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula de Identidad]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="08ba7ed5-5c10-4c6d-81b9-21d2492e83be" x="116" y="45" width="77" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="004f0ec0-3e28-4f33-a2f7-f48a0ab23b23" x="14" y="45" width="103" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfonos]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b300b68a-4c35-4af9-b2ec-5b9b8ad2b98e" x="216" y="44" width="89" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FAX}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="92c0f808-ab10-4007-8494-b087b2bb3422" x="193" y="44" width="23" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Fax]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a396c61a-481b-4d72-bb81-3d256bcb9542" x="397" y="44" width="147" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MAIL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f77959dd-2719-4137-8aa5-94c38ce97c5a" x="305" y="45" width="92" height="19"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="84476610-b79d-445a-bd8f-dfb80161ce45" x="116" y="65" width="428" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1d666b89-0d78-4a88-bd92-ee4e4e759f48" x="13" y="65" width="104" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="abe641ef-ba3b-42d5-97da-dff665c239b8" x="116" y="85" width="428" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAGINA_WEB}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bdbbe78b-6af5-43a1-89ab-db58a21eb4bf" x="13" y="85" width="103" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Página Web Institucional]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="76ce8664-5f7e-43fd-8f0c-e2595c47fbb6" x="117" y="104" width="428" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ORGANO_EJECUTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="96701815-d3cd-4112-b849-837cc6ae386a" x="13" y="104" width="104" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Órgano Ejecutor]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="1" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

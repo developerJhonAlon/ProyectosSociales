@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="objetivos_programa" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="20e919d0-d1e6-4400-81f7-09059ebcdbbe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROG_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_OBJETIVOS_PROG.OBJPROG_OBJETIVO
+    FROM SEA_OBJETIVOS_PROG
+   WHERE (SEA_OBJETIVOS_PROG.DATGEPROG_ID = $P{DATGEPROG_ID})
+ORDER BY SEA_OBJETIVOS_PROG.OBJPROG_ORDEN ASC
+]]>
+	</queryString>
+	<field name="OBJPROG_OBJETIVO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d7f7c70b-1294-4c60-8d8a-48ccd422a881" positionType="Float" x="0" y="7" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[OBJETIVOS ESPECIFICOS DEL PROGRAMA]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="e12734c0-78bc-414d-a01e-98ab5a8fe3b9" x="3" y="23" width="543" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement uuid="4c6b1e23-7995-4b6b-9d3c-7a2dc731a0e8" x="3" y="5" width="543" height="15"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OBJPROG_OBJETIVO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

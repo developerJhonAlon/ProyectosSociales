@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="areas_conocimiento" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="df0e2343-9bbd-4f11-bbca-ba96ab8c7bbe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT STVTOPS.STVTOPS_DESC AS AREA_CONOCIMIENTO, SEA_AREAC_UNESCO.SACU_DECSRIPCION AS UNESCO
+  FROM SEA_FORMATO_LARGO, SATURN.STVTOPS, SEA_AREAC_UNESCO
+ WHERE     (SEA_FORMATO_LARGO.STVTOPS_CODE_AC = STVTOPS.STVTOPS_CODE)
+       AND (SEA_FORMATO_LARGO.SACU_ID = SEA_AREAC_UNESCO.SACU_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="AREA_CONOCIMIENTO" class="java.lang.String"/>
+	<field name="UNESCO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1a7aed5a-bceb-41d6-96d3-43e68124adbc" positionType="Float" x="0" y="0" width="555" height="22"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Área de Conocimiento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="27b25820-2cbc-4db7-9253-7fd789aaf7e7" positionType="Float" x="0" y="22" width="254" height="22"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[ESPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29ab5da5-8c8a-44a5-9ae9-230af35848e6" positionType="Float" x="254" y="22" width="301" height="22"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Unesco]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="02873b70-2f1c-4ef5-aa28-039525c13eca" x="0" y="0" width="254" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AREA_CONOCIMIENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4f559b26-c452-4ccc-b7ae-cd3d98c16e03" x="254" y="0" width="301" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UNESCO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

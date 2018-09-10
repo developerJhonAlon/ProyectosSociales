@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Responsable Líneas de Investigación" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <p:tabView scrollable="true" id="tabP">
+                    <p:tab title="Responsable Líneas de Investigación" id="tabP1">
+                        <h:panelGrid columns="1" cellpadding="5" id="h1">
+                            <p:commandButton id="btnAgregarP1" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Agregra Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{lineaSubInvestigacionController.agregarP1()}" rendered="#{!lineaSubInvestigacionController.controlGrabar1}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" visible="#{lineaSubInvestigacionController.controlGrabar1}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{lineaSubInvestigacionController.validaVaciosP1}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dataTableResponsable" action="#{lineaSubInvestigacionController.registraP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Cancelar Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{lineaSubInvestigacionController.cancelarP1()}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="linInv" value="Líneas de Investigación:"/>
+                                <p:selectOneMenu id="linInv" value="#{lineaSubInvestigacionController.lineaInvest}" required="false" style="width: 260px">
+                                    <f:selectItem itemLabel="Seleccione Línea" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{lineaSubInvestigacionController.lineaInvesList}" var="linvest" itemLabel="#{linvest.lineaDescip}" itemValue="#{linvest.lineaId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{lineaSubInvestigacionController.validarVaciosP1}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel for="respInv" value="Responsable:"/>
+                                <p:selectOneMenu id="respInv" value="#{lineaSubInvestigacionController.docenteInves}" filter="true" filterMatchMode="contains" style="width: 260px">
+                                    <f:selectItem itemLabel="Seleccione Responsable" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{lineaSubInvestigacionController.docenteInvestList}" var="resp" itemLabel="#{resp.usuApellidos} #{resp.usuNombres}" itemValue="#{resp.usuId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{lineaSubInvestigacionController.validarVaciosP1}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="Documento Habilitante:"/>
+                                <h:outputLabel value="#{lineaSubInvestigacionController.nomFile1}"/>
+                            </h:panelGrid>
+                            <left>
+                                <p:fileUpload fileUploadListener="#{lineaSubInvestigacionController.handFileUpload1}" mode="advanced" dragDropSupport="false" style="width: 28%; text-align: left"
+                                              update=":formPrincipal:tabP:p1" label="Seleccione Documento Habilitante" sizeLimit="1000000" auto="true"/>
+                            </left>
+                        </p:panel>
+                        <p:dataTable id="dataTableResponsable" value="#{lineaSubInvestigacionController.responsableList}" var="responsable"
+                                     rows="10" rowIndexVar="index" paginator="true" resizableColumns="true" editable="true" emptyMessage="No se encontraron Resultados"> 
+
+                            <p:ajax event="rowEdit" listener="#{lineaSubInvestigacionController.onRowEditP1}" partialSubmit="true"/>
+                            <p:ajax event="rowEditCancel" listener="#{lineaSubInvestigacionController.onRowCancelP1}" partialSubmit="true"/>
+
+                            <p:column headerText="Ord." style="width: 3%">
+                                <h:outputText value="#{index + 1}" style="text-align: center"/>
+                            </p:column>
+                            <p:column headerText="Líneas de Investigación" style="width: 15%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{responsable.lineaId.lineaDescip}" style="white-space: pre-line; text-transform: uppercase;text-align: left" /></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{lineaSubInvestigacionController.responLinEdit}" style="width: 100%">
+                                            <f:selectItems value="#{lineaSubInvestigacionController.lineaInvesList}" var="lInvest" itemLabel="#{lInvest.lineaDescip}" itemValue="#{lInvest.lineaId}"/>
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Responsable" style="width: 25%">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{responsable.usuId.usuApellidos} #{responsable.usuId.usuNombres}" style="white-space: pre-line; text-transform: uppercase;text-align: left" /></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{lineaSubInvestigacionController.docentEdit}" style="width: 100%">
+                                            <f:selectItems value="#{lineaSubInvestigacionController.docenteInvestList}" var="docInvest" itemLabel="#{docInvest.usuApellidos} #{docInvest.usuNombres}" itemValue="#{docInvest.usuId}"/>
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Fecha Creación" style="width: 5%;white-space: pre-line">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{responsable.rplineaiFechaCrea}"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText></f:facet>
+                                    <f:facet name="input">
+                                        <p:calendar id="fechCr" navigator="true" value="#{responsable.rplineaiFechaCrea}" yearRange="1960:2015" size="20" style="font-size: 12px" locale="es" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+<!--                            <p:column headerText="Nombre Archivo" style="width: 10%" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{responsable.rplineaiDocNombre}" style="white-space: pre; text-transform: uppercase;text-align: left" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput1" value="#{responsable.rplineaiDocNombre}" style="width: 100%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>-->
+                            <p:column headerText="Documento Habilitante" style="width: 25%" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{responsable.rplineaiDocNombre}" style="white-space: pre; text-transform: uppercase;text-align: left" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:fileUpload fileUploadListener="#{lineaSubInvestigacionController.handFileUpload1}" mode="advanced" dragDropSupport="false" style=" width: 25%; text-align:left"
+                                                      update=":formPrincipal:tabP:dataTableResponsable" label="Seleccione Documento Habilitante" sizeLimit="100000" auto="true"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Editar" style="width: 3%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar " style="width: 3%">
+                                <p:commandButton id="btnEliminar" style="margin: 0;" title="Eliminar el registro" icon="ui-icon-trash"
+                                                 onclick="PF('deleteDialog1').show();" process="@this">
+                                    <f:setPropertyActionListener value="#{responsable}" target="#{lineaSubInvestigacionController.responsableLineaSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:tab>
+
+
+   <!-- <p:dataTable id="dtLinea" value="#{lineaSubInvestigacionController.lineaInvesList}" var="linea" paginator="true"
+                 rendered="#{not empty lineaSubInvestigacionController.lineaInvesList}"
+                 rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron resultados" >
+
+        <p:ajax event="rowToggle" listener="#{lineaSubInvestigacionController.onRowToggleLine}"/>
+        <p:ajax event="rowEdit" listener="#{lineaSubInvestigacionController.onRowEditP1}" partialSubmit="true"/>
+        <p:ajax event="rowEditCancel" listener="#{lineaSubInvestigacionController.onRowCancelP1}" partialSubmit="true"/>
+
+        <p:column style="width: 2%">
+            <p:rowToggler/>
+        </p:column>
+        <p:column headerText="Ord." style="width: 3%">
+            <h:outputText value="#{index + 1}"/>
+        </p:column>
+        <p:column headerText="Líneas de Investigación" style="width: 50%;text-align: left" >
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{linea.lineaDescip}" style="white-space: pre; text-transform: uppercase;text-align: left" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput1" value="#{linea.lineaDescip}" style="width: 100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="Agregar SubLínea" style="width: 15%;text-align: center">
+            <p:commandButton id="btnNuevoP11" icon="ui-icon-clipboard"
+                             onclick="PF('dialogSublinea').show();" process="@this">
+                <f:setPropertyActionListener value="#{linea}" target="#{lineaSubInvestigacionController.lineaInvestSelected}"/>
+            </p:commandButton>
+        </p:column>
+        <p:column headerText="Editar" style="width: 5%">
+            <p:rowEditor/>
+        </p:column>
+        <p:column headerText="Eliminar " style="width: 5%">
+            <p:commandButton id="btnEliminarP1" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                             onclick="PF('deleteDialog1').show();" process="@this">
+                <f:setPropertyActionListener value="#{linea}" target="#{lineaSubInvestigacionController.lineaInvestSelected}" />
+            </p:commandButton>    
+        </p:column>
+        <p:rowExpansion>
+            <p:panelGrid columns="1" style="border:none;margin:0 auto;width:95%; text-align: left" >
+                <p:dataTable id="dtSubl" value="#{lineaSubInvestigacionController.sublineaList}" var="subl"
+                             rendered="#{not empty lineaSubInvestigacionController.sublineaList}"
+                             rowIndexVar="index" style="width: 80%" editable="true">
+
+                    <p:ajax event="rowEdit" listener="#{lineaSubInvestigacionController.onRowEditSubP1}" partialSubmit="true"/>
+                    <p:ajax event="rowEditCancel" listener="#{lineaSubInvestigacionController.onRowCancelSubP1}" partialSubmit="true"/>
+
+                    <p:column headerText="Ord." style="width:3%">
+                        <h:outputText value="#{index + 1}" />
+                    </p:column>
+                    <p:column headerText="Sub Línea de Investigación" style="width: 70%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{subl.lineaDescip}" style="white-space: pre-line;text-transform: uppercase;width: 250px"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput111" value="#{subl.lineaDescip}" style="width: 100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Cod. Unesco" style="width: 10%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{subl.lineaUnesco}" style="white-space: pre-line;text-transform: uppercase;width: 100%"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput112" value="#{subl.lineaUnesco}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Editar" style="width: 5%">
+                        <p:rowEditor/>
+                    </p:column>
+                    <p:column headerText="Eliminar" style="width: 10%;text-align: center">
+                        <p:commandButton id="btnEliminarP12" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                         onclick="PF('deleteDialog12').show();" process="@this">
+                            <f:setPropertyActionListener value="#{subl}" target="#{lineaSubInvestigacionController.sublineaInveSelected}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panelGrid>
+        </p:rowExpansion>
+    </p:dataTable>
+</p:tab>-->
+                </p:tabView>
+            </p:panel>
+
+        <p:dialog id="deleteDlg1" header="Eliminar Registro" widgetVar="deleteDialog1" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+            <h:form id="deleteForm1">
+                <p:outputPanel id="panelDeleteRegistro1">
+                    <center>
+                        <h:panelGrid id="displayDelete1" columns="1">
+                            <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminar" value="Eliminar" style="margin: 0"
+                                             onclick="PF('deleteDialog1').hide();">
+                                <p:ajax update=":formPrincipal:tabP:dataTableResponsable" listener="#{lineaSubInvestigacionController.eliminarP1()}"/>
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+        <!--       <p:dialog header="Sublinea"  widgetVar="dialogSublinea"  resizable="false" width="400"  modal="true" style="font-size: small" appendTo="@(body)">
+                    <h:form id="fmSublinea" enctype="multipart/form-data" >
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="1">
+                                <h:outputLabel for="dSub" value="Descripción:"/>
+                                <p:inputText id="dSub" value="#{lineaSubInvestigacionController.descripSub}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:fmSublinea:btnGrabarSub" listener="#{lineaSubInvestigacionController.validarVaciosSubP1()}"/>
+                                </p:inputText>
+                                <h:outputLabel for="unesco" value="Código Unesco 9999:"/>
+                                <p:inputText id="unesco" value="#{lineaSubInvestigacionController.codUnesco}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:fmSublinea:btnGrabarSub" listener="#{lineaSubInvestigacionController.validarVaciosSubP1()}"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                            <p:spacer height="5"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnGrabarSub" value="Grabar" icon="ui-icon-locked" style="margin: 0"
+                                                     onclick="PF('dialogSublinea').hide();" disabled="#{lineaSubInvestigacionController.validaVaciosSubP1}">
+                                        <p:ajax update=":formPrincipal:tabP:dtLinea:dtSubl" listener="#{lineaSubInvestigacionController.registraSubP1()}"/>
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>  
+                </p:dialog>-->
+
+        <!--        <p:dialog id="deleteDlg12" header="Eliminar Registro" widgetVar="deleteDialog12" resizable="false" width="500" modal="true" appendTo="@(body)" >
+                    <h:form id="deleteForm12">
+                        <p:outputPanel id="panelDeleteRegistro12">
+                            <center>
+                                <h:panelGrid id="displayDelete12" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP12"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog12').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dtLinea:dtSubl" listener ="#{lineaSubInvestigacionController.eliminarSubP1()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>-->
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/vista/plantilla.xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:param name="backingBean" value="#{seguridadSistemaController}"/>
+    <ui:param name="tituloPagina" value="Catalogo Sistema"/>
+    <ui:define name="editar"/>
+    <ui:define name="contenido">
+
+        <h:form id="formPrincipal1" enctype="multipart/form-data">
+            <p:panel id="panelBase" header="Catalogo de Sistemas" style="margin-bottom:10px; text-align: center;font-size: x-small">
+                <p:tabView scrollable="true" style="font-size: x-small" id="tabP">
+                    <p:tab title="Catalogo de Sistemas">
+                        <h:panelGrid columns="1" cellpadding="5" id="h1">
+                            <p:commandButton id="btnAgregarP1" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                             title="Agrega Información" update=":formPrincipal:formPrincipal1:tabP:p1,:formPrincipal:formPrincipal1:tabP:h1" action="#{seguridadSistemaController.agregarP1()}" rendered="#{!seguridadSistemaController.controlGrabarP1}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" visible="#{seguridadSistemaController.controlGrabarP1}">
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{seguridadSistemaController.validaVaciosP1}"
+                                                 title="Graba Información" update=":formPrincipal:formPrincipal1:tabP:p1,:formPrincipal:formPrincipal1:tabP:h1,:formPrincipal:formPrincipal1:tabP:dataTableSistemas" action="#{seguridadSistemaController.registrarP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 title="Cancelar" update=":formPrincipal:formPrincipal1:tabP:p1,:formPrincipal:formPrincipal1:tabP:h1,:formPrincipal:formPrincipal1:tabP:btnGrabarP1" action="#{seguridadSistemaController.cancelarP1}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5" style="text-align: left">
+                                <h:outputLabel for="nomSist" value="Nombre Sistema:" />
+                                <p:inputText id="nomSist" value="#{seguridadSistemaController.nombreSistema}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{seguridadSistemaController.validarVaciosP1}"/>
+                                </p:inputText>
+                                <h:outputLabel for="urlSis" value="URL del Sistema:" />
+                                <p:inputText id="urlSis" value="#{seguridadSistemaController.urlSistema}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:formPrincipal1:tabP:btnGrabarP1" listener="#{seguridadSistemaController.validarVaciosP1}"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable id="dataTableSistemas" value="#{seguridadSistemaController.segSistemasList}" var="sist" paginator="true"
+                                     rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron Resultados">
+                            <p:ajax event="rowEdit" listener="#{seguridadSistemaController.onRowEditP1}" partialSubmit="true"/>
+                            <p:ajax event="rowEditCancel" listener="#{seguridadSistemaController.onRowCancelP1}" partialSubmit="true"/>
+
+
+                            <p:column headerText="Ord." style="width:5%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Nombre Sistemas" style="width: 25%;text-align: left" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{sist.sisNombre}" style="white-space:pre-line;text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput11" value="#{sist.sisNombre}" style="width: 100%;text-align: left"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="URL Sistema" style="width: 25%;text-align: left" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{sist.sisUrlSistema}" style="white-space:pre-line;text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput12" value="#{sist.sisUrlSistema}" style="width: 100%;text-align: left"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 10%;text-align: center">
+                                <p:commandButton id="btnEliminarP1" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                 onclick="PF('deleteDialog1').show();" process="@this">
+                                    <f:setPropertyActionListener value="#{sist}" target="#{seguridadSistemaController.sistemaSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+        </h:form>
+        <p:dialog id="deleteDlg1" header="Eliminar Registro" widgetVar="deleteDialog1" resizable="false" width="500" modal="true" appendTo="@(body)">
+            <h:form id="deleteForm1">
+                <p:outputPanel id="panelDeleteRegistro1">
+                    <center>
+                        <h:panelGrid id="displayDelete1" columns="1">
+                            <h:outputLabel value="¿ Está seguro que desea eliminar el registro.?" style="font-size: 11px" />
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminarP1" value="Eliminar" style="margin: 0"
+                                             onclick="PF('deleteDialog1').hide();">
+                                <p:ajax update=":formPrincipal:formPrincipal1:tabP:dataTableSistemas" listener="#{seguridadSistemaController.eliminarP1()}"/>
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+    </ui:define>   
+</ui:composition>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="d_entregable_proyecto" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="a555b21a-4a9c-4c85-8f34-3959075930db">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SEA_PARAMETROS_DET.PRD_ID,
+       SEA_OBJ_ENTREGABLES.SOE_DESCRIPCION,
+       SEA_OBJ_ADQUISISIONES.SOA_NACIONAL,
+       SEA_OBJ_ADQUISISIONES.SOA_IMPORTADO,
+       SEA_OBJ_ADQUISISIONES.SOA_DESTALLE_NACIONAL,
+       SEA_OBJ_ADQUISISIONES.SOA_DETALLE_IMPORTADO
+  FROM SEA_OBJ_ENTREGABLES, SEA_OBJ_ADQUISISIONES, SEA_PARAMETROS_DET
+ WHERE     (SEA_OBJ_ADQUISISIONES.SOE_ID(+) = SEA_OBJ_ENTREGABLES.SOE_ID)
+       AND (SEA_OBJ_ENTREGABLES.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_OBJ_ENTREGABLES.SFL_ID = $P{SFL_ID})
+ORDER BY SEA_PARAMETROS_DET.PRD_ID ASC]]>
+	</queryString>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="PRD_ID" class="java.math.BigDecimal"/>
+	<field name="SOE_DESCRIPCION" class="java.lang.String"/>
+	<field name="SOA_NACIONAL" class="java.math.BigDecimal"/>
+	<field name="SOA_IMPORTADO" class="java.math.BigDecimal"/>
+	<field name="SOA_DESTALLE_NACIONAL" class="java.lang.String"/>
+	<field name="SOA_DETALLE_IMPORTADO" class="java.lang.String"/>
+	<group name="TIPO">
+		<groupExpression><![CDATA[$F{PRD_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="8a367c4c-2b29-4bc4-820d-ac111697c060" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRD_DESCRIPCION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="8563edcf-5ff1-440e-bf83-2ec5a3735bbf" x="100" y="0" width="455" height="20"/>
+					<box>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band>
+				<staticText>
+					<reportElement uuid="9c6577b4-8861-4f4f-a74f-71bfad5af827" x="0" y="0" width="100" height="0"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cab9c087-ec66-4072-acef-1174aa23e1fd" positionType="Float" x="100" y="0" width="455" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Detalle de entregables del proyecto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="740e1c46-6327-4337-a81c-163f2e58521d" x="0" y="0" width="100" height="19"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="be7e3ff9-52f1-4344-966e-32325365bef5" positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="455" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOE_DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5174cbcc-1c77-433a-b210-7f7a316dbfe8" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="19"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

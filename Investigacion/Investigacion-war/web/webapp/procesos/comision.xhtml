@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Asignación Comisión de Evaluación Por Convocatoria">
+
+
+                    <h:panelGrid id="panelListadoConvocatorias" rendered="#{comisionController.convocatoriaSelected==null}">
+                        <p:dataTable id="dataTableConvocatorias" value="#{comisionController.convocatoriaList}" var="conv"
+                                     paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                     emptyMessage="No se encontraron resultados"  style="text-align: left">
+
+                            <p:column headerText="Ord." width="20">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Código" width="100" style="white-space: pre-line">
+                                <h:outputText value="#{conv.convocaCodigo}" />
+                            </p:column>
+                            <p:column headerText="Título" width="300" style="white-space: pre-line">
+                                <h:outputText value="#{conv.convocaTitulo}"/>
+                            </p:column>
+                            <p:column headerText="Resumen" style="white-space: pre-line">
+                                <h:outputText value="#{conv.convocaDocNombre}" />
+
+                            </p:column>
+                            <p:column headerText="Tipo Investigación" width="100" style="white-space: pre-line">
+                                <h:outputText value="#{conv.prdId.prdDescripcion}"/>
+                            </p:column>
+                            <p:column headerText="Seleccione" width="80" style="text-align: center">
+                                <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Selecciona Convocatoria" action="#{comisionController.seleccionarConvocatoria}" 
+                                                 update=":formPrincipal:panelBase" process="@this">
+                                    <f:setPropertyActionListener value="#{conv}" target="#{comisionController.convocatoriaSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                    <h:panelGrid id="panelConvocatoria" rendered="#{comisionController.convocatoriaSelected!=null}" style="width: 100%">
+
+                        <p:commandButton value="Convocatorias"
+                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                         title="Listar Convocatorias" update=":formPrincipal:panelBase" 
+                                         action="#{comisionController.listarConvocatorias()}"
+                                         >
+                        </p:commandButton>
+
+                        <p:panel style="width: 100%; margin-top: 20px" >
+                            <p:outputLabel value="Convocatoria: #{comisionController.convocatoriaSelected.convocaTitulo}"></p:outputLabel>
+                        </p:panel>
+                        <p:tabView id="tabView"> 
+                            <p:tab title="1. Documento designación">
+                                <h:panelGrid id="panelDocumento">
+                                    <p:commandButton value="Editar" title="Editar" icon="ui-icon-plus" 
+                                                     update=":formPrincipal:tabView:panelDocumento"
+                                                     rendered="#{!comisionController.modoEdicion}"
+                                                     actionListener="#{comisionController.setModoEdicion(true)}" 
+                                                     >
+                                    </p:commandButton>
+
+                                    <h:panelGrid id="panelDatosDocumento" rendered="#{!comisionController.modoEdicion}" style="margin-top: 10px">
+                                        <h:outputLabel value="Documento subido:" style="font-weight: bold" />
+                                        <h:panelGrid columns="2" rendered="#{comisionController.convocatoriaSelected.documentoComisionDigital!=null}">
+                                            <h:outputLabel value="#{comisionController.convocatoriaSelected.documentoComisionNombre}" />
+                                            <p:commandButton actionListener="#{comisionController.prepararArchivoDownload()}"
+                                                             ajax="false" icon="ui-icon-arrowthick-1-s" title="Ver/Descargar documento">
+                                                <p:fileDownload value="#{comisionController.archivoAdjunto}" />
+                                            </p:commandButton>                                    
+                                        </h:panelGrid>
+                                        <h:outputLabel value="NINGUNO" 
+                                                       rendered="#{comisionController.convocatoriaSelected.documentoComisionDigital==null}"/>
+
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" cellpadding="5"  >
+
+                                        <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" 
+                                                         rendered="#{comisionController.modoEdicion}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" update=":formPrincipal:tabView:panelDocumento, :formPrincipal:message1" action="#{comisionController.guardarDocumento()}">
+                                        </p:commandButton>
+                                        <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" 
+                                                         rendered="#{comisionController.modoEdicion}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" update=":formPrincipal:tabView:panelDocumento" action="#{comisionController.cancelarDocumento}">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid rendered="#{comisionController.modoEdicion}">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Seleccionar documento a subir:" />
+                                            <h:outputLabel value="#{comisionController.convocatoriaSelected.documentoComisionNombre}" />
+                                        </h:panelGrid>
+                                        <p:message for="hidNombreDocumento"></p:message> 
+                                        <p:fileUpload id="fileAnexo" fileUploadListener="#{comisionController.subirAnexo}" 
+                                                      required="#{not empty param['formPrincipal:tabView:btnGrabarP1']}" 
+                                                      mode="advanced" 
+                                                      label="Seleccionar"
+                                                      invalidFileMessage="Tipo de archivo incorrecto: "
+                                                      invalidSizeMessage="Tamaño del archivo seleccionado excede el límite permitido (10MB): "
+                                                      update="formPrincipal:tabView:panelDocumento, :formPrincipal:message1" auto="true" sizeLimit="10240000"/>
+
+                                    </h:panelGrid>
+                                    <h:inputHidden id="hidNombreDocumento" value="#{comisionController.convocatoriaSelected.documentoComisionNombre}"
+                                                   required="#{not empty param['formPrincipal:tabView:btnGrabarP1']}"></h:inputHidden>                                                    
+
+                                </h:panelGrid>
+
+                            </p:tab>                    
+
+                            <p:tab title="2. Miembros" >
+                                <h:panelGrid id="panelMiembros">
+                                    <p:commandButton id="btnAgregarP2" value="Agregar" icon="ui-icon-plus" style="margin-top: 10px"    
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     rendered="#{comisionController.comisionSelected==null}"
+                                                     title="Graba Información" update=":formPrincipal:tabView:panelMiembros"  action="#{comisionController.agregarP1()}" >
+                                    </p:commandButton>
+                                    <h:panelGrid id="panelEdicionComision" rendered ="#{comisionController.comisionSelected!=null}" >
+                                        <h:panelGrid columns="2" cellpadding="5"  >
+                                            <p:commandButton id="btnGrabarP2" value="Grabar" icon="ui-icon-locked" 
+                                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                             title="Graba Información" update=":formPrincipal:tabView:panelMiembros, :formPrincipal:message1" action="#{comisionController.registraP1()}">
+                                            </p:commandButton>
+                                            <p:commandButton id="btnCancelarP2" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" 
+                                                             immediate="true"
+                                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                             title="Graba Información" update=":formPrincipal:tabView:panelMiembros" action="#{comisionController.cancelarP1}">
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" cellpadding="5">
+                                            <p:selectOneRadio value="#{comisionController.tipoMiembro}" style="text-align: left">
+                                                <f:selectItem itemLabel="Miembros Espe" itemValue="E"/>
+                                                <f:selectItem itemLabel="Miembros Externos" itemValue="O"/>
+                                                <p:ajax event="change" update=":formPrincipal:tabView:panelSeleccionInvestigador"/>
+                                            </p:selectOneRadio>
+                                        </h:panelGrid>
+                                        <h:panelGrid id="panelSeleccionInvestigador">
+                                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0" rendered="#{comisionController.tipoMiembro=='E'}">
+                                                <p:outputLabel value="Investigador:" for="investigadorEspe"/>
+                                                <h:panelGrid columns="1" cellpadding="0" cellspacing="0">
+                                                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                        <p:autoComplete id="investigadorEspe" minQueryLength="1" value="#{comisionController.investigadorEspe}" completeMethod="#{comisionController.completeTextMiembroEspe}" size="55" 
+                                                                        >
+                                                            <p:ajax event="itemSelect" listener="#{comisionController.onItemSelectComisionEspe}"/>
+                                                        </p:autoComplete>
+                                                        <p:message for="investigadorEspe"/>
+                                                    </h:panelGrid>
+                                                    <h:outputLabel value="(Digite los apellidos y/o nombres a buscar)"></h:outputLabel>
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0" rendered="#{comisionController.tipoMiembro=='O'}">
+                                                <p:outputLabel value="Investigador:" for="investigadorExterno"/>
+                                                <h:panelGrid columns="1" cellpadding="0" cellspacing="0">
+                                                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                        <p:autoComplete id="investigadorExterno" minQueryLength="1" value="#{comisionController.investigadorExterno}" completeMethod="#{comisionController.completeTextMiembroExterno}" size="55" 
+                                                                        >
+                                                            <p:ajax event="itemSelect" listener="#{comisionController.onItemSelectComisionExterno}"/>
+                                                        </p:autoComplete>
+                                                        <p:message for="investigadorExterno"/>
+                                                    </h:panelGrid>
+                                                    <h:outputLabel value="(Digite los apellidos y/o nombres a buscar)"></h:outputLabel>
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="3">
+                                            <p:outputLabel for="selResponsabilidad" value="Responsabilidad:" />
+                                            <p:selectOneMenu id="selResponsabilidad" value="#{comisionController.comisionSelected.tipresId}" style="width: 260px"
+                                                             required="#{not empty param['formPrincipal:tabView:btnGrabarP2']}" 
+                                                             converter="omnifaces.SelectItemsConverter">
+                                                <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                                <f:selectItems value="#{comisionController.tipoResponsList}" var="t"
+                                                               itemLabel="#{t.tipresDescrip}" itemValue="#{t}" />
+                                            </p:selectOneMenu>
+                                            <p:message for="selResponsabilidad"/>
+
+                                        </h:panelGrid>
+
+
+                                    </h:panelGrid>
+
+
+                                    <p:dataTable id="dtComision" value="#{comisionController.convocatoriaSelected.seaComisionXConvocaList}" var="com" editable="true" style="width: 100%"
+                                                 paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                                 emptyMessage="No se encontraron resultados">
+                                        <p:column headerText="Ord." width="20">
+                                            <h:outputText value="#{index + 1}" />
+                                        </p:column>
+                                        <p:column headerText="Investigador">
+                                            <h:outputText value="#{com.usuId.usuCc}-#{com.usuId.usuApellidos} #{com.usuId.usuNombres}" />
+                                        </p:column>
+                                        <p:column headerText="Responsabilidad" width="250">
+                                            <h:outputText value="#{com.tipresId.tipresDescrip}"/>
+                                        </p:column>                            
+                                        <p:column headerText="Eliminar" width="80" style="text-align: center">
+                                            <p:commandButton title="Eliminar el registro" icon="ui-icon-trash"
+                                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                             update=":formPrincipal:tabView, :formPrincipal:message1"
+                                                             action="#{comisionController.eliminarP1}" >
+                                                <f:setPropertyActionListener value="#{com}" target="#{comisionController.comisionSelected}" />
+                                                <p:confirm header="Confirmación" message="Confirma que desea eliminar el item seleccionado ?" icon="ui-icon-alert" />
+                                            </p:commandButton>   
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGrid>
+
+
+                            </p:tab>                    
+                        </p:tabView>
+                    </h:panelGrid>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

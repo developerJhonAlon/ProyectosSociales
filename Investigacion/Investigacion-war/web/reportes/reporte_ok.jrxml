@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_ok" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="29ff9849-6f35-4fe0-aec3-86c0f15bed1c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="50"/>
+	<queryString>
+		<![CDATA[SELECT
+     SEA_DAT_GENERAL_PROY."DATGEPROY_TITULO" AS SEA_DAT_GENERAL_PROY_DATGEPROY,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_FINANCIA_TOTAL" AS FINANCIA_TOTAL,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_FINANCIA_OTRAS" AS FINANCIA_OTRAS,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_PRESUPUESTO" AS PRESUPUESTO
+FROM
+     "SISEACB"."SEA_DAT_GENERAL_PROY" SEA_DAT_GENERAL_PROY]]>
+	</queryString>
+	<field name="SEA_DAT_GENERAL_PROY_DATGEPROY" class="java.lang.String"/>
+	<field name="FINANCIA_TOTAL" class="java.math.BigDecimal"/>
+	<field name="FINANCIA_OTRAS" class="java.math.BigDecimal"/>
+	<field name="PRESUPUESTO" class="oracle.sql.BLOB"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e94b023d-8fd8-406d-a9f1-34a80d4b1877" x="0" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[SEA_DAT_GENERAL_PROY_DATGEPROY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="81f8e606-d3d5-4fa2-bfa9-d4f80f2993b4" x="175" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[FINANCIA_TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7279d49a-70d0-4582-b40a-d9c55f6f5185" x="275" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[FINANCIA_OTRAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c552de82-1167-4a18-82f6-e370d799d93b" x="375" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[PRESUPUESTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="77" splitType="Stretch">
+			<textField>
+				<reportElement uuid="26aaec59-7e31-4a5b-9f83-f93498560eb0" x="0" y="11" width="175" height="64"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{SEA_DAT_GENERAL_PROY_DATGEPROY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cdfb765e-3baf-4f8c-bf32-00ccaae30c4e" x="175" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{FINANCIA_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa904663-512e-48f1-a321-e7144f33d219" x="275" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{FINANCIA_OTRAS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b8e4560a-19ae-4637-b3dd-4846fbbdea7c" x="375" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[""+$F{PRESUPUESTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

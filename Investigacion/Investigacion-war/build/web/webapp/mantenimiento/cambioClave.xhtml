@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Cambio de Clave Usuario" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                <p:tabView scrollable="true" id="tabP">
+                    <p:tab title="Ingreso Nueva Clave" id="tabP1">
+                        <h:panelGrid columns="1" cellpadding="5" id="h1">
+                            <p:commandButton id="btnAgregarP1" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Agregar Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{cambioClaveController.agregarP1()}" rendered="#{!cambioClaveController.controlGrabarP1}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" visible="#{cambioClaveController.controlGrabarP1}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" disabled="#{cambioClaveController.validaVaciosP1}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dtUsuarioClave" action="#{cambioClaveController.registraP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Cancelar Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{cambioClaveController.cancelarP1()}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:spacer width="1%"/>
+                            <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="identUsu" value="CI/Pasporte:"  style=" float: left;white-space: pre-line"/>
+                                <p:inputText id="identUsu" value="#{cambioClaveController.identif}" required="false" autocomplete="off" style="width: 120px">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cambioClaveController.validarVaciosP1}"/>
+                                </p:inputText>
+                                <h:outputLabel for="pwdIng" value="Nuevo Password:"  style=" float: left;white-space: pre-line"/>
+                                <p:password id="pwdIng" value="#{cambioClaveController.password}" feedback="true" promptLabel="Ingrese su clave" style="text-transform: uppercase"
+                                            autocomplete="off" weakLabel="Seguridad baja" goodLabel="Seguridad buena" strongLabel="Seguridad fuerte" />
+                                <h:outputLabel for="pwdConf" value="Confirme Password:"  style=" float: left;white-space: pre-line"/>
+                                <p:password id="pwdConf" value="#{cambioClaveController.confirmapassw}" feedback="true" promptLabel="Confirme su clave" style="text-transform: uppercase"
+                                            autocomplete="off" weakLabel="Seguridad baja" goodLabel="Seguridad buena" strongLabel="Seguridad fuerte" />
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable id="dtUsuarioClave" value="#{cambioClaveController.usuarioList}" var="usuCl" paginator="true"
+                                     rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron Resultados">
+                            <p:column headerText="Ord." style="width: 5%">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="CI/Pasaporte" style="width: 20%">
+                                <h:outputText value="#{usuCl.usuCc}" style="white-space: pre; text-transform: uppercase;text-align: left" />
+                            </p:column>
+                            <p:column headerText="Nombres" style="width: 20%">
+                                    <h:outputText value="#{usuCl.usuNombres}" style="white-space: pre; text-transform: uppercase;text-align: left" />
+                            </p:column>
+                            <p:column headerText="Apellidos" style="width: 20%">
+                                    <h:outputText value="#{usuCl.usuApellidos}" style="white-space: pre; text-transform: uppercase;text-align: left" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+
+        <p:dialog id="updateDlg" header="Actualizar Clave" widgetVar="cambiaPassDialog" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+            <h:form id="updateForm">
+                <p:outputPanel id="panelUpdate">
+                    <center>
+                        <h:panelGrid id="displayUpdate" columns="1">
+                            <h:outputLabel value="Cambio de Clave Exitoso" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                             <p:commandButton id="btnCerrarSesion"  value="Aceptar" style="margin:0"
+                                              onclick="PF('cambiaPassDialog').hide();">
+                                 <p:ajax listener="#{cambioClaveController.cerrar_session()}"/>
+                             </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

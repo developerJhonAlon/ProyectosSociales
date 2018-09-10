@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="objetivos_buen_vivir" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="02d2413e-ae92-41ab-9c9b-35ab8c956db6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SLF_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SZTAPOLOBJBV.SZTAPOLOBJBV_DESCRIP AS POLITICAS, SEA_OBPLANBV.OBPLANBV_DECRIP AS OBJETIVO
+  FROM SEA_FORMATO_LARGO,
+       SZTAPOLOBJBV,
+       SZTAOBJBVPR,
+       SEA_OBPLANBV
+ WHERE     (SZTAOBJBVPR.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SZTAOBJBVPR.OBPLABV_ID = SEA_OBPLANBV.OBPLABV_ID)
+       AND (SZTAPOLOBJBV.SZTAOBJBVPR_CODE(+) = SZTAOBJBVPR.SZTAOBJBVPR_CODE)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SLF_ID})]]>
+	</queryString>
+	<field name="POLITICAS" class="java.lang.String"/>
+	<field name="OBJETIVO" class="java.lang.String"/>
+	<group name="OBJETIVOS">
+		<groupExpression><![CDATA[$F{OBJETIVO}]]></groupExpression>
+		<groupHeader>
+			<band height="60">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="b6ab8d57-0096-4f34-a539-14f3c8f18ca5" positionType="Float" x="0" y="20" width="555" height="20"/>
+					<box topPadding="2" leftPadding="25" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{OBJETIVO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="40d997ee-a043-4599-9f78-6aab1a7cc0df" positionType="Float" x="0" y="40" width="555" height="20"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Política(s):]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="42be2d9e-06c8-4dc2-b871-741a8841f6f4" positionType="Float" x="0" y="0" width="555" height="20"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Objetivo:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1bf181a-d20a-4eae-a48c-25b2da25bf0a" positionType="Float" x="0" y="0" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Objetivos del Plan Nacional del Buen Vivir:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2d29da93-f1a8-4c9e-8c8a-d07408be7fe2" positionType="Float" x="0" y="0" width="555" height="20"/>
+				<box topPadding="2" leftPadding="25" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{POLITICAS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="8">
+			<staticText>
+				<reportElement uuid="a3393f45-2e30-45f0-b844-bd4900bd1823" positionType="Float" x="0" y="0" width="555" height="8"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

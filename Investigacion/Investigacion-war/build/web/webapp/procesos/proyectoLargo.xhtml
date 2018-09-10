@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <h:panelGrid id="panelBase">
+                    <p:panel header="Listado de Proyectos Extensos" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                        <p:panel style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <p:dataTable id="dtDatGenProyConv" value="#{proyectoLargoController.datGenProyList}" var="datProy" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                         emptyMessage="No se encontraron Resultados">
+                                <p:column headerText="Ord." style="text-align: center" width="20">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Cód. Convocatoria" style="white-space: pre-line; font-size: 11px; font-weight: bold" width="100">
+                                    <h:outputText value="#{datProy.convocaId.convocaCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Título Convocatoria" style="white-space: pre-line" width="250">
+                                    <h:outputText value="#{datProy.convocaId.convocaTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Título Proyecto" style="white-space: pre-line">
+                                    <h:outputText value="#{datProy.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Tipo de Investigación" style="white-space: pre-line" width="200">
+                                    <h:outputText value="#{datProy.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                                </p:column>
+                                <p:column headerText="Fecha Creación" style="white-space: pre-line; text-align: center" width="80">
+                                    <h:outputText value="#{datProy.datgeproyFechaCreacion}" style="text-transform: uppercase; white-space: pre-line">
+                                        <f:convertDateTime locale="es" pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Estado" style="white-space: pre-line; text-align: center" width="160">
+                                    <h:outputText value="#{datProy.estado}"></h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Seleccione" style="text-align: center" width="50">
+                                    <p:button outcome="proyectoLargoContenido" icon="ui-icon-circle-check">
+                                        <f:param name="idNotaConceptual" value="#{datProy.datgeproyId}" />
+                                    </p:button>                                    
+                                    
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+
+
+
+                    </p:panel>
+                </h:panelGrid>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

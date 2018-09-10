@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="firmas_responsabilidad" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="37c55f45-32a7-48f9-9fd9-ddffc69e39ff">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="STVCAMP_CODE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_ID,
+       SEA_TIPO_RESPONS.TIPRES_DESCRIP,
+      DIRECTOR_PROYECTO.USU_NOMBRES || '  ' ||
+       DIRECTOR_PROYECTO.USU_APELLIDOS AS DIRECTOR_PROYECTO,
+       'C.I.: '|| DIRECTOR_PROYECTO.USU_CC AS DIRECTOR_PROY_CEDULA,
+       SEA_RESPONSABLE_PROG.STVSUBJ_CODE_DPTO,
+      V_DIRECTORES_DEPTO.USU_NOMBRES || ' ' ||
+       V_DIRECTORES_DEPTO.USU_APELLIDOS AS DIRECTOR_DEPARTAMENTO,
+       V_DIRECTORES_DEPTO.STVSUBJ_DESC AS DEPARTAMENTO,
+        'C.I.: '|| SEG_USUARIO.USU_CC AS DIRECTOR_DEP_CEDULA
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_RESPONSABLE_PROG,
+       SEA_TIPO_RESPONS,
+       SEG_USUARIO DIRECTOR_PROYECTO,
+       V_DIRECTORES_DEPTO,
+       SEG_USUARIO
+ WHERE (SEA_RESPONSABLE_PROG.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = DIRECTOR_PROYECTO.USU_ID)
+       AND (SEA_RESPONSABLE_PROG.STVSUBJ_CODE_DPTO =
+               V_DIRECTORES_DEPTO.STVSUBJ_CODE(+))
+       AND (V_DIRECTORES_DEPTO.USU_ID = SEG_USUARIO.USU_ID(+))
+       AND (SEA_TIPO_RESPONS.TIPRES_ID = 3)
+       AND (V_DIRECTORES_DEPTO.STVCAMP_CODE = $P{STVCAMP_CODE})
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = $P{DATGEPROY_ID})]]>
+	</queryString>
+	<field name="DATGEPROY_ID" class="java.math.BigDecimal"/>
+	<field name="TIPRES_DESCRIP" class="java.lang.String"/>
+	<field name="DIRECTOR_PROYECTO" class="java.lang.String"/>
+	<field name="DIRECTOR_PROY_CEDULA" class="java.lang.String"/>
+	<field name="STVSUBJ_CODE_DPTO" class="java.lang.String"/>
+	<field name="DIRECTOR_DEPARTAMENTO" class="java.lang.String"/>
+	<field name="DEPARTAMENTO" class="java.lang.String"/>
+	<field name="DIRECTOR_DEP_CEDULA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="297" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0d8bc3b9-c3b0-47f2-a637-947779c68ce4" positionType="Float" x="259" y="14" width="228" height="129"/>
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Director del Proyecto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd37d3ce-f5cb-4c31-873c-69b0e662eb6d" positionType="Float" x="31" y="143" width="456" height="142"/>
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DECLARO QUE EL PROYECTO SE ENCUENTRA APROBADO Y TIENE RESPALDO DEL DEPARTAMENTO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="449e01b6-8c65-430f-b3b8-6b8f3f96e2f1" positionType="Float" x="285" y="102" width="183" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="6b65558e-c766-4013-bef6-24c0d3b868ed" positionType="Float" x="31" y="14" width="228" height="129"/>
+				<box topPadding="5" leftPadding="5" bottomPadding="5" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ciudad y fecha:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="145b15c7-834f-4083-ae4a-eb6535f03458" positionType="Float" x="55" y="101" width="178" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="9bb7a678-7b3b-48c9-862f-476e30e5b712" positionType="Float" x="111" y="229" width="295" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="0d11b7cc-c642-46b1-bba5-4fff497a35a6" positionType="Float" x="44" y="31" width="43" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sangolquí, ]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="f644af90-dac9-4794-bcd0-63f52fa14f0e" positionType="Float" x="87" y="31" width="122" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="999fb841-0b44-40d2-ae55-741e5b40af9a" positionType="Float" x="31" y="158" width="456" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="24156486-df6f-49d6-91bd-94c410219723" positionType="Float" x="244" y="246" width="243" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c829cb8e-2e1a-4a1b-9248-68bf6f2bec59" x="99" y="246" width="145" height="20"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Director del departamento de]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a0985574-c9fc-41ac-9ea2-c33f5fe4beee" positionType="Float" x="259" y="103" width="228" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR_PROYECTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5a7c45c5-d0e0-42d4-9d95-a64109ecc8c5" positionType="Float" x="259" y="123" width="228" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR_PROY_CEDULA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6833e388-0614-460e-9bf8-c864e8e314d0" positionType="Float" x="31" y="230" width="456" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR_DEPARTAMENTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="70c4b43e-e6b7-49c1-a60b-551ad79ff5cf" positionType="Float" x="31" y="265" width="456" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR_DEP_CEDULA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="objetivo_general" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="c5410166-a8c6-42dc-adfb-8867ebdbe60b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+         SZDTAOBJPROY.SZDTAOBJPROY_DESCR,
+         SZDTAOBJPROY.SZDTAOBJPROY_CODE,
+         SZDTAOBJPROY.SZDTAOBJPROY_PADRE,
+         SEA_PARAMETROS_DET.PRD_ID
+    FROM SEA_FORMATO_LARGO,
+         SEA_SEGUIMIENTO_FORMATO,
+         SZDTAOBJPROY,
+         SEA_PARAMETROS_DET
+   WHERE     (SEA_SEGUIMIENTO_FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+         AND (SZDTAOBJPROY.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+         AND (SZDTAOBJPROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+         AND (SEA_PARAMETROS_DET.PRD_ID IN (303))
+         AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="SZDTAOBJPROY_DESCR" class="java.lang.String"/>
+	<field name="SZDTAOBJPROY_CODE" class="java.math.BigDecimal"/>
+	<field name="SZDTAOBJPROY_PADRE" class="java.math.BigDecimal"/>
+	<field name="PRD_ID" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="97d50d06-a3eb-4455-9b36-db72ea29ad4b" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SZDTAOBJPROY_DESCR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

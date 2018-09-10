@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="viabilidad_sostenibilidad" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="799ccf9f-9029-4153-a865-ed014c1019ce">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="6"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_FORMATO_VIABILIDAD.*
+  FROM SEA_FORMATO_VIABILIDAD
+ WHERE (SEA_FORMATO_VIABILIDAD.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="SFA_ID" class="java.math.BigDecimal"/>
+	<field name="SFL_ID" class="java.math.BigDecimal"/>
+	<field name="SFA_VIAVILIDAD_TEC" class="java.lang.String"/>
+	<field name="SFA_EQUIPAMIENTO_TEC" class="java.lang.String"/>
+	<field name="SFA_PERDER_PAIS" class="java.lang.String"/>
+	<field name="SFA_IMPACTOS_ESPERADOS" class="java.lang.String"/>
+	<field name="SFA_DISPONE_METODOLOGIA" class="java.lang.String"/>
+	<field name="SFA_IMPACTO_AMBIENTAL" class="java.lang.String"/>
+	<field name="SFA_SOSTENIBILIDAD_SOCIAL" class="java.lang.String"/>
+	<field name="SFA_TRANFERENCIA_TECNO" class="java.lang.String"/>
+	<field name="SFA_ARTICULOS_CIENTIFICOS" class="java.lang.String"/>
+	<field name="SFA_PROTOTIPOS" class="java.lang.String"/>
+	<field name="SFA_PROPIEDAD_INTELECTO" class="java.lang.String"/>
+	<field name="SFA_EMPRESA_SPIN" class="java.lang.String"/>
+	<field name="SFA_ANALISIS_RIESGOS" class="java.lang.String"/>
+	<field name="SFA_OTROS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="507">
+			<staticText>
+				<reportElement uuid="391bd829-3356-4bd3-b25a-37ede63409ec" positionType="Float" x="0" y="1" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Viabilidad Técnica:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="17a41322-904d-4233-bcf3-01f9d609fb80" positionType="Float" x="0" y="20" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_VIAVILIDAD_TEC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ae64a3f0-75cd-41a3-8b25-802f5917547e" positionType="Float" x="0" y="40" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Equipamiento Tecnológico Disponible:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2f2f954f-93be-477d-9992-9074546386b0" positionType="Float" x="0" y="59" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_EQUIPAMIENTO_TEC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="aa8d90c5-83c5-4be0-abe0-59bcda9d7bf8" positionType="Float" x="0" y="79" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Qué perdería el país si el proyecto no se ejecuta en este periodo?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="54eeb9b3-2ea8-475d-ac88-7446622c4d14" positionType="Float" x="0" y="118" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[¿Cuáles son los resultados o impactos esperados del proyecto?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f360eae-a343-442e-a9fc-a8e29828adf3" positionType="Float" x="0" y="157" width="496" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[¿Dispone de alguna metodología específica para valorar el retorno de inversión de su proyecto?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e4939af0-6fbc-40e8-aff4-c4d42702ba1c" positionType="Float" x="0" y="178" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Análisis del impacto ambiental:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed082741-5ddb-474c-b320-f26fc6ef7fe6" positionType="Float" x="0" y="219" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Sostenibilidad social: equidad, género, participación ciudadana:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd8dccd9-3853-4035-8c03-2cb0b9891f1a" positionType="Float" x="0" y="260" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Transferencia Tecnológica:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c32f93d0-9d71-4a09-a891-5bc50defe57c" positionType="Float" x="0" y="98" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_PERDER_PAIS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="73b339e9-df9f-4db7-a7a4-9c84922232e0" positionType="Float" x="0" y="138" width="555" height="19"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_IMPACTOS_ESPERADOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3cabeda3-f1e2-4c61-93a5-ad34591c8761" positionType="Float" x="496" y="157" width="59" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{SFA_DISPONE_METODOLOGIA} == "S" ? "SI" : "NO") ]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="563bbb71-ce00-4bb4-8b9c-a0a72766567d" positionType="Float" x="0" y="199" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_IMPACTO_AMBIENTAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="355904d0-adf9-4765-ae50-66a2a3aac14e" positionType="Float" x="0" y="240" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_SOSTENIBILIDAD_SOCIAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="498b2d19-ed64-4cea-a2b7-38e0c20040f7" positionType="Float" x="0" y="281" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_TRANFERENCIA_TECNO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7ea64422-af84-409b-bbd9-bce74285538a" positionType="Float" x="0" y="301" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Artículos Científicos:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="30ef605c-0f07-4e45-8273-ddb3b5f39220" positionType="Float" x="0" y="322" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_ARTICULOS_CIENTIFICOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f6bd61fb-f5d6-4ac5-8af4-e8d2d9050647" positionType="Float" x="0" y="342" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Prototipos:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d715b9e7-8f8c-4bc0-8092-4c86500d0530" positionType="Float" x="0" y="363" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_PROTOTIPOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f4ae9683-69c0-4ed7-8b85-d30222d7b9be" positionType="Float" x="0" y="383" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Registro de Propiedad Intelectual:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="da702d35-8e2d-41e0-9b51-1dd51d1410c9" positionType="Float" x="0" y="404" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_PROPIEDAD_INTELECTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8ea90895-1cad-4ef3-bbbe-61c4d66c26c1" positionType="Float" x="0" y="425" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Empresa Spin Offs:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="eede3f58-3a23-457b-aaac-bd92afb95e55" positionType="Float" x="0" y="446" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_EMPRESA_SPIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b4d33f90-b61c-494e-ab72-3544d7454447" positionType="Float" x="0" y="466" width="555" height="21"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Otros:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c89ebe62-066f-41ab-be9e-a030614149a8" positionType="Float" x="0" y="487" width="555" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFA_OTROS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

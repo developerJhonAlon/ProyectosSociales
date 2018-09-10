@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Registro de Convocatorias de Investigación" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                    <h:panelGrid columns="2" >                   
+                        <p:selectBooleanButton value="#{convocatoriaController.botonInicio}" 
+                                               onLabel="Agregar" offLabel="Convocatorias" 
+                                               onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px"
+                                               >
+                            <p:ajax update=":formPrincipal:panelBase"  onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" listener="#{convocatoriaController.inicioConvocatorias}" />
+                        </p:selectBooleanButton>
+                        <h:outputText value="Convocatoria: #{convocatoriaController.convocatoriaSelected.convocaTitulo}" rendered="#{!convocatoriaController.botonInicio and convocatoriaController.convocatoriaSelected!=null and convocatoriaController.convocatoriaSelected.convocaTitulo!=null}"/>
+
+                    </h:panelGrid>
+
+                    <p:panel id="inicio"  visible="#{convocatoriaController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+
+                        <p:dataTable id="dataTableConvocatorias" value="#{convocatoriaController.seaConvocaList}" var="convocatorias"
+                                     paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" 
+                                     emptyMessage="No se encontraron resultados"  style="text-align: left">
+                            <p:column headerText="Ord." width="20" >
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Código" width="100" sortBy="#{convocatorias.convocaCodigo}">
+                                <h:outputText value="#{convocatorias.convocaCodigo}"/>
+                            </p:column>
+                            <p:column headerText="Título Convocatoria" style="white-space: pre-line" sortBy="#{convocatorias.convocaTitulo}">
+                                <h:outputText value="#{convocatorias.convocaTitulo}" />
+                            </p:column>
+                            <p:column rendered="false" headerText="Resumen Convocatoria" style="white-space: pre-line" sortBy="#{convocatorias.convocaDocNombre}">
+                                <h:outputText value="#{convocatorias.convocaDocNombre}" />
+                            </p:column>
+                            <p:column headerText="Tipo de Investigación" width="200" style="white-space: pre-line" sortBy="#{convocatorias.prdId.prdDescripcion}">
+                                <h:outputText value="#{convocatorias.prdId.prdDescripcion}"/>
+                            </p:column>
+                            <p:column headerText="Seleccione" style="text-align: center" width="50">
+                                <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Selecciona Convocatoria" action="#{convocatoriaController.seleccionaConvo}" 
+                                                 update=":formPrincipal:panelBase" process="@this">
+                                    <f:setPropertyActionListener value="#{convocatorias}" target="#{convocatoriaController.convocatoriaSelected}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column rendered="false" headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="text-align: center" width="40">
+                                <p:commandButton id="btnEliminar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                 onclick="PF('deleteDialog').show();" process="@this">
+                                    <f:setPropertyActionListener value="#{convocatorias}" target="#{convocatoriaController.convocatoriaSelected}"/>
+                                </p:commandButton>     
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                    <p:tabView id="tabP" scrollable="true" rendered="#{!convocatoriaController.botonInicio}" style="width: 99%; height: 100%" > 
+                        <p:tab title="1. Datos Generales" id="tabP1">
+                            <h:panelGrid columns="1" cellpadding="7" cellspacing="0" id="h1">
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:panelBase, :formPrincipal:message1" action="#{convocatoriaController.registra()}">
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="2" cellpadding="7" cellspacing="0"  style="text-align: left">
+                                <p:outputLabel for="descT" value="* Título de la Convocatoria:"  />
+                                <h:panelGrid columns="2">
+                                    <p:inputTextarea id="descT" rows="2" cols="120" value="#{convocatoriaController.convocatoriaSelected.convocaTitulo}" maxlength="250"
+                                                     required="#{not empty param['formPrincipal:tabP:btnGrabarP1']}" >
+                                    </p:inputTextarea>
+                                    <p:message for="descT"></p:message>
+                                </h:panelGrid>
+
+                                <p:outputLabel for="resumenconv" value="* Resumen de la Convocatoria:" />
+                                <h:panelGrid columns="2">
+                                    <p:inputTextarea id="resumenconv" rows="4" cols="120" value="#{convocatoriaController.convocatoriaSelected.convocaDocNombre}" maxlength="500"
+                                                     required="#{not empty param['formPrincipal:tabP:btnGrabarP1']}" >
+                                    </p:inputTextarea>
+                                    <p:message for="resumenconv"></p:message>
+                                </h:panelGrid>
+
+                                <p:outputLabel for="descC" value="* Tipo de Investigación:"  />
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="descC" value="#{convocatoriaController.convocatoriaSelected.prdId}" style="width:200px"
+                                                     required="#{not empty param['formPrincipal:tabP:btnGrabarP1']}" 
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="[[-Seleccione un item-]]" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{convocatoriaController.tipoInvesList}" var="item" itemValue="#{item}" itemLabel="#{item.prdDescripcion}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="descC"></p:message>
+                                </h:panelGrid>
+
+                                <p:outputLabel for="fInicio" value="* Fecha Inicio (dd/mm/aaaa):"/>
+                                <h:panelGrid columns="4" cellpadding="0" cellspacing="0">
+                                    <h:panelGrid columns="2">
+                                        <p:calendar id="fInicio" navigator="true" locale="es" pattern="dd/MM/yyyy" size="10" style="font-size: 10px; text-align: center" value="#{convocatoriaController.convocatoriaSelected.convocaFechaInicia}"
+                                                    required="#{not empty param['formPrincipal:tabP:btnGrabarP1']}" >
+                                        </p:calendar>
+                                        <p:message for="fInicio"></p:message>
+                                    </h:panelGrid>
+                                    <p:spacer height="1" width="80"></p:spacer>
+                                    <p:outputLabel for="fFinal" value="Fecha Final (dd/mm/aaaa):&nbsp;&nbsp;&nbsp;"/>
+                                    <h:panelGrid columns="2">
+                                        <p:calendar id="fFinal" navigator="true" locale="es" pattern="dd/MM/yyyy" size="10" style="font-size: 10px; text-align: center" value="#{convocatoriaController.convocatoriaSelected.convocaFechaFin}"
+                                                    required="#{not empty param['formPrincipal:tabP:btnGrabarP1']}" >
+                                        </p:calendar>
+                                        <p:message for="fFinal"></p:message>
+                                    </h:panelGrid>
+                                </h:panelGrid>                                
+
+                                <p:outputLabel value="* Estado:"/>
+                                <p:selectOneRadio id="estado" value="#{convocatoriaController.convocatoriaSelected.convocaEstado}">
+                                    <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                </p:selectOneRadio>
+
+                            </h:panelGrid>
+
+                        </p:tab>
+
+                        <p:tab title="2. Bases Convocatoria" id="tabP2" disabled="#{convocatoriaController.habilitaTab}">
+                            <h:panelGrid columns="2" cellpadding="5" id="h2">
+                                <p:commandButton id="btnAgregarP2" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p2,:formPrincipal:tabP:h2" action="#{convocatoriaController.agregarP2()}" rendered="#{!convocatoriaController.controlGrabarP2}">
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                            <p:panel id="p2" visible="#{convocatoriaController.controlGrabarP2}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <p:fieldset legend="Nueva base de la Convocatoria" >
+                                    <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                        <p:commandButton id="btnGrabarP2" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" 
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Graba Información" update=":formPrincipal:tabP:p2,:formPrincipal:tabP:h2,:formPrincipal:tabP:dataTableBases, :formPrincipal:message1" action="#{convocatoriaController.registraP2()}">
+                                        </p:commandButton>
+                                        <p:commandButton id="btnCancelarP2" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left "
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         title="Cancela Información" update=":formPrincipal:tabP" action="#{convocatoriaController.cancelarP2()}">
+                                        </p:commandButton> 
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                        <h:outputLabel style="text-align: left " value="Base de la Convocatoria:"  />
+                                        <p:inputTextarea id="descR" rows="2" cols="120" autoResize="false" value="#{convocatoriaController.sbcBases}" maxlength="500">
+                                        </p:inputTextarea>
+                                    </h:panelGrid>
+                                </p:fieldset>
+
+                            </p:panel>
+
+                            <h:outputLabel value="Los proyectos deben cumplir los siguientes requisitos:"/>
+                            <p:dataTable id="dataTableBases" value="#{convocatoriaController.seaBaseConvocaList}" var="basesConvo" 
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                         editable="true" 
+                                         emptyMessage="No se encontraron resultados">
+                                <p:ajax event="rowEdit" listener="#{convocatoriaController.onRowEdit2}" update=":formPrincipal:tabP:dataTableBases"/>
+                                <p:ajax event="rowEditCancel" listener="#{convocatoriaController.onRowCancel2}" update=":formPrincipal:tabP:dataTableBases"/>
+                                <p:column headerText="Ord." style="text-align: center" width="20">
+                                    <h:outputText value="#{index + 1}"/>
+                                </p:column>
+
+                                <p:column headerText="Bases de la Convocatoria" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{basesConvo.sbcBases}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputTextarea id="modelInput22" value="#{basesConvo.sbcBases}" rows="4" cols="160"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="text-align: center" width="50">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="text-align: center" width="50">
+                                    <p:commandButton id="btnEliminar2" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialog2').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{basesConvo}" target="#{convocatoriaController.seaBaseConvocaSelected}"/>
+                                    </p:commandButton>     
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:tab>
+
+                        <p:tab title="3. Financiamiento" id="tabP3" disabled="#{convocatoriaController.habilitaTab}">
+                            <h:panelGrid id="panelFinanciamiento">
+                                <h:panelGrid columns="2">
+                                    <p:commandButton id="btnGuardarP3" value="Grabar" icon="ui-icon-locked" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:panelFinanciamiento, :formPrincipal:message1" 
+                                                     action="#{convocatoriaController.registraP3()}"  >
+                                    </p:commandButton>
+                                    <p:commandButton value="Cancelar" icon="ui-icon-arrowreturnthick-1-w"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancela Información" update=":formPrincipal:tabP:panelFinanciamiento" action="#{convocatoriaController.cancelarP3()}">
+                                    </p:commandButton>                                     
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="5"  id="pInput1"  style="text-align: left">
+                                    <p:outputLabel for="montProy" value="* Se financiará hasta (USD):"/>
+                                    <pe:inputNumber id="montProy" value="#{convocatoriaController.convocatoriaSelected.convocaFinanciamiento}" decimalPlaces="2" minValue="0" maxValue="1000000" styleClass="inputNumber" 
+                                                    required="#{not empty param['formPrincipal:tabP:btnGrabarP3']}" >
+                                    </pe:inputNumber>
+                                </h:panelGrid>
+
+                                <p:fieldset legend="Recursos a financiar">
+
+                                    <h:panelGrid columns="6" cellpadding="5" cellspacing="0"  id="pAgregar"  style="text-align: left">
+                                        <p:outputLabel for="recurso" value="* Seleccione Recurso:"/>
+                                        <p:selectOneMenu id="recurso" value="#{convocatoriaController.financiaConvocaSelected.srcId}" style="width: 150px"
+                                                         required="#{not empty param['formPrincipal:tabP:Agregar']}" 
+                                                         converter="omnifaces.SelectItemsConverter">
+                                            <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                            <f:selectItems value="#{convocatoriaController.recursoConvocaList}" var="rec" itemLabel="#{rec.srcNombre}" itemValue="#{rec}" />
+                                        </p:selectOneMenu>                            
+
+                                        <p:outputLabel for="porcentaje" value="* Porcentaje (%):"/>
+                                        <p:spinner id="porcentaje" value="#{convocatoriaController.financiaConvocaSelected.sfcPorcentaje}" min="1" max="100" size="3"  maxlength="3"
+                                                   required="#{not empty param['formPrincipal:tabP:Agregar']}" >
+                                        </p:spinner>
+                                        <p:commandButton id="Agregar" value="Agregar" action="#{convocatoriaController.registraP32()}"
+                                                         onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                         update=":formPrincipal:tabP:pAgregar,:formPrincipal:tabP:dataTableM, :formPrincipal:message1"/>                                             
+                                    </h:panelGrid>
+                                    <p:dataTable id="dataTableM" value="#{convocatoriaController.convocatoriaSelected.financiamientoRecursoList}" var="monto"
+                                                 style="width: 800px" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                                 emptyMessage="No se encontraron resultados">
+                                        <p:column headerText="Ord." style="text-align: center" width="20">
+                                            <h:outputText value="#{index + 1}"/>
+                                        </p:column>
+                                        <p:column headerText="Recursos financiados" >
+                                            <h:outputText value="#{monto.srcId.srcNombre}" />
+                                        </p:column>
+                                        <p:column headerText="Porcentaje (%)" style="text-align: center" width="70">
+                                            <h:outputText value="#{monto.sfcPorcentaje}" />
+                                        </p:column>                            
+                                        <p:column headerText="Valor" style="text-align: center" width="50">
+                                            <h:outputText value="#{monto.valor}" >
+                                                <f:convertNumber locale="es_ES"  pattern="###,###,##0.00" />
+                                            </h:outputText>
+                                        </p:column>                            
+                                        <p:column headerText="Eliminar" style="text-align: center" width="50">
+                                            <p:commandButton title="Eliminar el registro" icon="ui-icon-trash" action="#{convocatoriaController.eliminarP32}" update=":formPrincipal:tabP:dataTableM">
+                                                <f:setPropertyActionListener value="#{monto}" target="#{convocatoriaController.financiaConvocaSelected}"/>
+                                            </p:commandButton>
+                                        </p:column>
+
+
+                                    </p:dataTable>
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel value="Observaciones:" for="observFinanciamiento"/>
+                                        <p:inputTextarea id="observFinanciamiento" rows="4" cols="134" autoResize="false" maxlength="2000"
+                                                         value="#{convocatoriaController.convocatoriaSelected.financiamientoObservaciones}"
+                                                         >
+                                        </p:inputTextarea>
+                                        <p:spacer height="1" width="1"></p:spacer>
+                                        <p:message for="observFinanciamiento"/>
+
+                                    </h:panelGrid>
+
+                                </p:fieldset>
+
+
+                                <p:fieldset legend="Recursos No financiados" style="margin-top: 20px">
+                                    <h:panelGrid columns="2" id="pNoFinancia">
+                                        <p:outputLabel value="* Ingrese recurso:" for="descN"/>
+                                        <h:panelGrid columns="2"> 
+                                            <p:inputTextarea id="descN" rows="2" cols="114" autoResize="false" maxlength="500"
+                                                             value="#{convocatoriaController.noFinanciaSelected.snfcDetalle}"
+                                                             required="#{not empty param['formPrincipal:tabP:btnAgregarP3']}" >
+                                            </p:inputTextarea>
+                                            <p:commandButton id="btnAgregarP3" value="Agregar" icon="ui-icon-plus"
+                                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                             title="Agregar Información" update=":formPrincipal:tabP:pNoFinancia,  :formPrincipal:tabP:dataTableN, :formPrincipal:message1" 
+                                                             action="#{convocatoriaController.agregarP3()}">
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                    <p:dataTable id="dataTableN" value="#{convocatoriaController.convocatoriaSelected.noFinanciamientoRecursoList}" var="noFinancia"
+                                                 style="width: 800px" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                                 emptyMessage="No se encontraron resultados">
+                                        <p:column headerText="Ord." style="text-align: center" width="20">
+                                            <h:outputText value="#{index + 1}"/>
+                                        </p:column>
+                                        <p:column headerText="Recursos No Financiados">
+                                            <h:outputText value="#{noFinancia.snfcDetalle}" style="white-space: pre-line"/>
+                                        </p:column>
+                                        <p:column headerText="Eliminar" style="text-align: center" width="50">
+                                            <p:commandButton id="btnEliminar3" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                             action="#{convocatoriaController.eliminarP3()}"
+                                                             update=":formPrincipal:tabP:dataTableN">
+                                                <f:setPropertyActionListener value="#{noFinancia}" target="#{convocatoriaController.noFinanciaSelected}"/>
+                                            </p:commandButton>     
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:fieldset>
+
+
+                            </h:panelGrid>
+
+                        </p:tab>
+
+
+                        <p:tab title="4. Evaluación, Selección y Priorización" id="tabP4" disabled="#{convocatoriaController.habilitaTab}" >
+                            <h:panelGrid columns="1" cellpadding="5"   >
+                                <p:commandButton id="btnGuardarP4" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{convocatoriaController.validaVaciosP4}" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:btnGuardarP4, :formPrincipal:message1" action="#{convocatoriaController.registraP4()}"  >
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellspacing="0" cellpadding="7"  id="h4" style="text-align: left">
+                                <h:outputLabel value="PRIMERA FASE:" style="white-space: pre-line" />
+                                <h:outputLabel value="En la primera fase se presentará las notas conceptuales y se realizará el proceso de calificación de la propuesta." />
+                                <h:outputLabel for="calificacion1" value="Calificación:"  />
+                                <p:inputTextarea id="calificacion1" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.calificacion1}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP4" listener="#{convocatoriaController.validarVaciosP4}"/>
+                                </p:inputTextarea>
+                                <h:outputLabel rendered="false" for="evaluacion1" value="Evaluación:"   />
+                                <p:inputTextarea rendered="false" id="evaluacion1" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.evalua1}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP4" listener="#{convocatoriaController.validarVaciosP4}"/>
+                                </p:inputTextarea>
+                                <h:panelGrid rendered="false" columns="6" cellpadding="7" cellspacing="0" style="text-align: left">
+                                    <h:outputLabel for="criterio1" value="Criterio de Evaluación:"  />
+        <!--                            <p:selectOneMenu id="criterio1" value="#{convocatoriaController.criterio1}" required="false" style="width:200px" >
+                                        <f:selectItem itemLabel="Seleccione Criterio de Evaluación" itemValue="" noSelectionOption="true"/>                                   
+                                        <f:selectItems value="#{convocatoriaController.seaCriteriosEvaluaList}" var="criterio1" itemLabel="#{criterio1.sceNombre}" itemValue="#{criterio1.sceId}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:AgregarP4" listener="#{convocatoriaController.validarVaciosP41}"/>                                
+                                    </p:selectOneMenu>-->
+                                    <p:selectOneMenu id="criterio1" value="#{convocatoriaController.criterio1}" required="false" style="width: 200px">
+                                        <f:selectItem itemLabel="Seleccione Criterio de Evaluación" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{convocatoriaController.seaCriteriosEvaluaList}" var="criterio1" itemValue="#{criterio1.sceId}" itemLabel="#{criterio1.sceNombre}"/>
+                                        <p:ajax event="change" listener="#{convocatoriaController.validarVaciosP41}" update=":formPrincipal:tabP:AgregarP4"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="porcevalua1" value="%"/>
+                                    <p:spinner id="porcevalua1" value="#{convocatoriaController.porcEvalua1}" min="1" max="100" size="3">
+                                        <p:ajax event="keypress" update=":formPrincipal:tabP:AgregarP4" listener="#{convocatoriaController.validarVaciosP41}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:AgregarP4" listener="#{convocatoriaController.validarVaciosP41}"/>
+                                    </p:spinner>
+                                    <h:outputLabel for="AgregarP4" />
+                                    <p:commandButton id="AgregarP4" value="Agregar" disabled="#{convocatoriaController.validaVaciosP41}" action="#{convocatoriaController.registraP41()}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     update=":formPrincipal:tabP:AgregarP4,:formPrincipal:tabP:criterio1,:formPrincipal:tabP:porcevalua1,:formPrincipal:tabP:dataTableEva"/>   
+                                </h:panelGrid>
+
+                                <p:dataTable rendered="false" id="dataTableEva" value="#{convocatoriaController.seaPorcEvaluaList}" var="evaluaF1"
+                                             editable="true" style="width: 50%" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                             emptyMessage="No se encontraron resultados">
+                                    <p:ajax event="rowEdit" listener="#{convocatoriaController.onRowEditP3}" update=":formPrincipal:tabP:dataTableEva"/>
+                                    <p:ajax event="rowEditCancel" listener="#{convocatoriaController.onRowCancel}" update=":formPrincipal:tabP:dataTableEva"/>
+                                    <p:column headerText="Ord." style="width:3%;text-align: center">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Criterio de Evaluación-Fase1" style="width: 30%">
+                                        <h:outputText value="#{evaluaF1.sceId.sceNombre}" />
+                                    </p:column>
+                                    <p:column headerText="Calificación" style="width: 10%;text-align: center">
+                                        <h:outputText value="#{evaluaF1.spxccPorcentaje}" />
+                                    </p:column>              
+                                    <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                        <p:commandButton id="btnEliminar41" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                         onclick="PF('deleteDialog41').show();" process="@this">
+                                            <f:setPropertyActionListener value="#{evaluaF1}" target="#{convocatoriaController.seaPorcEvaluaSelected}"/>
+                                        </p:commandButton>     
+                                    </p:column>
+
+
+                                </p:dataTable>
+                                <h:outputLabel value="SEGUNDA FASE:" style="white-space: pre-line" />
+                                <h:outputLabel  value="Los proyectos que pasen la primera fase, serán invitados a presentar la propuesta completa, y constará de los siguientes pasos: Evaluación, selección y priorización." />
+
+                                <h:outputLabel rendered="false" for="calificacion2" value="Calificación:" />
+                                <p:inputTextarea rendered="false" id="calificacion2" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.calificacion2}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP4" listener="#{convocatoriaController.validarVaciosP4}"/>
+                                </p:inputTextarea>
+
+                                <h:outputLabel for="evaluacion2" value="Evaluación:" />
+                                <p:inputTextarea id="evaluacion2" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.evalua2}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP4" listener="#{convocatoriaController.validarVaciosP4}"/>
+                                </p:inputTextarea>
+                                <h:panelGrid columns="6" cellpadding="5"  id="pAgregarE2"  style="text-align: left">
+                                    <h:outputLabel for="evaluacion12" value="Criterio de Evaluación"/>
+                                    <p:selectOneMenu id="evaluacion12" value="#{convocatoriaController.criterio2}" style="width:200px" >
+                                        <f:selectItem itemLabel="Seleccione Criterio de Evaluación" noSelectionOption="true"/>                                   
+                                        <f:selectItems value="#{convocatoriaController.seaCriteriosEvaluaList}" var="criterio2" itemLabel="#{criterio2.sceNombre}" itemValue="#{criterio2.sceId}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:AgregarP42" listener="#{convocatoriaController.validarVaciosP42}"/>                                
+                                    </p:selectOneMenu>
+        <!--                            <p:selectOneMenu id="evaluacion12" value="#{convocatoriaController.evalua2}" >
+                                        <f:selectItem itemLabel="Seleccione Criterio de Evaluación" noSelectionOption="true"/>                                   
+                                        <f:selectItems value="#{convocatoriaController.seaCriteriosEvaluaList}" var="criterio2" itemLabel="#{criterio2.sceNombre}" itemValue="#{criterio2.sceId}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:AgregarP42" listener="#{convocatoriaController.validarVaciosP42}"/>                                
+                                    </p:selectOneMenu>-->
+                                    <h:outputLabel for="porcevalua2" value="%"/>
+                                    <p:spinner id="porcevalua2" value="#{convocatoriaController.porcEvalua2}" min="1" max="100" size="3">
+                                        <p:ajax event="keypress" update=":formPrincipal:tabP:AgregarP42" listener="#{convocatoriaController.validarVaciosP42}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:AgregarP42" listener="#{convocatoriaController.validarVaciosP42}"/>
+
+
+                                    </p:spinner>
+                                    <h:outputLabel for="AgregarP42" />
+                                    <p:commandButton id="AgregarP42" value="Agregar" disabled="#{convocatoriaController.validaVaciosP42}" action="#{convocatoriaController.registraP42()}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     update=":formPrincipal:tabP:AgregarP42,:formPrincipal:tabP:evaluacion12,:formPrincipal:tabP:porcevalua2,:formPrincipal:tabP:dataTableEva2"/>   
+                                </h:panelGrid>
+
+                                <p:dataTable id="dataTableEva2" value="#{convocatoriaController.seaPorcEvaluaList2}" var="evaluaF2"
+                                             editable="true" style="width: 50%" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                             emptyMessage="No se encontraron resultados">
+                                    <p:ajax event="rowEdit" listener="#{convocatoriaController.onRowEditP3}" update=":formPrincipal:tabP:dataTableEva2"/>
+                                    <p:ajax event="rowEditCancel" listener="#{convocatoriaController.onRowCancel}" update=":formPrincipal:tabP:dataTableEva2"/>
+                                    <p:column headerText="Ord." style="width:3%;text-align: center">
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
+                                    <p:column headerText="Criterio de Evaluación-Fase2" style="width: 30%">
+                                        <h:outputText value="#{evaluaF2.sceId.sceNombre}" />
+                                    </p:column>
+                                    <p:column headerText="Calificación" style="width: 10%;text-align: center">
+                                        <h:outputText value="#{evaluaF2.spxccPorcentaje}" />
+                                    </p:column>                            
+
+                                    <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                        <p:commandButton id="btnEliminar42" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                         onclick="PF('deleteDialog42').show();" process="@this">
+                                            <f:setPropertyActionListener value="#{evaluaF2}" target="#{convocatoriaController.seaPorcEvaluaSelected2}"/>
+                                        </p:commandButton>     
+                                    </p:column>
+
+
+                                </p:dataTable>
+                                <h:outputLabel for="seleccion" value="Selección y Priorización:" />
+                                <p:inputTextarea id="seleccion" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.seleccion}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP4" listener="#{convocatoriaController.validarVaciosP4}"/>
+                                </p:inputTextarea>
+
+                            </h:panelGrid>
+
+                        </p:tab>
+
+                        <p:tab title="5. Formatos" id="tabP5" disabled="#{convocatoriaController.habilitaTab}">
+                            <h:panelGrid columns="1" cellpadding="5"   >
+                                <p:commandButton id="btnGuardarP7" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{convocatoriaController.validaVaciosP7}" 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:btnGuardarP7" action="#{convocatoriaController.registraP7()}"  >
+                                </p:commandButton>
+
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellspacing="0" cellpadding="5"  id="h5" style="text-align: left">
+                                <h:outputLabel value="Las propuestas deben ser subidas en el sistema informático: Oficina Virtual de Investigación, disponible en el sitio web: http://ugi.espe.edu.ec o en miespe/docentes." />
+                                <h:outputLabel for="fase1" value="Primera Fase:" />
+                                <p:inputTextarea id="fase1" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.convocaF1}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP7" listener="#{convocatoriaController.validarVaciosP7}"/>
+                                </p:inputTextarea>
+                                <h:outputText value=""/>
+                                <h:outputLabel for="fase2" value="Segunda Fase:" />
+                                <p:inputTextarea id="fase2" rows="2" cols="150" autoResize="false" value="#{convocatoriaController.convocaF2}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGuardarP7" listener="#{convocatoriaController.validarVaciosP7}"/>
+                                </p:inputTextarea>
+                                <h:outputText value=""/>
+                            </h:panelGrid>
+
+                        </p:tab>
+                        <p:tab title="6. Fechas Importantes" id="tabP6" disabled="#{convocatoriaController.habilitaTab}">
+                            <h:panelGrid columns="2" cellpadding="5" id="h6">
+                                <p:commandButton id="btnAgregarP6" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6" action="#{convocatoriaController.agregarP6()}" rendered="#{!convocatoriaController.controlGrabarP6}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p6" visible="#{convocatoriaController.controlGrabarP6}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0"  style="text-align: left">
+                                    <p:commandButton id="btnGrabarP6" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{convocatoriaController.validaVaciosP6}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6,:formPrincipal:tabP:dataTableProceso" action="#{convocatoriaController.registraP6()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP6" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left "
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancela Información" update=":formPrincipal:tabP" action="#{convocatoriaController.cancelarP6()}">
+                                    </p:commandButton> 
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellspacing="5" style="text-align: left">
+                                    <h:outputLabel for="proN" value="Nombre Proceso:"  />
+                                    <p:selectOneMenu id="proN" value="#{convocatoriaController.nomProceso}" required="false" style="width:300px">
+                                        <f:selectItem itemLabel="Seleccione el Proceso" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItems value="#{convocatoriaController.procesoList}" var="item" itemValue="#{item.proId}" itemLabel="#{item.proDescrip}"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP6" listener="#{convocatoriaController.validarVaciosP6}" />
+                                    </p:selectOneMenu>
+                                    <h:outputLabel for="fechaIni" value="Fecha de Recepción:"  />
+                                    <p:calendar id="fechaIni" navigator="true"  locale="es"  pattern="dd/MM/yyyy HH:mm a" style="width: 200px" value="#{convocatoriaController.fechaIni}">
+                                        <p:ajax event="dateSelect" update=":formPrincipal:tabP:btnGrabarP6" listener="#{convocatoriaController.validarVaciosP6}"/>
+                                    </p:calendar>
+                                    <h:outputLabel for="fechaFin" value="Fecha de Presentación:"  />
+                                    <p:calendar id="fechaFin" navigator="true"  locale="es"  pattern="dd/MM/yyyy HH:mm a"   value="#{convocatoriaController.fechaFin}"  >
+                                        <p:ajax event="dateSelect" update=":formPrincipal:tabP:btnGrabarP6" listener="#{convocatoriaController.validarVaciosP6}"/>
+                                    </p:calendar>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dataTableProceso" value="#{convocatoriaController.proConvaList}" var="proconvoca"
+                                         paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="text-align: left">
+                                <p:ajax event="rowEdit" listener="#{convocatoriaController.onRowEdit}" update=":formPrincipal:tabP:dataTableProceso"/>
+                                <p:ajax event="rowEditCancel" listener="#{convocatoriaController.onRowCancel}" update=":formPrincipal:tabP:dataTableProceso"/>
+                                <p:column headerText="Ord." style="width:3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Código Convocatoria" style="width: 10%">
+                                    <h:outputText value="#{proconvoca.seaConvoca.convocaCodigo}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                                </p:column>
+                                <p:column headerText="Nombre Proceso" style="width: 40%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{proconvoca.seaProceso.proDescrip}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput6" value="#{proconvoca.seaProceso.proDescrip}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Fecha Recepción" style="width: 10%;text-align: center">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{proconvoca.fechaTextoDesde}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput61" value="#{proconvoca.ppcFecini}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Fecha de Presentación" style="width: 10%;text-align: center">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{proconvoca.fechaTextoHasta}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput62" value="#{proconvoca.ppcFecifin}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                    <p:commandButton id="btnEliminar6" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialog6').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{proconvoca}" target="#{convocatoriaController.proConvaSelected}"/>
+                                    </p:commandButton>     
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="7. Resumen" id="tabP7" disabled="#{convocatoriaController.habilitaTab}">
+                        </p:tab>
+                    </p:tabView> 
+                </p:panel>
+
+
+                <p:dialog id="deleteDlg" header="Eliminar Registro" widgetVar="deleteDialog" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm">
+                        <p:outputPanel id="panelDeleteRegistro">
+                            <center>
+                                <h:panelGrid id="displayDelete" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminar"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog').hide();">
+                                        <p:ajax update=":formPrincipal:dataTableConvocatorias" listener ="#{convocatoriaController.eliminarP1()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg2" header="Eliminar Registro" widgetVar="deleteDialog2" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm2">
+                        <p:outputPanel id="panelDeleteRegistro2">
+                            <center>
+                                <h:panelGrid id="displayDelete2" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminar2"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog2').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableBases" listener ="#{convocatoriaController.eliminarP2()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="deleteDlg41" header="Eliminar Registro" widgetVar="deleteDialog41" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm41">
+                        <p:outputPanel id="panelDeleteRegistro41">
+                            <center>
+                                <h:panelGrid id="displayDelete41" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminar41" style="margin: 0" value="Eliminar"
+                                                     onclick="PF('deleteDialog41').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableEva" listener ="#{convocatoriaController.eliminarP41()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>   
+
+                <p:dialog id="deleteDlg42" header="Eliminar Registro" widgetVar="deleteDialog42" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm42">
+                        <p:outputPanel id="panelDeleteRegistro42">
+                            <center>
+                                <h:panelGrid id="displayDelete42" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminar42" style="margin: 0" value="Eliminar"
+                                                     onclick="PF('deleteDialog42').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableEva2" listener ="#{convocatoriaController.eliminarP42()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>   
+                <p:dialog id="deleteDlg6" header="Eliminar Registro" widgetVar="deleteDialog6" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm6">
+                        <p:outputPanel id="panelDeleteRegistro6">
+                            <center>
+                                <h:panelGrid id="displayDelete6" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminar6" style="margin: 0" value="Eliminar"
+                                                     onclick="PF('deleteDialog6').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableProceso" listener ="#{convocatoriaController.eliminarP6()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+
+                <script  type="text/javascript">
+
+                    PrimeFaces.locales['es'] = {
+                        closeText: 'Cerrar',
+                        prevText: 'Anterior',
+                        nextText: 'Siguiente',
+                        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                        monthNamesShort: ['Enero', 'Feb', 'Mar', 'Abril', 'Mayo', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                        dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+                        weekHeader: 'Semana',
+                        firstDay: 1,
+                        isRTL: false,
+                        showMonthAfterYear: false,
+                        yearSuffix: '',
+                        timeOnlyTitle: 'Sólo hora',
+                        timeText: 'Tiempo',
+                        hourText: 'Hora',
+                        minuteText: 'Minuto',
+                        secondText: 'Segundo',
+                        currentText: 'Fecha actual',
+                        ampm: false,
+                        month: 'Mes',
+                        week: 'Semana',
+                        day: 'Día',
+                        allDayText: 'Todo el día'
+                    };
+                    function justNumbers(e) {
+                        var keynum = window.event ? window.event.keyCode : e.which;
+                        if ((keynum == 8) || (keynum == 46))
+                            return true;
+                        return /\d/.test(String.fromCharCode(keynum));
+                    }
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="personalProyecto" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="db8178b2-45ee-47ef-b200-65620cb781e9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_TIPO_RESPONS.TIPRES_DESCRIP,
+       SEG_USUARIO.USU_CC,
+       SEG_USUARIO.USU_NOMBRES || ' ' ||  SEG_USUARIO.USU_APELLIDOS AS NOMBRES,
+       STVSUBJ.STVSUBJ_DESC,
+       SEG_USUARIO.USU_TELEFONO_FIJO,
+       SEG_USUARIO.USU_TELEFONO_CELULAR,
+       SEG_USUARIO.USU_EMAIL
+  FROM SEA_RESPONSABLE_PROG,
+       SEA_TIPO_RESPONS,
+       SEG_USUARIO,
+       SATURN.STVSUBJ
+ WHERE     (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID)
+       AND (SEA_RESPONSABLE_PROG.STVSUBJ_CODE_DPTO = STVSUBJ.STVSUBJ_CODE)
+       AND (SEA_RESPONSABLE_PROG.DATGEPROY_ID =$P{DATGEPROY_ID})
+ORDER BY SEA_TIPO_RESPONS.TIPRES_ORDEN]]>
+	</queryString>
+	<field name="TIPRES_DESCRIP" class="java.lang.String"/>
+	<field name="USU_CC" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="STVSUBJ_DESC" class="java.lang.String"/>
+	<field name="USU_TELEFONO_FIJO" class="java.lang.String"/>
+	<field name="USU_TELEFONO_CELULAR" class="java.lang.String"/>
+	<field name="USU_EMAIL" class="java.lang.String"/>
+	<group name="TIPRES_DESCRIP">
+		<groupExpression><![CDATA[$F{TIPRES_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="USU_CC">
+		<groupExpression><![CDATA[$F{USU_CC}]]></groupExpression>
+	</group>
+	<group name="NOMBRES">
+		<groupExpression><![CDATA[$F{NOMBRES}]]></groupExpression>
+	</group>
+	<group name="STVSUBJ_DESC">
+		<groupExpression><![CDATA[$F{STVSUBJ_DESC}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cc365e84-0039-4045-b141-cbeb66a53318" positionType="Float" x="2" y="10" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[E.  PERSONAL DEL PROYECTO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="5d1735db-fe13-4363-996f-c48ad03e42b1" positionType="Float" x="2" y="25" width="546" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="160" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="c5dc96dd-7407-491a-9bde-811b1c5f6cfb" positionType="Float" mode="Opaque" x="0" y="5" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="a1b630ed-0bb1-464e-b45e-478067dbcece" x="138" y="116" width="404" height="39" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="12407c84-1ee0-4a27-9595-59e048ac66a6" x="138" y="84" width="404" height="32" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="b0761e5e-7cf4-4a10-a2f2-da5cf7971651" x="138" y="64" width="404" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="fa92169f-6fdc-41e2-aa91-3fdd13e1cb62" x="138" y="45" width="404" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5cfa6398-b9bc-40c6-8a8b-60fac86642b9" x="0" y="84" width="138" height="32" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="1dcca7b7-ffe3-467b-8a6b-8180e1a0aa85" x="0" y="64" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="6a4bded8-c3b6-4291-bb1d-2fe30825c873" x="0" y="45" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="93c98d77-98e9-41df-87df-b7361ef54133" x="0" y="25" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="db3d1bd5-c26c-45e3-bbc5-cc04f373bcef" positionType="Float" x="138" y="25" width="404" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="1342aebc-09cf-4417-87b7-38c3e95a9d2e" x="7" y="25" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Función:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e1adbef4-b6c7-49f8-ad4e-9235936fc3b0" x="140" y="25" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPRES_DESCRIP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8ef09814-8046-4d4f-be67-6a5c007c19e9" x="7" y="46" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula de Identidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e3dc6c68-d65b-4ee4-8e04-4cf664e0f4b4" x="140" y="46" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_CC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="97f2f4b0-774d-4a62-baa9-6763fc38df67" x="7" y="65" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombres Completos]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="60339ed9-478e-4e52-84cc-b7683e3aa07a" x="140" y="65" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="220a680b-cdd6-418e-8c39-9d8a43b8729d" x="7" y="84" width="120" height="33"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento/ Institución a la que Pertenece]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5124f2d4-01a0-4e32-9356-b8204a965db4" x="140" y="84" width="390" height="33"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STVSUBJ_DESC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="15797311-6887-41e9-aabc-6c8da539c0ee" x="140" y="116" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_TELEFONO_FIJO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="160ae031-9342-4d93-b07d-8851bbbae97c" x="261" y="116" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_TELEFONO_CELULAR}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="600b67a6-6ae5-4a58-8ff8-e3d3e83773f8" x="140" y="136" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_EMAIL}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="eaf1c594-74bb-4d60-acf9-c3deb7be930c" x="0" y="116" width="138" height="39" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="59add9e4-a8bf-4041-a48a-4bd7d25f2167" x="7" y="116" width="120" height="40"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfono Fijo, Celular y Correo Electrónico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc5a19b5-609b-4a96-8ed6-21d18ea0ef35" positionType="Float" x="7" y="5" width="523" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERSONAL DEL PROYECTO]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

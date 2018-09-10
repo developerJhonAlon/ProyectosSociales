@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="entregables" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="da4b3895-db9e-40ad-a262-1cea1b419d57">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_ID,
+            SEA_FORMATO_LARGO.SFL_ID,
+            SEA_OBJ_ENTREGABLES.SOE_DESCRIPCION
+FROM    SEA_DAT_GENERAL_PROY,
+            SEA_FORMATO_LARGO,
+            SEA_OBJ_ENTREGABLES
+WHERE  (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = SEA_FORMATO_LARGO.DATGEPROY_ID)
+      AND(SEA_FORMATO_LARGO.SFL_ID = SEA_OBJ_ENTREGABLES.SFL_ID)
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='0')
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='1')
+      AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="DATGEPROY_ID" class="java.math.BigDecimal"/>
+	<field name="SFL_ID" class="java.math.BigDecimal"/>
+	<field name="SOE_DESCRIPCION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="3c4dfebc-9773-4969-a8ca-49b72b028ca0"/>
+				<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SOE_DESCRIPCION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

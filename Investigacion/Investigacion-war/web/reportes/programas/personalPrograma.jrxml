@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="personalPrograma" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f2f26faa-55d3-431b-8f8f-e1008cc9c77d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROG_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_TIPO_RESPONS.TIPRES_DESCRIP,
+       SEG_USUARIO.USU_CC,
+       SEG_USUARIO.USU_NOMBRES || ' ' ||  SEG_USUARIO.USU_APELLIDOS AS NOMBRES,
+       STVSUBJ.STVSUBJ_DESC,
+       SEG_USUARIO.USU_TELEFONO_FIJO,
+       SEG_USUARIO.USU_TELEFONO_CELULAR,
+       SEG_USUARIO.USU_EMAIL
+  FROM SEA_RESPONSABLE_PROG,
+       SEA_TIPO_RESPONS,
+       SEG_USUARIO,
+       SATURN.STVSUBJ
+ WHERE     (SEA_RESPONSABLE_PROG.TIPRES_ID = SEA_TIPO_RESPONS.TIPRES_ID)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID)
+       AND (SEA_RESPONSABLE_PROG.STVSUBJ_CODE_DPTO = STVSUBJ.STVSUBJ_CODE)
+       AND (SEA_RESPONSABLE_PROG.DATGEPROG_ID =$P{DATGEPROG_ID})
+ORDER BY SEA_TIPO_RESPONS.TIPRES_ORDEN]]>
+	</queryString>
+	<field name="TIPRES_DESCRIP" class="java.lang.String"/>
+	<field name="USU_CC" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="STVSUBJ_DESC" class="java.lang.String"/>
+	<field name="USU_TELEFONO_FIJO" class="java.lang.String"/>
+	<field name="USU_TELEFONO_CELULAR" class="java.lang.String"/>
+	<field name="USU_EMAIL" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="52a7387a-472b-4b6b-b021-4f03f5fabcef" positionType="Float" x="2" y="10" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[PERSONAL RESPONSABLE DEL PROGRAMA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="112" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="c83e20f5-1447-47aa-a27f-5f9483e95fef" positionType="Float" x="0" y="5" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="60c28ba5-09e3-4cdd-aef5-f19f79a4db62" positionType="Float" x="7" y="5" width="523" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[PERSONAL RESPONSABLE DEL PROGRAMA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="5caf93b7-1551-4cd4-8e10-1b5689d9009b" x="0" y="25" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="e745903e-79b3-45cb-acff-4f3f60311022" x="7" y="25" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Función]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="40ba9fad-cfdb-4268-b7e8-c835d676b675" positionType="Float" x="138" y="25" width="404" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="5441937c-dc6f-4b1b-a375-29ebc9107bed" x="140" y="25" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPRES_DESCRIP}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="3f858846-23f8-406f-afc4-cee2885bb27f" x="0" y="45" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="f3bb84ac-f977-4df7-b6e3-18d662e1bca3" x="7" y="46" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombres Completos]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="b2dc8503-4ee9-431c-9ebf-df05584aac44" x="138" y="45" width="404" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="8cc2693a-5712-4d90-8977-354f8f4aeb8b" x="140" y="45" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="0ed98704-91ec-455e-8ecd-81cf3b671324" x="0" y="64" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="d5a1b068-f5c3-49d5-9f41-ddde4d6c6e57" x="7" y="65" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidad/Dpto.]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="55cdc9ca-f7b9-4382-b0d7-a2fc21699fec" x="138" y="64" width="404" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="cf09b7dc-dcc8-4b2e-8b9e-f0c5828578ee" x="140" y="65" width="390" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STVSUBJ_DESC}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="5727fe06-5317-4fcd-932e-1fd9cf743fb3" x="0" y="84" width="138" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="e2b96d70-44a2-4902-8810-8aaad489c354" x="138" y="84" width="169" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="15412837-4c3d-4290-81a8-749f25ca74d7" x="7" y="86" width="120" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4b043413-18f2-4f96-9f6b-af27c36a829e" x="140" y="85" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_EMAIL}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="43cb9ae6-8de6-4650-9c8f-e354b69094f3" x="307" y="84" width="100" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="f21b27a3-7fd4-46ca-86a3-70e3d3481bcf" x="314" y="85" width="75" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfonos]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="1c29d182-9a43-4199-a1ce-befc68af3680" x="407" y="84" width="135" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c6fc547c-95e2-4a64-96ab-e30a01b37d7e" x="417" y="85" width="62" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_TELEFONO_FIJO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3f95361b-1227-48f6-ba2c-a4c7d25adcaf" x="479" y="86" width="63" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{USU_TELEFONO_CELULAR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

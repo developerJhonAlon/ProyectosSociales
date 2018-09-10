@@ -1,0 +1,93 @@
+package ec.edu.espe_ctt.saturno.entity;
+
+import ec.edu.espe_ctt.saturno.entity.Stvterm;
+import java.util.Date;
+import javax.annotation.Generated;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
+
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-05-10T16:18:56")
+@StaticMetamodel(Sobterm.class)
+public class Sobterm_ { 
+
+    public static volatile SingularAttribute<Sobterm, String> sobtermRpthSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCampSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDurationWebSrchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermTivDateSource;
+    public static volatile SingularAttribute<Sobterm, String> sobtermFeeAssessVr;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDynamicSchedTermInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermClosectWebDispInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLcTitleWebcDispInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDivWebCatlSrchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermGradeDetailWebInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLcDescWebcDispInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermPrintBillVr;
+    public static volatile SingularAttribute<Sobterm, String> sobtermInsmWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermHoldSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDataOrigin;
+    public static volatile SingularAttribute<Sobterm, String> sobtermProfileSendInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDuplSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDeptWebCatlSrchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermAssessSwapInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermSchdWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermTmstCalcInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLsDescWebsDispInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLsTitleWebsDispInd;
+    public static volatile SingularAttribute<Sobterm, Date> sobtermActivityDate;
+    public static volatile SingularAttribute<Sobterm, String> sobtermApprSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermWebCappCatlgInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermReadmReq;
+    public static volatile SingularAttribute<Sobterm, String> sobtermInclAttmptHrsInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDegreeSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLevlSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermOverappWebUpdInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermMajrSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermGmodWebUpdInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLevlWebCatlSrchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermMaxhSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermAddDrpWebUpdInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermWebCappTermInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermMinhSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermDeptSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLinkSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermPreqSeverity;
+    public static volatile SingularAttribute<Sobterm, Stvterm> stvterm;
+    public static volatile SingularAttribute<Sobterm, String> sobtermChrtSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermAttsSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermClaslstWebDispInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermTermCode;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCampWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermFacschdWebDispInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermProgramSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermReptSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCorqSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermStypWebCatlSrchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermAssessRevNrfInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCollWebCatlSrchInd;
+    public static volatile SingularAttribute<Sobterm, Integer> sobtermCrnOneup;
+    public static volatile SingularAttribute<Sobterm, String> sobtermSessWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCollSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCredWebUpdInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermUserId;
+    public static volatile SingularAttribute<Sobterm, String> sobtermAssessRegGraceInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermCapcSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermInstrWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermFeeAssessment;
+    public static volatile SingularAttribute<Sobterm, String> sobtermInprogressUsageInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLevlWebUpdInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermRegAllowed;
+    public static volatile SingularAttribute<Sobterm, String> sobtermMidtermWebInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermRefundInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermClasSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermBycrnInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermTestSeverity;
+    public static volatile SingularAttribute<Sobterm, Date> sobtermCutoffDate;
+    public static volatile SingularAttribute<Sobterm, Date> sobtermFeeAssessmntEffDate;
+    public static volatile SingularAttribute<Sobterm, String> sobtermHold;
+    public static volatile SingularAttribute<Sobterm, String> sobtermMailerWebInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermAttrWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermLevlWebSearchInd;
+    public static volatile SingularAttribute<Sobterm, String> sobtermTimeSeverity;
+    public static volatile SingularAttribute<Sobterm, String> sobtermProgAttWebcSrchInd;
+
+}

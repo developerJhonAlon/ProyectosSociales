@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Presupuesto de Partida" style="margin-bottom:10px; text-align: center; font-size: xx-small;margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >                   
+                    <p:selectBooleanButton id="value2" value="#{presupuestoPartidaController.botonInicio}" onLabel="Formatos Largos"  disabled="#{presupuestoPartidaController.botonInicio}" offLabel="Formatos Largos" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                        <p:ajax update=":formPrincipal:panelBase" listener="#{presupuestoPartidaController.inicioFormatoLargo}" />
+                    </p:selectBooleanButton>
+                </h:panelGrid>                
+
+                <p:panel id="inicio"  visible="#{presupuestoPartidaController.botonInicio}">
+
+                    <p:dataTable id="dtFormatoLargo" value="#{presupuestoPartidaController.formatoLargoList}" var="formatoLargo"
+                                 paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                 emptyMessage="No se encontraron resultados"  style="text-align: left">
+
+                        <p:column headerText="Ord." style="width:5%; white-space: pre-line">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Formato Largo" style="width: 45%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.sflTituloEspaniol}" style="text-transform: uppercase; white-space: pre-line"/>                           
+                        </p:column>
+<!--                        <p:column headerText="Título Convocatoria" style="width: 40%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.datgeproyId.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Tipo de Investigación" style="width: 10%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.prdId.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>-->
+                        <p:column headerText="Categoria" style="width: 10%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.prdIdCategoria.prdDescripcion}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+<!--                        <p:column headerText="Plan" style="width: 15%; white-space: pre-line">
+                            <h:outputText value="#{formatoLargo.obplabvId.obplabvNombre}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>-->
+
+                        <p:column headerText="Seleccione" style="width:5%;text-align: center; white-space: pre-line">
+                            <p:commandButton id="btnSeleccione"  icon="ui-icon-circle-check" style="margin: 0;font-size: 11px;" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Selecciona Formato Largo" action="#{presupuestoPartidaController.seleccionaConvo}" 
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{formatoLargo}" target="#{presupuestoPartidaController.formatoLargoSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                </p:panel>
+
+                <!--                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" > 
+                                    <p:tab title="1. Datos Generales" id="tabP1">-->
+                <!--<p:panel id="pcomision" visible="#{!presupuestoPartidaController.botonInicio}">-->
+                <p:tabView scrollable="true"  style="font-size: x-small" id="tabP" rendered="#{!presupuestoPartidaController.botonInicio}"> 
+                    <p:tab title="1. Presupuesto de Partida" >
+                        <h:panelGrid columns="1" cellpadding="5"  id="h1" >
+                            <p:commandButton id="btnAgregar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1"   action="#{presupuestoPartidaController.agregarP1}" rendered="#{!presupuestoPartidaController.controlGrabarP1}" >
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p1" style="border: hidden" visible="#{presupuestoPartidaController.controlGrabarP1}" >
+                            <p:messages id="messages" />
+                            <h:panelGrid columns="2" cellpadding="5"  >
+                                <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "  disabled="#{presupuestoPartidaController.validaVaciosP1}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dtPrepPartida,:formPrincipal:tabP:pInputP1" action="#{presupuestoPartidaController.registraP1()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Cancel Acción" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{presupuestoPartidaController.cancelarP1}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5"  id="pInputP1" rendered="#{presupuestoPartidaController.controlGrabarP1}" style="text-align: left">
+                                <h:outputLabel for="clasificador" value="Grupo Partida:"/>
+                                <p:selectOneMenu id="clasificador" value="#{presupuestoPartidaController.clasificador}" required="false" style="width: 350px">
+                                    <f:selectItem itemLabel="Seleccione Clasif. Prep." itemValue="" noSelectionOption="true"  />
+                                    <f:selectItems value="#{presupuestoPartidaController.clasificadorPresupuestoList}" var="cp" itemLabel="#{cp.scpId}.    #{cp.scpNombre}" itemValue="#{cp.scpId}" />
+                                    <p:ajax event="change" update=":formPrincipal:tabP:subPart" listener="#{presupuestoPartidaController.onSubPartidaChange}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel for="subPart" value="Subgrupo Partida:"/>
+                                <p:selectOneMenu id="subPart" value="#{presupuestoPartidaController.subPartida}" required="false" style="width: 350px">
+                                    <f:selectItem itemLabel="Seleccione Subgrupo Clasif. Prep." itemValue="" noSelectionOption="true"  />
+                                    <f:selectItems value="#{presupuestoPartidaController.subPartidaPresupList}" var="subP" itemLabel="#{subP.scpId}.   #{subP.scpNombre}" itemValue="#{subP.scpId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:partid" listener="#{presupuestoPartidaController.onPartidaPresupChange}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel for="partid" value="Partida Presupuestaria:"/>
+                                <p:selectOneMenu id="partid" value="#{presupuestoPartidaController.partidaPresp}" required="false" style="width: 350px">
+                                    <f:selectItem itemLabel="Seleccione Partida. Prep." itemValue="" noSelectionOption="true"  />
+                                    <f:selectItems value="#{presupuestoPartidaController.partidaPresupList}" var="part" itemLabel="#{part.scpId}.   #{part.scpNombre}" itemValue="#{part.scpId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP1" listener="#{presupuestoPartidaController.validarVaciosP1}"/>
+                                </p:selectOneMenu>
+                                
+                                <p:outputLabel for="valor" value="Valor Espe:" />
+                                <p:inputText id="valor" maxlength="9" value="#{presupuestoPartidaController.valor}"  onkeypress="return justNumbers(event);" >                                
+                                    <p:ajax event="keyup" listener="#{presupuestoPartidaController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputText>
+                                <p:outputLabel for="valOtr" value="Valor Otras Instituciones:" />
+                                <p:inputText id="valOtr" maxlength="9" value="#{presupuestoPartidaController.valorOtras}"  onkeypress="return justNumbers(event);" >                                
+                                    <p:ajax event="keyup" listener="#{presupuestoPartidaController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputText>
+                                <p:outputLabel for="especificacion" value="Especificaciones Técnicas:" />
+                                <p:inputTextarea id="especificacion" value="#{presupuestoPartidaController.especificacion}" maxlength="500" rows="2" style="width: 340px" >                                
+                                    <p:ajax event="keyup" listener="#{presupuestoPartidaController.validarVaciosP1}" update=":formPrincipal:tabP:btnGrabarP1"/>
+                                </p:inputTextarea>
+                                <p:outputLabel for="codInc" value="Código Categoría CPC:" />
+                                <p:inputText id="codInc" value="#{presupuestoPartidaController.codIncop}" autocomplete="off" required="false" size="20" maxlength="50">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{presupuestoPartidaController.validarVaciosP1}"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel for="documentoP1" value="Seleccione el documento" style="width: auto"/>
+                                <h:outputText id="documentoP1" value ="#{presupuestoPartidaController.nomFileP1}" style="font-weight: bolder" />                                
+                            </h:panelGrid>
+                            <left>
+                                <p:fileUpload fileUploadListener="#{presupuestoPartidaController.handleFileUploadP1}" mode="advanced" dragDropSupport="false" style=" width: 28%; text-align:left;font-weight: bold"
+                                              update=":formPrincipal:tabP" label="Seleccione Documento Habilitante" sizeLimit="10000000" auto="true"  />
+                            </left>                              
+                        </p:panel>   
+
+                        <p:dataTable id="dtPrepPartida" value="#{presupuestoPartidaController.presupuestoXPartidaList}" var="pp" editable="true" style="width: auto"
+                                     paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                     emptyMessage="No se encontraron resultados"   >
+                            <p:ajax event="rowEdit" listener="#{presupuestoPartidaController.onRowEditP1}" update=":formPrincipal:tabP:dtPrepPartida"/>
+                            <p:ajax event="rowEditCancel" listener="#{presupuestoPartidaController.onRowCancelP1}" update=":formPrincipal:tabP:dtPrepPartida"/>
+                            <p:column headerText="Ord." style="width: 10%; font-size: 11px; font-weight: bold">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Partida Presupuestaria" style="width: 30%; font-size: 11px; font-weight: bold" >
+                                <h:outputText value="#{pp.scpId.scpNombre}" style="text-transform: uppercase; font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Valor Espe" style="width: 10%; font-size: 11px; font-weight: bold">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pp.spxpValor}" style="text-transform: uppercase"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:inputText id="valor" maxlength="9" value="#{pp.spxpValor}"  onkeypress="return justNumbers(event);" style="width: 80%"/>                                        
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Valor Otras Instituciones" style="width: 10%; font-size: 11px; font-weight: bold; white-space: pre-line">
+                                <p:cellEditor> 
+                                    <f:facet name="output"><h:outputText value="#{pp.spxpValotras}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"> 
+                                        <p:inputText id="valOtr" maxlength="9" value="#{pp.spxpValotras}"  onkeypress="return justNumbers(event);" style="width: 80%"/>                                        
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Documento de Estimación Presupuestaria" style="width: 20%; font-size: 11px; font-weight: bold; white-space: pre-line">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pp.spxpNombreDocumento}" style="text-transform: uppercase; font-size: xx-small; white-space: pre-line; text-align: justify"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:fileUpload fileUploadListener="#{presupuestoPartidaController.handleFileUploadP1}" mode="advanced" dragDropSupport="false" style=" width: 80%; text-align:left;font-weight: bold"
+                                                      label="documento" sizeLimit="100000" auto="true"  />
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Especificaciones Técnicas" style="width: 20%; font-size: 11px; font-weight: bold; white-space: pre-line; text-align: justify">
+                                <p:cellEditor> 
+                                    <f:facet name="output"> 
+                                        <h:outputText value="#{pp.spxpEspecificaciones}" style="text-transform: uppercase; font-size: xx-small; text-align: justify"/>
+                                    </f:facet>
+                                    <f:facet name="input"> 
+                                        <p:inputTextarea id="especificacion" value="#{pp.spxpEspecificaciones}" maxlength="500" rows="2" style="width: 80%"/>
+                                    </f:facet>                                    
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Código Categoría CPC" style="width: 8%; font-size: 11px; font-weight: bold; white-space: pre-line">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{pp.spxpCodincop}" style="text-transform: uppercase"/></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{pp.spxpCodincop}" id="modelInput1" style="width: 80%"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%; font-size: 11px; font-weight: bold">
+                                <p:commandButton id="btnEliminar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                 onclick="PF('deleteDialogP1').show();" process="@this" >
+                                    <f:setPropertyActionListener value="#{pp}" target="#{presupuestoPartidaController.presupuestoXPartidaSelected}" />                                    
+                                </p:commandButton>   
+                            </p:column>
+                        </p:dataTable> 
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+
+        <p:dialog id="deleteDlgP1" header="Eliminar Registro" widgetVar="deleteDialogP1" resizable="false" width="500" modal="true" appendTo="@(body)"  style="font-size: x-small">
+            <h:form id="deleteFormP1">
+                <p:outputPanel id="panelDeleteRegistroP1">
+                    <center>
+                        <h:panelGrid id="displayDeleteP1" columns="1" >                          
+                            <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                        </h:panelGrid>
+                    </center>
+                    <p:spacer height="10"></p:spacer>
+                    <h:panelGroup>
+                        <center>
+                            <p:commandButton id="btnEliminarP1"  value="Eliminar" style="margin:0"
+                                             onclick="PF('deleteDialogP1').hide();" >
+                                <p:ajax update=":formPrincipal:tabP:dtPrepPartida" listener ="#{presupuestoPartidaController.eliminarP1}" />
+                            </p:commandButton>
+                        </center>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+        <script>
+            function justNumbers(e) {
+                var keynum = window.event ? window.event.keyCode : e.which;
+                if ((keynum == 8) || (keynum == 46))
+                    return true;
+                return /\d/.test(String.fromCharCode(keynum));
+            }
+        </script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

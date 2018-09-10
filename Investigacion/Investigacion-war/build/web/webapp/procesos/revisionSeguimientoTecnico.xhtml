@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Revisión Seguimiento Técnico" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera">
+                    <p:selectBooleanButton id="value2" value="#{revisionSeguimientoController.botonInicio}" onLabel="Agregar" disabled="#{revisionSeguimientoController.botonInicio}" offLabel="Seguimiento" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width:100px">
+                        <p:ajax update=":formPrincipal:panelBase,:formPrincipal:tabP" listener="#{revisionSeguimientoController.inicioProgramas}"/>
+                    </p:selectBooleanButton>
+                </h:panelGrid>
+                <p:panel id="inicio" visible="#{revisionSeguimientoController.botonInicio}" style="font-size: 11px; text-align: left;border: hidden; font-weight: bold">
+                    <p:dataTable id="dtTSeguimientoF" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="segF" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                 emptyMessage="No se encontraron Resultados">
+                        <p:column headerText="Ord." style="width:5%;text-align: center">
+                            <h:outputText value="#{index + 1}" />
+                        </p:column>
+                        <p:column headerText="Título Español" style="width: 20%; white-space: pre-line">
+                            <h:outputText value="#{segF.sflId.sflTituloEspaniol}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Proyecto" style="width: 20%; white-space: pre-line">
+                            <h:outputText value="#{segF.sflId.datgeproyId.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Revisado" style="width: 5%; white-space: pre-line">
+                            <h:outputText value="#{segF.ssfeRevisado == 'S' ? 'REVISADO': ''}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Seleccione" style="width: 10%; text-align: center">
+                            <p:commandButton id="btnSeleccione" icon="ui-icon-circle-check" style="margin: 0; font-size: 11px"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Seleccione Seguimiento" action="#{revisionSeguimientoController.seleccioneSeguimiento()}"
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{segF}" target="#{revisionSeguimientoController.seguimientoFormatoSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:tabView id="tabP" scrollable="false" orientation="left" dynamic="true" rendered="#{!revisionSeguimientoController.botonInicio}" effect="slide" effectDuration="slow">
+                    <p:ajax event="tabChange" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" />
+                    <p:tab title="1.Información del Proyecto" id="tabP1" disabled="#{revisionSeguimientoController.habilitaTab}">
+                        <h:panelGrid columns="2" cellpadding="2" cellspacing="0"  id="pInput1"  style="text-align: left">
+                            <h:outputLabel for="nomProy" value="Nombre del Proyecto:" style="text-align: left">
+                                <p:dataList id="nomProy" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="nomProy" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{nomProy.sflId.datgeproyId.datgeproyTitulo}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel for="codP" value="Código del Proyecto:" style="text-align: left">
+                                <p:dataList id="codP" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="codProyecto" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{codProyecto.ssefCodigoProy}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel for="dirP" value="Nombre del Director del Proyecto:" style="text-align: left">
+                                <p:dataList id="dirP" value="#{revisionSeguimientoController.responsableProgList}" var="directP" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{directP.usuIdDocente.usuApellidos} #{directP.usuIdDocente.usuNombres}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel for="depCProy" value="Departamento / Centro:" style="text-align: left">
+                                <p:dataList id="depCProy" value="#{revisionSeguimientoController.directorDeptoList}" var="dCP" style="width: 10%;white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{dCP.stvsubjDesc}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:panelGrid columns="7" cellpadding="2" cellspacing="0" style="float: left">
+                                <h:outputLabel for="informe" value="Informe No: &nbsp;&nbsp;&nbsp;" style="float: left">
+                                    <p:dataList id="informe" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="infN" style="width: 50%;white-space: pre-line">
+                                        <f:facet name="hedaer"></f:facet>
+                                        #{infN.ssefInforme} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </p:dataList>
+                                </h:outputLabel>
+                                <h:outputLabel value=" &nbsp;&nbsp;&nbsp; Período del Informe &nbsp;&nbsp;&nbsp;&nbsp;"/>
+                                <h:outputLabel for="fDesde" value="Del (DD/MM/AAAA)&nbsp;&nbsp;&nbsp;&nbsp;:"/>
+                                    <p:dataList id="fDesde" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="desde" style="width: 10%;white-space: pre-line">
+                                        <f:facet name="hedaer"></f:facet>
+                                        <h:outputLabel value="#{desde.ssfeFechaDesde}" >
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                                        </h:outputLabel> 
+                                    </p:dataList>
+                                <h:outputLabel for="fHasta" value="Al (DD/MM/AAAA)&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;"/>
+                                    <p:dataList id="fHasta" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="hasta" style="width: 10%;white-space: pre-line">
+                                        <f:facet name="hedaer"></f:facet>
+                                        <h:outputLabel value="#{hasta.ssfeFechaHasta}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+                                        </h:outputLabel>
+                                    </p:dataList>
+                            </h:panelGrid>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:panelGrid columns="4" cellpadding="10" cellspacing="0">
+                                <h:outputLabel for="presAsig" value="Presupuesto Asignado (9,999.00) USD.$:"  style=" float: right">
+                                    <p:dataList id="presAsig" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="presupAs" style="float: left; width: 100%">
+                                        <f:facet name="header"></f:facet>
+                                        #{presupAs.sflId.datgeproyId.datgeproyMontoTotal}
+                                    </p:dataList>
+                                </h:outputLabel>
+                                <h:outputLabel for="presExt" value="Presupuesto Externo (9,999.00) USD.$:"  style=" float: right">
+                                    <p:dataList id="presExt" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="presupExter" style="float: left; width: 100%">
+                                        <f:facet name="header"></f:facet>
+                                        #{presupExter.sflId.datgeproyId.datgeproyMontoOtraInst}
+                                    </p:dataList>
+                                </h:outputLabel>
+                                <h:outputLabel for="fDevengago" value="Financiamiento Devengado (9,999.00) USD.$:"  style=" float: right">
+                                    <p:dataList id="fDevengago" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="fDev" style="float: left; width: 100%">
+                                        <f:facet name="header"></f:facet>
+                                        #{fDev.ssfeFinanDevengado}
+                                    </p:dataList>
+                                </h:outputLabel>
+                            </h:panelGrid>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:panelGrid columns="3" cellpadding="10" cellspacing="10">
+                                <h:outputLabel for="linInv" value="Línea de Investigación:" style="text-align: left; width: 150px">
+                                    <p:dataList id="linInv" value="#{revisionSeguimientoController.departCenProyList}" var="lineaInv" style="float: left;white-space: pre-line" >
+                                        <f:facet name="hedaer"></f:facet>
+                                        #{lineaInv.lineaId.lineaIdPadre.lineaDescip} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </p:dataList>
+                                </h:outputLabel>
+                                <h:outputLabel for="sblIn" value="Sublínea de Investigación:" style="text-align: left">
+                                    <p:dataList id="sblIn" value="#{revisionSeguimientoController.departCenProyList}" var="subLinea" style="float: left;white-space: pre-line">
+                                        <f:facet name="header"></f:facet>
+                                        #{subLinea.lineaId.lineaDescip}
+                                    </p:dataList>
+                                </h:outputLabel>
+                                <h:outputLabel for="grpInvest" value="Grupo de Investigación:" style="text-align: left">
+                                    <p:dataList id="grpInvest" value="#{revisionSeguimientoController.departCenProyList}" var="grupoInvest" style="float: left;white-space: pre-line">
+                                        <f:facet name="hedaer"></f:facet>
+                                        #{grupoInvest.grupiId.grupiDescrip} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </p:dataList>
+                                </h:outputLabel>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="2.Instituciones Auspiciantes" id="tabP2" disabled="#{revisionSeguimientoController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="10" cellspacing="10" id="pInput2" style="text-align: left;width: 60%" >
+                            <h:outputLabel for="nombInstitu" value="Nombre Institución:" style="text-align: left">
+                                <p:dataList id="nombInstitu" value="#{revisionSeguimientoController.opcionInstList}" var="nombreInst" style="width: 100%">
+                                    <f:facet name="header"></f:facet>
+                                    #{nombreInst.opinstiNombre.toUpperCase()}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel for="drcInst" value="Dirección Institución:" style="text-align: left">
+                                <p:dataList id="drcInst" value="#{revisionSeguimientoController.opcionInstList}" var="dierccInst" style="width: 100%">
+                                    <f:facet name="header"></f:facet>
+                                    #{dierccInst.opinstiDireccion}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel for="ciudInst" value="Ciudad/Provincia:" style="text-align: left">
+                                <p:dataList id="ciudInst" value="#{revisionSeguimientoController.opcionInstList}" var="ciudadInst" style="width: 100%">
+                                    <f:facet name="header"></f:facet>
+                                    #{ciudadInst.opinstiCiudad}
+                                </p:dataList>
+                            </h:outputLabel>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="3. Estudiantes Vinculados al Proyecto" id="tabP3" disabled="#{revisionSeguimientoController.habilitaTab}">
+                        <p:dataTable id="dtTEstVinculado" value="#{revisionSeguimientoController.estudianteFormatoList}" var="estF"
+                                     editable="false" style="width: auto" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." style="width: 3%; font-size: x-small; text-align: center">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Nombre del Estudiante" style="width: 20%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{estF.usuId.usuApellidos} #{estF.usuId.usuNombres}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Programas de pregrado o postgrado" style="width: 15%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{estF.sesfPrograma}" style="text-transform: uppercase;width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Fecha de Inicio" style="width: 8%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{estF.sesfFechaInicio}" style="text-transform: uppercase;width: 100%; font-size: x-small"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha Fin" style="width: 8%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{estF.sesfFechaFin}" style="text-transform: uppercase;width: 100%; font-size: x-small"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText>
+                            </p:column>
+                            <p:column headerText="Se generó tesis o proyecto de grado del estudiante SI/NO" style="white-space: pre-line; width: 12%; font-size: x-small; text-align: center">
+                                <h:outputText value="#{estF.sesfGeneroTesis}"  style="text-transform: uppercase;width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Título de Tesis" style="width: 15%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{estF.sesfTesis}" style="text-transform: uppercase;width: 100%; font-size: x-small"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="4. Desarrollo del Proyecto" id="tabP4" disabled="#{revisionSeguimientoController.habilitaTab}">
+                        <p:dataTable id="dtTObjProyecto" value="#{revisionSeguimientoController.objetGenProyList}"
+                                     var="objGenProy" rows="10" rowIndexVar="index" resizableColumns="true" paginator="true"
+                                     editable="false" emptyMessage="No se encontraron Resultados">
+                            <p:column style="width: 1%">
+                                <p:rowToggler rendered="#{objGenProy.prdId.prdId != 303}"/>
+                            </p:column>
+                            <p:column headerText="Tipo" style="width: 20%; text-align: left; white-space: pre-line">
+                                <h:outputText value="#{objGenProy.prdId.prdId}. #{objGenProy.prdId.prdDescripcion}" style="white-space: pre-line; text-transform: uppercase; text-align: left; font-size: xx-small"/>
+                            </p:column>
+                            <p:column headerText="Descripción" style="width: 50%; text-align: justify; white-space: pre-line">
+                                <h:outputText value="#{objGenProy.szdtaobjproyDescr}" style="white-space: pre-line; text-transform: uppercase; text-align: left"/>
+                            </p:column>
+                            <p:rowExpansion>
+                                <p:panelGrid columns="1" style="border:none;margin:0 auto;width:100%; text-align: left" >
+                                    <p:dataTable id="dtTObjGenAct" value="#{objGenProy.szdtaobjproyList}" var="actObjGen" paginator="true" style="text-align: left"
+                                                 rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron resultados">
+                                        <p:column headerText="Ord." style="width: 2%">
+                                            <h:outputText value="#{index + 1}"/>
+                                        </p:column>
+                                        <p:column headerText="Actividad" style="width: 50%; text-align: justify; white-space: pre-line">
+                                            <h:outputText value="#{actObjGen.szdtaobjproyDescr}" style="white-space: pre-line; text-transform: uppercase; text-align: left"/>
+                                        </p:column>
+                                        <p:column headerText="Resultados" style="width: 50%; text-align: justify; white-space: pre-line">
+                                            <h:outputText value="#{actObjGen.szdtaobjproyResult}" style="white-space: pre-line; text-transform: uppercase; text-align: left"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                            </p:rowExpansion>
+                            <f:facet name="footer">
+                                <h:outputLabel value="Comentar y justificar eventuales alteraciones ocurridas con relación a los objetivos específicos propuestos inicialmente. "/>
+                                <p:panel  style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                    <h:panelGrid columns="2" cellpadding="7" cellspacing="0" id="pInput4" style="text-align: left">
+                                        <h:outputLabel for="jutif" style="text-align: left">
+                                            <p:dataList id="justif" value="#{revisionSeguimientoController.seguimientoFormatoList}" var="seguimientoF" style="width: 100%">
+                                                <f:facet name="header"></f:facet>
+                                                #{seguimientoF.ssefAnalisis}
+                                            </p:dataList>
+                                        </h:outputLabel>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="5. Presupuesto del Proyecto" id="tabP5" disabled="#{revisionSeguimientoController.habilitaTab}">
+                        <p:dataTable id="dtTPartidaFormnato" value="#{revisionSeguimientoController.presXPartidaList}" var="presPart"
+                                   paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false"
+                                   emptyMessage="No se encontraron Resultados">
+                            <p:column headerText="Ord." style="width:5%; text-align: center">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Partida" style="width: 20%; white-space: pre-line">
+                                <h:outputText value="#{presPart.scpId.scpNombre}" style="text-transform: uppercase"/>
+                            </p:column>
+                            <p:column headerText="Valor" style="width: 5%; white-space: pre-line; text-align: right">
+                                <h:outputText value="#{presPart.spxpValor}" style="text-transform: uppercase">
+                                    <f:convertNumber minFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Presupuesto Devengado" style="width: 15%; white-space: pre-line; text-align: right">
+                                <h:outputText value="#{presPart.spxpDevengado}" style="text-transform: uppercase; text-align: right"><f:convertNumber minFractionDigits="2" /></h:outputText>
+                            </p:column>
+                            <p:column headerText="Factores que facilitaron o dificultaron la ejecución presupuestaria" style="width: 30%; white-space: pre-line">
+                                <h:outputText value="#{presPart.spxpFactorD}" style="text-transform: uppercase"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="6. Informe del Director del Departamento/Centro" id="tabP6" disabled="#{revisionSeguimientoController.habilitaTab}">
+                        <p:dataTable id="dtInformDirect" value="#{revisionSeguimientoController.informeDirectFormatoList}" var="informeDirc"
+                                     editable="false" style="width: auto" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." style="width: 3%; text-align: center">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Tipo de Ejecución" style="white-space: pre-line; width: 8%; font-size: x-small">
+                                <h:outputText value="#{informeDirc.prdId.prdDescripcion}" style="text-transform: uppercase; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Porcentaje de Ejecución Programada" style="white-space: pre-line; width: 5%; font-size: x-small">
+                                <h:outputText value="#{informeDirc.sidfPorcentajeProgram}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Porcentaje de Ejecución Realizada" style="white-space: pre-line; width: 5%; font-size: x-small">
+                                <h:outputText value="#{informeDirc.sidfPorcetajeRealizada}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Observaciones" style="white-space: pre-line; width: 25%; font-size: x-small">
+                                <h:outputText value="#{informeDirc.sidfObservacion}" style="text-transform: uppercase; white-space: pre-line; width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Análisis" style="white-space: pre-line; width: 25%; font-size: x-small">
+                                <h:outputText value="#{informeDirc.sidfAnalisis}" style="text-transform: uppercase; white-space: pre-line; width: 100%; font-size: x-small"/>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <h:outputLabel value=""/>
+                        <p:panel  style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <h:panelGrid columns="1" cellpadding="7" id="h6">
+                                <p:commandButton id="btnGrabarP6" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" disabled="#{revisionSeguimientoController.validaVaciosP6}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:h6,:formPrincipal:tabP:pInput6" action="#{revisionSeguimientoController.registraP6()}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0" id="pInput6" style="margin-bottom:10px">
+                                <h:outputLabel for="rev" value="Revisado:" style="text-align: left"/>
+                                <p:selectBooleanCheckbox value="#{revisionSeguimientoController.revisado}" required="true">
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP6" listener="#{revisionSeguimientoController.validarVaciosP6}"/>
+                                </p:selectBooleanCheckbox>
+                            </h:panelGrid>
+                        </p:panel>
+                        <!--                            <f:facet name="footer">
+                                <h:outputLabel value="Aprobación "/>
+                                
+                                    
+                                        
+                                                          update=":formPrincipal:tabP:dtInformDirect:h6,:formPrincipal:tabP:dtInformDirect:pInput6" 
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    
+                                        
+                                        <p:selectBooleanCheckbox value="#{revisionSeguimientoController.revisado}" required="true">
+                                                
+                                        </p:selectBooleanCheckbox>
+                                    </h:panelGrid>
+                                </p:panel>
+                            </f:facet>-->
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

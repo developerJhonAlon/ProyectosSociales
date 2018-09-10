@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="objetivos" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="62f6d7bf-018c-4f58-926e-a489e7cce4c9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SZDTAOBJPROY.SZDTAOBJPROY_CODE,
+       SZDTAOBJPROY.SZDTAOBJPROY_PADRE,
+       SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+       SZDTAOBJPROY.SZDTAOBJPROY_DESCR,
+       OBJETIVOPROY.SZDTAOBJPROY_CODE,
+       OBJETIVOPROY.SZDTAOBJPROY_PADRE,
+       OBJETIVOPROY.SZDTAOBJPROY_DESCR AS ACTIVIDAD,
+       PARAMOBJETIVO.PRD_DESCRIPCION,
+       MEDIOS.SZDTAOBJPROY_DESCR AS INDICADOR,
+       PARAMEDIOS.PRD_DESCRIPCION,
+       SUPUESTOS.SZDTAOBJPROY_DESCR AS MEDIO_VERIFICACION,
+       PARAMSUPUESTOS.PRD_DESCRIPCION,
+       SUPUESTOS_A.SZDTAOBJPROY_DESCR AS SUPUESTOS
+  FROM SZDTAOBJPROY, SEA_PARAMETROS_DET, SZDTAOBJPROY OBJETIVOPROY, SZDTAOBJPROY MEDIOS,
+            SZDTAOBJPROY SUPUESTOS, SEA_PARAMETROS_DET  PARAMOBJETIVO,
+            SEA_PARAMETROS_DET PARAMEDIOS,  SEA_PARAMETROS_DET  PARAMSUPUESTOS,
+           SZDTAOBJPROY SUPUESTOS_A
+ WHERE     (SZDTAOBJPROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (OBJETIVOPROY.SZDTAOBJPROY_PADRE = SZDTAOBJPROY.SZDTAOBJPROY_CODE)
+       AND(MEDIOS.SZDTAOBJPROY_PADRE = OBJETIVOPROY.SZDTAOBJPROY_CODE)
+       AND(SUPUESTOS.SZDTAOBJPROY_PADRE = MEDIOS.SZDTAOBJPROY_CODE)
+       AND(SUPUESTOS_A.SZDTAOBJPROY_PADRE = SUPUESTOS.SZDTAOBJPROY_CODE)
+       AND(OBJETIVOPROY.PRD_ID = PARAMOBJETIVO.PRD_ID)
+       AND(MEDIOS.PRD_ID = PARAMEDIOS.PRD_ID)
+       AND(SUPUESTOS.PRD_ID = PARAMSUPUESTOS.PRD_ID)
+       AND (SZDTAOBJPROY.SFL_ID = $P{SFL_ID})
+       AND(PARAMOBJETIVO.PRD_ID   =308)
+   ORDER BY SZDTAOBJPROY.SZDTAOBJPROY_CODE ASC]]>
+	</queryString>
+	<field name="SZDTAOBJPROY_CODE" class="java.math.BigDecimal"/>
+	<field name="SZDTAOBJPROY_PADRE" class="java.math.BigDecimal"/>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="SZDTAOBJPROY_DESCR" class="java.lang.String"/>
+	<field name="ACTIVIDAD" class="java.lang.String"/>
+	<field name="INDICADOR" class="java.lang.String"/>
+	<field name="MEDIO_VERIFICACION" class="java.lang.String"/>
+	<field name="SUPUESTOS" class="java.lang.String"/>
+	<group name="componentes">
+		<groupExpression><![CDATA[$F{SZDTAOBJPROY_CODE}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="8c47b298-6f0b-4412-941a-2e62a57f1b10" positionType="Float" stretchType="RelativeToTallestObject" x="95" y="0" width="95" height="20" isPrintWhenDetailOverflows="true"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SZDTAOBJPROY_DESCR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="2a313724-0f64-43bc-9b81-8b2859c7ebca" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="95" height="20" isPrintWhenDetailOverflows="true"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRD_DESCRIPCION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="faa66d7e-9da3-4643-9f3d-bf7530da0be0" positionType="Float" stretchType="RelativeToTallestObject" x="190" y="0" width="92" height="20"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="3a19c839-cce6-4c52-a03f-ec5fc1c99690" positionType="Float" stretchType="RelativeToTallestObject" x="282" y="0" width="96" height="20"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1fd5953a-800f-49da-9b9c-5e87433e2d1c" positionType="Float" stretchType="RelativeToTallestObject" x="378" y="0" width="93" height="20"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="53a2ac9a-a5ab-4098-a752-9ece0c616762" positionType="Float" stretchType="RelativeToTallestObject" x="471" y="0" width="84" height="20"/>
+					<box>
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band>
+				<staticText>
+					<reportElement uuid="ddf8eaa0-5c4f-479d-a5f4-11a2d50329ef" x="0" y="0" width="190" height="0"/>
+					<box>
+						<topPen lineWidth="0.25"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="87a78185-b89d-49ba-9a03-1290ea1f0525" positionType="Float" x="0" y="0" width="95" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Objetivos del Proyecto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="57ce668c-a30b-4808-98cb-2edc9195746b" positionType="Float" x="95" y="0" width="95" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd4144fa-8733-4417-a654-36e1fe8c2eed" positionType="Float" x="190" y="0" width="92" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Actividad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bfd90a3e-588f-41c6-903a-4ff8a023b1ef" positionType="Float" x="282" y="0" width="96" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Indicador]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c61cb669-2951-44a0-a011-f57ec7136aad" positionType="Float" x="378" y="0" width="93" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Medio de Verificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="166ed7e2-ed25-4ed5-aee2-d3e6f3d922f1" positionType="Float" x="471" y="0" width="84" height="36"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supuestos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8d684e0a-2ff5-40c9-acab-37736b8bd3cf" positionType="Float" stretchType="RelativeToTallestObject" x="282" y="0" width="96" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INDICADOR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="bfb414f2-6ab9-41e5-ac3a-e062d2dec663" positionType="Float" stretchType="RelativeToTallestObject" x="378" y="0" width="93" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MEDIO_VERIFICACION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5a6d8e5c-5c9c-4eca-9ed3-69c24bf2934c" positionType="Float" stretchType="RelativeToTallestObject" x="471" y="0" width="84" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SUPUESTOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f711df09-ad9e-418d-8e3b-6cc6ec56763c" stretchType="RelativeToBandHeight" x="190" y="0" width="92" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ACTIVIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="61fa1af5-6c02-422e-ba5d-f63072ed8481" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="95" height="20"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7af32075-01b6-46cb-ab4e-de3f43544e85" positionType="Float" stretchType="RelativeToTallestObject" x="95" y="0" width="95" height="20"/>
+				<box>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

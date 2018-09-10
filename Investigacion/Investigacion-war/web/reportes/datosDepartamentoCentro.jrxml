@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="datosDepartamentoCentro" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="13358fdf-47cd-4635-9cf4-288ff512a449">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT STVSUBJ.STVSUBJ_DESC,
+       STVMAJR.STVMAJR_DESC,
+       SEA_PROG_POSTGRADO.POSTPROG_DESCRIP,
+       SEA_DEPCENPROY.DEPCE_CONVOCATORIA,
+       SEA_LINEAINVES.LINEA_DESCIP,
+       SEA_GRUPINV.GRUPI_DESCRIP
+  FROM SEA_DEPCENPROY,
+       SATURN.STVSUBJ,
+       SATURN.STVMAJR,
+       SEA_PROG_POSTGRADO,
+       SEA_LINEAINVES,
+       SEA_GRUPINV
+ WHERE     (SEA_DEPCENPROY.STVSUBJ_CODE_DEPTO = STVSUBJ.STVSUBJ_CODE)
+       AND (SEA_DEPCENPROY.STVMAJR_CODE_CAR = STVMAJR.STVMAJR_CODE)
+       AND (SEA_DEPCENPROY.POSTPROG_ID = SEA_PROG_POSTGRADO.POSTPROG_ID)
+       AND (SEA_DEPCENPROY.LINEA_ID = SEA_LINEAINVES.LINEA_ID)
+       AND (SEA_DEPCENPROY.GRUPI_ID = SEA_GRUPINV.GRUPI_ID)
+       AND (SEA_DEPCENPROY.DATGEPROY_ID =$P{DATGEPROY_ID})]]>
+	</queryString>
+	<field name="STVSUBJ_DESC" class="java.lang.String"/>
+	<field name="STVMAJR_DESC" class="java.lang.String"/>
+	<field name="POSTPROG_DESCRIP" class="java.lang.String"/>
+	<field name="DEPCE_CONVOCATORIA" class="java.math.BigDecimal"/>
+	<field name="LINEA_DESCIP" class="java.lang.String"/>
+	<field name="GRUPI_DESCRIP" class="java.lang.String"/>
+	<group name="STVSUBJ_DESC">
+		<groupExpression><![CDATA[$F{STVSUBJ_DESC}]]></groupExpression>
+	</group>
+	<group name="STVMAJR_DESC">
+		<groupExpression><![CDATA[$F{STVMAJR_DESC}]]></groupExpression>
+	</group>
+	<group name="POSTPROG_DESCRIP">
+		<groupExpression><![CDATA[$F{POSTPROG_DESCRIP}]]></groupExpression>
+	</group>
+	<group name="DEPCE_CONVOCATORIA">
+		<groupExpression><![CDATA[$F{DEPCE_CONVOCATORIA}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="57" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="7a6b337d-78a2-48e5-ad4e-f13f9aa3757a" positionType="Float" mode="Opaque" x="0" y="37" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="447a2b8a-171e-46bc-9756-0bf1db556cdb" x="5" y="37" width="526" height="20" forecolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATOS DEPARTAMENTO/CENTRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4df9b178-cba8-4b8e-b474-24aabce428db" x="1" y="10" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[C.   DATOS DEPARTAMENTO/CENTRO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="916a66c7-b1aa-4b56-9bac-db11eba648a1" x="1" y="25" width="546" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="166" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="53c3306e-39ab-455f-85b4-4472fc60afd9" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="542" height="160" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" forecolor="#666666" backcolor="#FFFFFF"/>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b3a32419-8518-4cd4-83ae-035b473c6071" x="212" y="7" width="319" height="34"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STVSUBJ_DESC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ae33343d-0c2c-4019-91eb-78ddb9e60c84" x="13" y="7" width="181" height="34"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre del Departamento/Centro Responsable:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="93837803-51d1-4983-b8e8-42ab50bdb630" x="13" y="41" width="181" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Carrera: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b4f3ea89-ead3-4db4-b1ac-070891b1b8a5" x="212" y="41" width="319" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STVMAJR_DESC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fd446c9e-a0ce-4653-a547-092f79ebd114" x="13" y="61" width="181" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Programa de Postgrado:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="35f61133-2ce8-45e4-a400-1d3db6ef483e" x="212" y="61" width="319" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{POSTPROG_DESCRIP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="080dd3eb-8f2e-45a8-952a-62a5f5f7b67f" x="13" y="81" width="181" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No. Convocatoria:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4355a8ae-bd40-4768-bec6-6d5cc845df73" x="212" y="81" width="319" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEPCE_CONVOCATORIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c8497f64-06a1-4ce9-8f00-9a15b57d9871" x="13" y="101" width="181" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUB LÍNEA (Op):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6e91bd1f-6caf-4daf-abe8-5e7ea54c1a45" x="212" y="101" width="319" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{LINEA_DESCIP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="aa0471c0-a8a7-453b-8ae8-12e4bcdaff63" x="13" y="122" width="181" height="30"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grupos de Investigación Asociados (Op):]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="28aa6359-8174-4601-a338-918762b2641f" positionType="Float" x="212" y="122" width="319" height="30" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GRUPI_DESCRIP}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>

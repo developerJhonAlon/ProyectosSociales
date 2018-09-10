@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+            <p:panel id="panelBase" header="Cierre Proyecto #{cierreProyectosController.seguimFormatoSelected.sflId.sflTituloEspaniol}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold;margin-bottom: 80px">
+                <h:panelGrid columns="2" id="hpCabecera" >
+                    <p:selectBooleanButton id="value2" value="#{cierreProyectosController.botonInicio}" onLabel="Agregar" disabled="#{cierreProyectosController.botonInicio}" offLabel="Proyecto" onIcon="ui-icon-plus" offIcon="ui-icon-arrowreturnthick-1-w" style="width: 100px">
+                        <p:ajax update=":formPrincipal:panelBase,:formPrincipal:tabP" listener="#{cierreProyectosController.inicioProgramas}"/>
+                    </p:selectBooleanButton>
+                </h:panelGrid>
+                <p:panel id="inicio" visible="#{cierreProyectosController.botonInicio}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                    <p:dataTable id="dtSeguimientoF" value="#{cierreProyectosController.seguimientFormatoList}" var="segF" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                 emptyMessage="No se encontraron Resultados">
+                        <p:column headerText="Ord." style="width:5%;text-align: center">
+                            <h:outputText value="#{index + 1}"/>
+                        </p:column>
+                        <p:column headerText="Título Español" style="width: 20%; white-space: pre-line">
+                            <h:outputText value="#{segF.sflId.sflTituloEspaniol}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Título Ingles" style="width: 20%; white-space: pre-line">
+                            <h:outputText value="#{segF.sflId.sflTituloIngles}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Proyecto" style="width: 20%; white-space: pre-line">
+                            <h:outputText value="#{segF.sflId.datgeproyId.datgeproyTitulo}" style="text-transform: uppercase; white-space: pre-line"/>
+                        </p:column>
+                        <p:column headerText="Seleccione" style="width: 10%; text-align: center">
+                            <p:commandButton id="btnSeleccione" icon="ui-icon-circle-check" style="margin: 0; font-size: 11px"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Seleccione Proyecto" action="#{cierreProyectosController.seleccioneProyecto()}"
+                                             update=":formPrincipal:panelBase" process="@this">
+                                <f:setPropertyActionListener value="#{segF}" target="#{cierreProyectosController.seguimFormatoSelected}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:tabView id="tabP" scrollable="false" orientation="left" dynamic="true" rendered="#{!cierreProyectosController.botonInicio}" effect="slide" effectDuration="slow">
+                    <p:ajax event="tabChange" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" />
+                    <p:tab title="Acta de Liquidación del Proyecto" id="tabP1" disabled="#{cierreProyectosController.habilitaTab}">
+                        <h:panelGrid  columns="1" cellpadding="7" id="h1">
+                            <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" disabled="#{cierreProyectosController.validaVaciosP1}"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP,:formPrincipal:tabP,:formPrincipal:tabP,:formPrincipal:tabP:pInput1" action="#{cierreProyectosController.registraP1()}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="2" cellspacing="0" id="pInput1" style="text-align: left">
+                            <h:outputLabel for="proyInv" value="Nombre del Proyecto:" style="text-align: left">
+                                <p:dataList id="proyInv" value="#{cierreProyectosController.seguimientFormatoList}" var="nombProy" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{nombProy.sflId.sflTituloEspaniol}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                            <h:outputLabel for="objProy" value="Objetivo del Proyecto:" style="text-align: left">
+                                <p:dataList id="objProy" value="#{cierreProyectosController.szdtaObjProyList}" var="objPry" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{objPry.szdtaobjproyDescr}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel value=""/>
+                            <h:outputLabel for="fechas" value="Fechas:" style="text-align: left">
+                                <p:dataList  id="fechas" value="#{cierreProyectosController.seguimientFormatoList}" var="fech" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    <h:outputLabel value="Inicio :"/> &nbsp; &nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="#{fech.sflId.sflFechaInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputLabel>
+                                    &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="Finalizando :"/> &nbsp; &nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="#{fech.sflId.sflFechaFinaliza}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputLabel>
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                            <h:outputLabel for="montEsp" value="Presupuesto:" style="text-align: left">
+                                <p:dataList id="montEsp" value="#{cierreProyectosController.datGeneralProyList}" var="dtGenPry" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    <h:outputLabel value="Monto total del financiamiento proyecto ESPE:"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="#{dtGenPry.datgeproyMontoTotal}"><f:convertNumber minFractionDigits="2"/></h:outputLabel>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="Monto financiamiento Otras Instituciones:"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="#{dtGenPry.datgeproyMontoOtraInst}"><f:convertNumber minFractionDigits="2"/></h:outputLabel>
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                            <h:outputLabel for="patrocina" value="Patrocinador:" style="text-align: left"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <p:inputText id="patrocina" value="#{cierreProyectosController.patrocinador}" required="false" autocomplete="off" style="width: 350px">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP1}"/>
+                                </p:inputText>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                            <h:outputLabel for="presupTotal" value="Presupuesto de Ingresos:" style="text-align: left">
+                                <p:dataList id="presupTotal" value="#{cierreProyectosController.datGeneralProyList}" var="presupT" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    <h:outputLabel value="#{presupT.datgeproyMontoTotal + presupT.datgeproyMontoOtraInst }"><f:convertNumber minFractionDigits="2"/></h:outputLabel>
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                            <h:outputLabel for="costoEjec" value="Costo de Ejecución del Proyecto" style="text-align: left"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <pe:inputNumber id="costoEjec" value="#{cierreProyectosController.costoEjecucion}" required="false" style="width: 80px; text-align: right">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP1}" />
+                                </pe:inputNumber>
+                            </h:outputLabel>
+                            <h:outputLabel/>        
+                            <h:outputLabel for="entre" value="Entregables del Proyecto:" style="text-align: left">   
+                                <p:dataList id="entre" value="#{cierreProyectosController.objEntregablesList}" var="objEntr" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{objEntr.soeDescripcion}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3" cellpadding="5" cellspacing="0" style="text-align: left">
+                            <h:outputLabel/>
+                            <h:outputLabel/>
+                            <h:outputLabel/>
+                            <h:outputLabel for="bienes" value="Bienes a Favor de la Universidad de las Fuerzas Armadas ESPE:" style="text-align: left"/>
+                            <p:inputText id="bienes" value="#{cierreProyectosController.bienesUnivers}" required="false" autocomplete="off" style="width: 350px">
+                                <p:ajax event="keyup" update=":formPrincipal:tabP:Agregar" listener="#{cierreProyectosController.validarVaciosP11}" />
+                            </p:inputText>
+                            <p:commandButton id="Agregar" value="Agregar" disabled="#{cierreProyectosController.validaVaciosP11}"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Registra Bienes" update=":formPrincipal:tabP:Agregar,:formPrincipal:tabP:bienes,:formPrincipal:tabP:" action="#{cierreProyectosController.registraP11()}">
+                            </p:commandButton>      
+                        </h:panelGrid>
+                        <p:dataTable id="dataTBienes"  value="#{cierreProyectosController.bienProyList}" var="bienFav"
+                                     editable="true" style="width: 50%" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                     emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." style="width:1%">
+                                <h:outputText value="#{index + 1}" style="font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Descripción" style="width: 30%">
+                                <h:outputText value="#{bienFav.szdtabienproyDesc}" style="white-space: pre-line; text-transform: uppercase; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Fecha Ingreso" style="width: 10%">
+                                <h:outputText value="#{bienFav.szdtabienproyFechIngre}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small"><f:convertDateTime locale="es_EC" pattern="dd/MM/yyyy"/></h:outputText>
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                <p:commandButton id="btnEliminarBien" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                 process="@this" update=":formPrincipal:tabP:dataTBienes"
+                                                 action="#{cierreProyectosController.eliminarBienes()}">
+                                    <f:setPropertyActionListener value="#{bienFav}" target="#{cierreProyectosController.bienProySelected}"/>
+                                    <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+                       </p:dataTable>
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" style="text-align: left">
+                            <h:outputLabel for="coment" value="Comentarios:" style="text-align: left"/>
+                            <pe:ckEditor id="coment" value="#{cierreProyectosController.comentarios}" width="900" height="100" 
+                                          toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                          'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                          'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-', 
+                                          'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP1" />
+                            </pe:ckEditor>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Acta de Cierre y Entrega del Proyecto" id="tabP2" disabled="#{cierreProyectosController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="7" cellspacing="0" id="h2">
+                            <p:commandButton id="btnGrabarP2" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" disabled="#{cierreProyectosController.validaVaciosP2}"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP,:formPrincipal:tabP,:formPrincipal:tabP,:formPrincipal:tabP:pInput2" action="#{cierreProyectosController.registraP2()}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="2" cellspacing="0" id="pInput2" style="text-align: left">
+                            <h:outputLabel for="titulProy" value="Título del Proyecto:" style="text-align: left">
+                                <p:dataList id="titulProy" value="#{cierreProyectosController.seguimientFormatoList}" var="titPry" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{titPry.sflId.sflTituloEspaniol}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel/>
+                            <h:outputLabel for="fchPry" value="Fechas:" style="text-align: left">
+                                <p:dataList  id="fchPry" value="#{cierreProyectosController.seguimientFormatoList}" var="fchProy" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    <h:outputLabel value="Fecha de entrega del Proyecto:"/> &nbsp; &nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="#{fchProy.sflId.sflFechaPresenta}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputLabel>
+                                    &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="Fecha de inicio del Proyecto:"/> &nbsp; &nbsp;&nbsp;&nbsp;
+                                    <h:outputLabel value="#{fchProy.sflId.sflFechaInicio}"><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputLabel>
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel value=""/>
+                            <h:panelGrid columns="2" cellpadding="2" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="costoFinP" value="Costo Final del Proyecto en US$" style="text-align: left"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <pe:inputNumber id="costoFinP" value="#{cierreProyectosController.costoFinProyecto}" required="false" autocomplete="off" style="width: 80px; text-align: right">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP2" />
+                                    </pe:inputNumber>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </h:outputLabel>
+                                <!--
+                                <h:outputLabel for="costoEjec" value="Costo de Ejecución del Proyecto" style="text-align: left"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <pe:inputNumber id="costoEjec" value="#{cierreProyectosController.costoEjecucion}" required="false" style="width: 80px; text-align: right">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP1}" />
+                                </pe:inputNumber>
+                            </h:outputLabel>
+                                -->
+                                <h:outputLabel for="aporteFinP" value="Aporte final del Patrocinador US$" style="text-align: left"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <pe:inputNumber id="aporteFinP" value="#{cierreProyectosController.aporteFinPatrocinador}" required="false" autocomplete="off" style="width: 80px; text-align: right">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP2" listener="#{cierreProyectosController.validarVaciosP2}"/>
+                                    </pe:inputNumber>
+<!--                                    <p:inputText id="aporteFinP" value="#{cierreProyectosController.aporteFinPatrocinador}" required="false" autocomplete="off" style="width: 80px" onkeypress="return justNumbers(event);">
+                                        
+                                    </p:inputText>-->
+                                </h:outputLabel>
+                            </h:panelGrid>
+                            <h:outputLabel value=""/>
+                            <h:outputLabel for="entregP" value="Entregables generados por el Proyecto:" style="text-align: left">   
+                                <p:dataList id="entregP" value="#{cierreProyectosController.objEntregablesList}" var="objEntrProy" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{objEntrProy.soeDescripcion}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel value=""/>
+                            <h:outputLabel for="bienUni" value="Bienes a favor de la Universidad:" style="text-align: left">   
+                                <p:dataList id="bienUni" value="#{cierreProyectosController.bienProyList}" var="bienU" style="width: 50%; white-space: pre-line">
+                                    <f:facet name="header"></f:facet>
+                                    #{bienU.szdtabienproyDesc}
+                                </p:dataList>
+                            </h:outputLabel>
+                            <h:outputLabel value=""/>
+                            <h:panelGrid columns="1" cellpadding="5" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="logro" value="Logros del Proyecto:" style="text-align: left"/>
+                                <pe:ckEditor id="logro" value="#{cierreProyectosController.logrosProy}"  width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-',
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP2" listener="#{cierreProyectosController.validarVaciosP2}"/>
+                                </pe:ckEditor>
+                            </h:panelGrid>
+                            <h:outputLabel value=""/>
+                            <h:panelGrid columns="1" cellpadding="5" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="apliResult" value="Posibles Aplicaciones de los Resultados:" style="text-align: left"/>
+                                <pe:ckEditor id="apliResult" value="#{cierreProyectosController.apliResulProy}"  width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-',
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP2" listener="#{cierreProyectosController.validarVaciosP2}"/>
+                                </pe:ckEditor>
+                            </h:panelGrid>
+                            <h:outputLabel/>
+                            <h:panelGrid columns="3" cellpadding="5" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="benefiProy" value="Beneficiarios del Proyecto:" style="text-align: left"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p:inputText id="benefiProy" value="#{cierreProyectosController.beneficiarioPry}" required="false" autocomplete="off" style="width: 450px; text-transform: uppercase">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnAgregaB" listener="#{cierreProyectosController.validarVaciosP21}"/>
+                                    </p:inputText>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p:commandButton id="btnAgregaB" value="Agregar" disabled="#{cierreProyectosController.validaVaciosP21}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Agregar Beneficiarios" update=":formPrincipal:tabP:btnAgregaB,:formPrincipal:tabP:benefiProy,:formPrincipal:tabP" action="#{cierreProyectosController.registraP21()}">
+                                    </p:commandButton>
+                                </h:outputLabel>
+                            </h:panelGrid>
+                            <h:outputLabel/>
+                            <p:dataTable id="dataTBenefiario" value="#{cierreProyectosController.beneficiaProyList}" var="benefPry"
+                                         editable="true" style="width: 80%" paginator="false" rows="10" rowIndexVar="index" resizableColumns="true" 
+                                         emptyMessage="No se encontraron resultados">
+                                <p:column headerText="Ord." style="width:1%">
+                                    <h:outputText value="#{index + 1}" style="font-size: x-small"/>
+                                </p:column>
+                                <p:column headerText="Beneficiario del Proyecto" style="width: 30%">
+                                    <h:outputText value="#{benefPry.szdtabeneproyNombres}" style="white-space: pre-line; text-transform: uppercase; font-size: x-small"/>
+                                </p:column>
+                                <p:column headerText="Fecha Ingreso" style="width: 10%">
+                                    <h:outputText value="#{benefPry.szdtabeneproyFechaCrea}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small"><f:convertDateTime locale="es_EC" pattern="dd/MM/yyyy"/></h:outputText>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                    <p:commandButton id="btnEliminarBenef" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dataTBenefiario"
+                                                     action="#{cierreProyectosController.eliminarBeneficiario()}">
+                                        <f:setPropertyActionListener value="#{benefPry}" target="#{cierreProyectosController.beneficiaProySelected}" />
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <h:outputLabel/>
+                            <h:panelGrid columns="1" cellpadding="5" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="comentG" value="Comentarios Generales:" style="text-align: left"/>
+                                <pe:ckEditor id="comentG" value="#{cierreProyectosController.comentGeneral}"  width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-',
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP2" listener="#{cierreProyectosController.validarVaciosP2}"/>
+                                </pe:ckEditor>
+                            </h:panelGrid>
+                            <h:outputLabel value=""/>
+                            <h:panelGrid columns="1" cellpadding="5" cellspacing="0" style="text-align: left">
+                                <h:outputLabel for="documS" value="Documentos de Soporte:" style="text-align: left"/>
+                                <pe:ckEditor id="documS" value="#{cierreProyectosController.documentSoport}"  width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-',
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP2" listener="#{cierreProyectosController.validarVaciosP2}"/>
+                                </pe:ckEditor>
+                            </h:panelGrid>
+                            <h:outputLabel/>
+                            <h:panelGrid columns="1" cellpadding="5" cellspacing="0" style="text-align: justify">
+                                <p:dataTable id="dataTPresupXPartida" value="#{cierreProyectosController.presupestoXPartidaList}" var="presupXP"
+                                             editable="true" style="width: 80%" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                             emptyMessage="No se encontraron resultados">
+                                    <p:ajax event="rowEdit" listener="#{cierreProyectosController.onRowEditP2}" partialSubmit="true"/>
+                                    <p:ajax event="rowEditCancel" listener="#{cierreProyectosController.onRowCancelP2}" partialSubmit="true"/>
+                                    <p:column headerText="Ord." style="width:1%">
+                                        <h:outputText value="#{index + 1}" style="font-size: x-small"/>
+                                    </p:column>
+                                    <p:column headerText="Partidas Presupuestarias Asignadas" style="width: 30%; white-space: pre-line">
+                                        <h:outputText value="#{presupXP.scpId.scpNombre}" style="white-space: pre-line; text-transform: uppercase; font-size: x-small"/>
+                                    </p:column>
+                                    <p:column headerText="Valor" style="width: 8%; white-space: pre-line">
+                                        <h:outputText value="#{presupXP.spxpValor}" style="text-align: right" >
+                                            <f:convertNumber minFractionDigits="2"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Partidas Utilizadas SI/NO" style="white-space: pre-line; width: 18%; font-size: x-small">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{presupXP.spxpUtilizado}" style="text-transform: uppercase;width: 100%; font-size: x-small"/></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectOneRadio value="#{presupXP.spxpUtilizado}">
+                                                    <f:selectItem itemLabel="SI" itemValue="S"/>
+                                                    <f:selectItem itemLabel="NO" itemValue="N"/>
+                                                </p:selectOneRadio>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Valor Utilizado" style="width: 8%; white-space: pre-line">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{presupXP.spxpValorUtilizado}" style="text-align: right"><f:convertNumber minFractionDigits="2"/></h:outputText></f:facet>
+                                            <f:facet name="input"><p:inputText id="moldelInput22" value="#{presupXP.spxpValorUtilizado}" style="width: 90%"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Editar" style="width: 5%">
+                                        <p:rowEditor/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Informe de Cierre Técnico de Proyectos de Investigación" id="tabP3" disabled="#{cierreProyectosController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="7" cellspacing="0" id="h3">
+                            <p:commandButton id="btnGrabarP3" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" 
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP,:formPrincipal:tabP,:formPrincipal:tabP,:formPrincipal:tabP:pInput3" action="#{cierreProyectosController.registraP3()}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="7" cellspacing="0" id="pInput3" style="text-align: justify">
+                            <p:outputLabel for="conclFech" value="El proyecto se concluyó en las fechas de vigencia antes indicadas:" style="text-align: left"/>
+                            <p:selectOneRadio id="conclFech" value="#{cierreProyectosController.concluyeFecha}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <p:ajax event="change" update=":formPrincipal:tabP:pGrid1,:formPrincipal:tabP:btnGrabarP3" listener="#{cierreProyectosController.validarVaciosP3}"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                        <h:panelGrid id="pGrid1" columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                            <p:outputLabel value="Justificar en caso de respuesta negativa(adjuntar documento de respaldo)" style="font-size: xx-small; text-align: left" rendered="#{cierreProyectosController.controlConcluye}"/>
+                            <p:outputLabel/>
+                            <p:inputTextarea id="justfConcl"  value="#{cierreProyectosController.justificaNo}" rows="2" cols="150" autoResize="true" maxlength="15000" rendered="#{cierreProyectosController.controlConcluye}">
+                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{cierreProyectosController.validarVaciosP3}"/>
+                            </p:inputTextarea>
+                            <p:outputLabel/>
+                            <p:outputLabel value="Documento de Respaldo (PDF)" rendered="#{cierreProyectosController.controlConcluye}" />
+                            <p:outputLabel value="#{cierreProyectosController.nomFile1}"/>
+                            <p:outputLabel/>
+                            <left>
+                                <p:fileUpload fileUploadListener="#{cierreProyectosController.handleFileUploadP3}"  mode="advanced" dragDropSupport="false" style="width: 250px; text-align: left"
+                                          update=":formPrincipal:tabP:btnGrabarP3" label="Seleccione Documento" sizeLimit="10000000" auto="true" rendered="#{cierreProyectosController.controlConcluye}"/>
+                            </left>
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                            <p:outputLabel for="utlPresp" value="Utilizó la Totalidad del Presupuesto:" style="text-align: left"/>
+                            <p:selectOneRadio id="utlPresp" value="#{cierreProyectosController.utilizaPresup}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <p:ajax event="change" update=":formPrincipal:tabP:pGrid2,:formPrincipal:tabP:btnGrabarP3" listener="#{cierreProyectosController.validarVaciosP3}"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                        <h:panelGrid id="pGrid2" columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                            <p:outputLabel value="Justificar en caso que no haya sido utilizada la totalidad del presupuesto(adjuntar documento de respaldo)" style="font-size: xx-small; text-align: left" rendered="#{cierreProyectosController.controUtilizaPresp}"/>
+                            <p:outputLabel/>
+                            <p:inputTextarea id="utilizPresp" value="#{cierreProyectosController.justificaPrespUtilzd}" rows="2" cols="150" autoResize="true" maxlength="15000" rendered="#{cierreProyectosController.controUtilizaPresp}">
+                                <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{cierreProyectosController.validarVaciosP3}"/>
+                            </p:inputTextarea>
+                            <p:outputLabel/>
+                            <p:outputLabel value="Documento de Respaldo (PDF)" rendered="#{cierreProyectosController.controUtilizaPresp}"/>
+                            <p:outputLabel value="#{cierreProyectosController.nomFile2}"/>
+                            <p:outputLabel/>
+                            <left>
+                                <p:fileUpload fileUploadListener="#{cierreProyectosController.handleFileUploadP31}"  mode="advanced" dragDropSupport="false" style="width: 250px; text-align: left"
+                                              update=":formPrincipal:tabP:btnGrabarP3" label="Seleccione Documento" sizeLimit="10000000" auto="true" rendered="#{cierreProyectosController.controUtilizaPresp}"/>
+                            </left>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Desarrollo del Proyecto" id="tabP5" disabled="#{cierreProyectosController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="5">
+                            <p:commandButton id="btnGrabarP5" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP:btnGrabarP5" action="#{cierreProyectosController.registraP5()}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <right>
+                            <h:panelGrid columns="1" cellspacing="0" cellpadding="5"  id="h5">
+                                <p:outputLabel for="resultAlc" value="Resultados alcanzados/Productos obtenidos/Desarrollo de Protocolos"/>
+                                <pe:ckEditor id="resultAlc" value="#{cierreProyectosController.resultdAlc}" width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-', 
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP5}"/>
+                                </pe:ckEditor>
+                                <p:outputLabel for="factFacil" value="Describir factores que facilitaron el desarrollo del proyecto"/>
+                                <pe:ckEditor id="factFacil" value="#{cierreProyectosController.factorFacil}" width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-', 
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP5}"/>
+                                </pe:ckEditor>
+                                <p:outputLabel for="factDific" value="Describir factores que dificultaron el desarrollo del proyecto"/>
+                                <pe:ckEditor id="factDific" value="#{cierreProyectosController.factorDific}" width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-', 
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP5}"/>
+                                </pe:ckEditor>
+                                <p:outputLabel for="coordActiv" value="Describir la coordinación de actividades del trabajo realizado entre Departamentos, Instituciones o Grupos "/>
+                                <pe:ckEditor id="coordActiv" value="#{cierreProyectosController.coordinActiv}" width="900" height="100" 
+                                             toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                             'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                             'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-', 
+                                             'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                    <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP1" listener="#{cierreProyectosController.validarVaciosP5}"/>
+                                </pe:ckEditor>
+                            </h:panelGrid>
+                        </right>
+                    </p:tab>
+                    <p:tab title="Análisis general de la participación de los estudiantes" id="tabP6"  disabled="#{cierreProyectosController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="5" cellspacing="0" id="h6">
+                            <p:commandButton id="btnAgregarP6" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Agregar Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6" action="#{cierreProyectosController.agregarP6()}" rendered="#{!cierreProyectosController.controlGrabarP6}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:panel id="p6" visible="#{cierreProyectosController.controlGrabarP6}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                            <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                <p:commandButton id="btnGrabarP6" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left" disabled="#{cierreProyectosController.validaVaciosP6}"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Graba Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6,:formPrincipal:tabP:dtTEstudiant,:formPrincipal:tabP:pInput6" action="#{cierreProyectosController.registraP6()}">
+                                </p:commandButton>
+                                <p:commandButton id="btnCancelarP6" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0;font-size: 11px;float: left"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Cancela Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6" action="#{cierreProyectosController.cancelarP6}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" cellpadding="5" cellspacing="0" id="pInput6" style="text-align: left">
+                                <h:outputLabel for="estud" value="Estudiante:" style="text-align: left"/>
+                                <p:selectOneMenu id="estud" value="#{cierreProyectosController.desempEstudiante}" required="false" style="width: 350px" >
+                                    <f:selectItem itemLabel="Seleccione Estudiante" itemValue="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{cierreProyectosController.estudiantesFormatoList}" var="evalEst" itemLabel="#{evalEst.usuId.usuApellidos} #{evalEst.usuId.usuNombres}" itemValue="#{evalEst.sesfId}"/>
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP6" listener="#{cierreProyectosController.validarVaciosP6}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel for="evaluaEst" value="Evaluación general del desempeño de cada estudiante dentro del proyecto de investigación" style="text-align: left"/>
+                                <p:selectOneRadio id="evaluaEst" value="#{cierreProyectosController.evaluaEstudiante}" required="false" style="width: 350px" layout="grid"  columns="3">
+                                    <f:selectItems value="#{cierreProyectosController.parametrosDetList}" var="parEval" itemLabel="#{parEval.prdDescripcion}" itemValue="#{parEval.prdId}" />
+                                    <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP6" listener="#{cierreProyectosController.validarVaciosP6}"/>
+                                </p:selectOneRadio>
+                                <h:outputLabel for="analisisEst" value="Análisis de Participación" />
+                                <p:inputTextarea id="analisisEst" rows="2" cols="150" autoResize="true" maxlength="3900" value="#{cierreProyectosController.analisisEvaluaEst}">
+                                    <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP6" listener="#{cierreProyectosController.validarVaciosP6}"/>
+                                </p:inputTextarea>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable id="dtTEstudiant" value="#{cierreProyectosController.evalEstudianteList}" var="analisEst"
+                                     editable="false" style="width: auto" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            <p:ajax event="rowEdit" listener="#{cierreProyectosController.onRowEditP7}" partialSubmit="true"/>
+                            <p:ajax event="rowEditCancel" listener="#{cierreProyectosController.onRowCancelP7}" partialSubmit="true"/>
+                            <p:column headerText="Ord." style="width: 3%; font-size: x-small">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Estudiante" style="width: 30%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{analisEst.sesfId.usuId.usuApellidos} #{analisEst.sesfId.usuId.usuNombres}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Evaluación" style="width: 15%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{analisEst.prdId.prdDescripcion}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Análisis de la participación de Estudiantes" style="width: 30%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{analisEst.szdtaevalestAnalpa}" style="width: 100%; font-size: x-small; white-space: pre-line"/>
+                            </p:column>
+                            <!--<p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>-->
+                            <p:column headerText="Eliminar" style="width: 5%;text-align:center">
+                                <p:commandButton id="btnEliminarP6" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                 process="@this" update=":formPrincipal:tabP:dtTEstudiant"
+                                                 action="#{cierreProyectosController.eliminarP6()}">
+                                    <f:setPropertyActionListener value="#{analisEst}" target="#{cierreProyectosController.evalEstudianteSelected}"/>
+                                    <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Cantidad de Producción" id="tabP7" disabled="#{cierreProyectosController.habilitaTab}">
+                        <p:dataTable id="dtTProduccionProy" value="#{cierreProyectosController.produProyList}" var="prodPry"
+                                     editable="true" style="width: auto" paginator="true" rows="14" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            <p:ajax event="rowEdit" listener="#{cierreProyectosController.onRowEditP7}" partialSubmit="true"/>
+                            <p:ajax event="rowEditCancel" listener="#{cierreProyectosController.onRowCancelP7}" partialSubmit="true"/>
+                            <p:column headerText="Ord." style="width: 3%; font-size: x-small">
+                                <h:outputText value="#{index + 1}"/>
+                            </p:column>
+                            <p:column headerText="Producto" style="width: 30%;white-space: pre-line">
+                                <h:outputText value="#{prodPry.szdtacantprodCode.szdtacantprodDesc}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Cantidad" style="width: 10%;white-space: pre-line">
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{prodPry.szdtaproduproyCant}" style="text-transform: uppercase; text-align: right"><f:convertNumber minFractionDigits="0" /></h:outputText></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInpunt71" value="#{prodPry.szdtaproduproyCant}" style="width: 78%; white-space: pre-line; text-align: right"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Editar" style="width: 5%">
+                                <p:rowEditor/>
+                            </p:column>
+                        </p:dataTable>
+                        <!--
+                        <p:dataTable id="dtTEstudiant" value="#{cierreProyectosController.evalEstudianteList}" var="analisEst"
+                                     editable="false" style="width: auto" paginator="true" rows="10" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            
+                                
+                            </p:column>
+                            
+                                <h:outputText value="#{analisEst.sesfId.usuId.usuApellidos} #{analisEst.sesfId.usuId.usuNombres}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Evaluación" style="width: 15%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{analisEst.prdId.prdDescripcion}" style="width: 100%; font-size: x-small"/>
+                            </p:column>
+                            <p:column headerText="Análisis de la participación de Estudiantes" style="width: 30%;white-space: pre-line; font-size: x-small">
+                                <h:outputText value="#{analisEst.szdtaevalestAnalpa}" style="width: 100%; font-size: x-small; white-space: pre-line"/>
+                            </p:column>
+                            
+                                
+                            </p:column>
+                            <p:column headerText="Eliminar" style="width: 5%;text-align:center">
+                                <p:commandButton id="btnEliminarP6" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                 process="@this" update=":formPrincipal:tabP:dtTEstudiant"
+                                                 action="#{cierreProyectosController.eliminarP6()}">
+                                    <f:setPropertyActionListener value="#{analisEst}" target="#{cierreProyectosController.evalEstudianteSelected}"/>
+                                    <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        -->
+                    </p:tab>
+                    <p:tab title="Conclusiones y Recomendaciones de la Ejecución del Proyecto" id="tabP8" disabled="#{cierreProyectosController.habilitaTab}">
+                        <h:panelGrid columns="1" cellpadding="5">
+                            <p:commandButton id="btnGrabarP8" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left "
+                                             onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                             title="Graba Información" update=":formPrincipal:tabP:btnGrabarP8" action="#{cierreProyectosController.registraP8()}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellspacing="0" cellpadding="5"  id="h8">
+                            <p:outputLabel for="concluRec" value="Conclusiones y Recomendaciones de la Ejecución del Proyecto"/>
+                            <pe:ckEditor id="concluRec" value="#{cierreProyectosController.conclusiones}" width="900" height="100" 
+                                         toolbar="[['SelectAll','-', 'Table' ,'Image', 'HorizontalRule','-' ,'Cut','Copy','Paste','-', 'Bold','Underline',
+                                         'Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' , '-' , 
+                                         'NumberedList', 'BulletedList', 'Outdent' , 'Indent', '-', 
+                                         'Styles', 'Format','Font','FontSize','TextColor','BGColor']]">
+                                <p:ajax event="save" update=":formPrincipal:tabP:btnGrabarP8" listener="#{cierreProyectosController.validarVaciosP8}"/>
+                            </pe:ckEditor>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

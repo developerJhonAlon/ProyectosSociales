@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportGrupNotasConceptuales_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="eee0a6f3-a0da-4f3a-95bc-ae7ed59f6f7c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  SEA_ZONA_PLANIFICACION."ZOP_NOMBRE_LARGO" AS SEA_ZONA_PLANIFICACION_ZOP_NOM,
+        SEA_PROVINCIA."PRO_NOMBRE" AS SEA_PROVINCIA_PRO_NOMBRE,
+        SEA_CANTON."CAN_NOMBRE" AS SEA_CANTON_CAN_NOMBRE
+
+FROM   SEA_DAT_GENERAL_PROY,
+       SEA_COBERTURA,
+       SEA_ZONA_DETALLE,
+       SEA_ZONA_PLANIFICACION,
+       SEA_PROVINCIA,
+       SEA_CANTON
+ WHERE     (SEA_COBERTURA.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_ZONA_DETALLE.COBERT_ID = SEA_COBERTURA.COBERT_ID)
+       AND (SEA_ZONA_DETALLE.ZOP_ID = SEA_ZONA_PLANIFICACION.ZOP_ID(+))
+       AND (SEA_ZONA_DETALLE.PRO_ID = SEA_PROVINCIA.PRO_ID(+))
+       AND (SEA_ZONA_DETALLE.CAN_ID = SEA_CANTON.CAN_ID(+))
+       AND (SEA_DAT_GENERAL_PROY."DATGEPROY_ID" = $P{DATGEPROY_ID})
+ORDER BY SEA_ZONA_PLANIFICACION."ZOP_NOMBRE_LARGO"]]>
+	</queryString>
+	<field name="SEA_ZONA_PLANIFICACION_ZOP_NOM" class="java.lang.String"/>
+	<field name="SEA_PROVINCIA_PRO_NOMBRE" class="java.lang.String"/>
+	<field name="SEA_CANTON_CAN_NOMBRE" class="java.lang.String"/>
+	<group name="provincia">
+		<groupExpression><![CDATA[$F{SEA_PROVINCIA_PRO_NOMBRE}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="8175618d-47fe-4b7a-b2ce-8ad2bf557014" x="0" y="-1" width="542" height="20"/>
+					<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{SEA_PROVINCIA_PRO_NOMBRE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="b45eb775-075b-44ee-af9e-721344c4330c" positionType="Float" mode="Opaque" x="0" y="34" width="542" height="20" forecolor="#666666" backcolor="#999999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="3be7ea67-274e-418a-8661-958f6e85465c" positionType="Float" x="11" y="34" width="516" height="20" forecolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COBERTURA DE EJECUCIÓN DEL PROYECTO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="9dec193a-d540-4f58-8b17-76e3742c5fc8" x="0" y="26" width="546" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="9cd1337e-7af2-4dfb-9b7e-b2b395943a52" positionType="Float" x="0" y="11" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[B.   LOCALIZACIÓN GEOGRAFICA DEL PROYECTO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d706f123-b2ae-4fa3-93da-6d6623c4cf2b" x="146" y="0" width="396" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SEA_CANTON_CAN_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9b40c658-6b1e-4aad-b507-bdeb858ffc50" x="0" y="-1" width="542" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SEA_ZONA_PLANIFICACION_ZOP_NOM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

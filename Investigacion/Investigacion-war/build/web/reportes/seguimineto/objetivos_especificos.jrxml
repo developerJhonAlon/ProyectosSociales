@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="objetivos_especificos" language="groovy" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="5ebba6cb-ed00-4b0c-91c4-6bfd8d910c0d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+      ' ' ,
+       SZDTAOBJPROY.SZDTAOBJPROY_DESCR "DESCR OBJ",
+       ' ' "DESC ACTIVIDADES",
+       SEA_PARAMETROS_DET.PRD_ID,
+       ' ' "RESULTADOS",
+       SEA_SEGUIMIENTO_FORMATO.SSEF_ANALISIS
+  FROM SEA_SEGUIMIENTO_FORMATO,
+       SEA_FORMATO_LARGO,
+       SZDTAOBJPROY,
+       SEA_PARAMETROS_DET
+ WHERE     (SEA_SEGUIMIENTO_FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SZDTAOBJPROY.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SZDTAOBJPROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})
+       AND (SEA_PARAMETROS_DET.PRD_ID = 304)
+UNION
+SELECT '',
+
+         SEA_PARAMETROS_DET.PRD_DESCRIPCION,
+         '',
+       SZDTAOBJPROY.SZDTAOBJPROY_DESCR,
+       SEA_PARAMETROS_DET.PRD_ID,
+        SZDTAOBJPROY.SZDTAOBJPROY_RESULT,
+        SEA_SEGUIMIENTO_FORMATO.SSEF_ANALISIS
+  FROM SEA_SEGUIMIENTO_FORMATO,
+       SEA_FORMATO_LARGO,
+       SZDTAOBJPROY,
+       SEA_PARAMETROS_DET
+ WHERE     (SEA_SEGUIMIENTO_FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SZDTAOBJPROY.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SZDTAOBJPROY.PRD_ID = SEA_PARAMETROS_DET.PRD_ID)
+       AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})
+       AND (SEA_PARAMETROS_DET.PRD_ID = 308)]]>
+	</queryString>
+	<field name="PRD_DESCRIPCION" class="java.lang.String"/>
+	<field name="&apos;&apos;" class="java.lang.String"/>
+	<field name="DESCR OBJ" class="java.lang.String"/>
+	<field name="DESC ACTIVIDADES" class="java.lang.String"/>
+	<field name="PRD_ID" class="java.math.BigDecimal"/>
+	<field name="RESULTADOS" class="java.lang.String"/>
+	<field name="SSEF_ANALISIS" class="java.lang.String"/>
+	<group name="objetivos">
+		<groupExpression><![CDATA[$F{DESCR OBJ}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement uuid="1a5cf363-304c-46d5-a949-77e1859dfbf3" positionType="Float" x="0" y="0" width="168" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Objetivos específicos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6cfd4708-7b8a-48eb-9644-663705f382ee" positionType="Float" x="168" y="0" width="202" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Actividades por objetivos (Cronograma aprobado)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d08bd324-2c57-41bc-8b8e-c90ac14731e8" positionType="Float" x="370" y="0" width="185" height="15"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resultados alcanzados/Productos obtenidos/Desarrollo de Protocolos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="533fe8d5-800f-4e0a-8ac5-46f0f7a4a42d" positionType="Float" stretchType="RelativeToTallestObject" x="168" y="0" width="202" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESC ACTIVIDADES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6f69cc2b-3607-4965-b078-0dc52971f86d" positionType="Float" stretchType="RelativeToTallestObject" x="370" y="0" width="185" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RESULTADOS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fe840386-a24a-4fb7-be99-59cdb1f3b9d8" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="168" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCR OBJ}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="21dd9627-100f-4332-92a4-64df23ac50d2" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="15" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SSEF_ANALISIS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="seguimiento" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="202c844f-fd0e-427c-937b-ffbc1aa571d6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<parameter name="DATGEPROY_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Administrador\\Documents\\NetBeansProjects\\APP\\investigacion5\\trunk\\Investigacion\\Investigacion-war\\web\\reportes\\seguimineto\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="STVCAMP_CODE" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_TITULO "NOMBRE PROYECTO",
+       SEA_SEGUIMIENTO_FORMATO.SSEF_CODIGO_PROY "CODIGO PROYECTO",
+       SEG_USUARIO.USU_APELLIDOS||'   '||SEG_USUARIO.USU_NOMBRES "NOMBRES",
+       STVSUBJ.STVSUBJ_DESC "DEPARTAMENTO/ CENTRO",
+       SEA_SEGUIMIENTO_FORMATO.SSEF_INFORME "INFORME No",
+       SEA_SEGUIMIENTO_FORMATO.SSFE_FECHA_DESDE,
+       SEA_SEGUIMIENTO_FORMATO.SSFE_FECHA_HASTA,
+       SEA_DAT_GENERAL_PROY.DATGEPROY_MONTO_TOTAL "PRESUPUESTO ASIGNADO",
+       SEA_DAT_GENERAL_PROY.DATGEPROY_MONTO_OTRA_INST "PRESUPUESTO EXTERNO",
+       SEA_SEGUIMIENTO_FORMATO.SSFE_FINAN_DEVENGADO "FINANCIAMIENTO DEVENGADO",
+       LINEA.LINEA_DESCIP "LINEA INVESTIGACION",
+       SEA_LINEAINVES.LINEA_DESCIP "SUBLINEA",
+       SEA_GRUPINV.GRUPI_DESCRIP "GRUPO INVESTIGACION"
+  FROM SEA_DAT_GENERAL_PROY,
+       SEA_FORMATO_LARGO,
+       SEA_SEGUIMIENTO_FORMATO,
+       SEA_RESPONSABLE_PROG,
+       SATURN.STVSUBJ,
+       SEG_USUARIO,
+       SEA_DEPCENPROY,
+       SEA_LINEAINVES,
+       SEA_LINEAINVES LINEA,
+       SEA_GRUPINV
+ WHERE (SEA_FORMATO_LARGO.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_SEGUIMIENTO_FORMATO.SFL_ID = SEA_FORMATO_LARGO.SFL_ID)
+       AND (SEA_RESPONSABLE_PROG.DATGEPROY_ID =
+               SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_RESPONSABLE_PROG.STVSUBJ_CODE_DPTO = STVSUBJ.STVSUBJ_CODE)
+       AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID)
+       AND (SEA_DEPCENPROY.DATGEPROY_ID = SEA_DAT_GENERAL_PROY.DATGEPROY_ID)
+       AND (SEA_DEPCENPROY.LINEA_ID = SEA_LINEAINVES.LINEA_ID)
+       AND (LINEA.LINEA_ID = SEA_LINEAINVES.LINEA_ID_PADRE )
+       AND (SEA_DEPCENPROY.GRUPI_ID = SEA_GRUPINV.GRUPI_ID)
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '0')
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO != '1')
+       AND (SEA_RESPONSABLE_PROG.TIPRES_ID = 3)
+       AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = $P{DATGEPROY_ID})
+       AND(SEA_FORMATO_LARGO.SFL_ID =$P{SFL_ID})]]>
+	</queryString>
+	<field name="NOMBRE PROYECTO" class="java.lang.String"/>
+	<field name="CODIGO PROYECTO" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="DEPARTAMENTO/ CENTRO" class="java.lang.String"/>
+	<field name="INFORME No" class="java.lang.String"/>
+	<field name="SSFE_FECHA_DESDE" class="java.sql.Timestamp"/>
+	<field name="SSFE_FECHA_HASTA" class="java.sql.Timestamp"/>
+	<field name="PRESUPUESTO ASIGNADO" class="java.math.BigDecimal"/>
+	<field name="PRESUPUESTO EXTERNO" class="java.math.BigDecimal"/>
+	<field name="FINANCIAMIENTO DEVENGADO" class="java.math.BigDecimal"/>
+	<field name="LINEA INVESTIGACION" class="java.lang.String"/>
+	<field name="SUBLINEA" class="java.lang.String"/>
+	<field name="GRUPO INVESTIGACION" class="java.lang.String"/>
+	<group name="HEADER">
+		<groupExpression><![CDATA[$V{PAGE_NUMBER}]]></groupExpression>
+		<groupHeader>
+			<band height="233">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="c3dabdc1-3ddb-48c3-908b-12670789ed4e"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[1. INFORMACIÓN DEL PROYECTO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="33" width="401" height="15" uuid="a2a0a094-a321-4b8d-b1f4-9e8f953da2da"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre del Proyecto:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="401" y="33" width="154" height="15" uuid="bc97d73e-b718-4b6d-83aa-af2d5ed7b134"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Código del Proyecto:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="48" width="401" height="15" uuid="46bbbc05-e196-4caa-911c-a1a430a4558e"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRE PROYECTO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="401" y="48" width="154" height="15" uuid="a39c57e4-db60-4e52-a54f-e759ad553d4f"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CODIGO PROYECTO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="63" width="555" height="15" uuid="87697a9a-27c7-49c3-bdba-416e54c92c91"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre del Director del Proyecto:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="78" width="555" height="15" uuid="b3111d68-6889-4fdc-9b37-a2cf99491ea1"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="93" width="76" height="15" uuid="793f77a4-c71f-472a-91c7-adef0f145fe9"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Informe No.: ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="76" y="93" width="55" height="15" uuid="7e2d10ba-45a4-4fa5-a4c9-ec896569d5d3"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{INFORME No}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="131" y="93" width="118" height="15" uuid="1bd60554-ee0a-402c-861d-bf5fb64b249c"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Periodeo del Informe:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="249" y="93" width="88" height="15" uuid="db87c1ca-331b-4483-aea4-e00c104e2f35"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SSFE_FECHA_DESDE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="375" y="93" width="88" height="15" uuid="bc586a9d-9961-48e9-a6fa-da9e6cc3a3ac"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SSFE_FECHA_HASTA}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="337" y="93" width="38" height="15" uuid="ef65c430-07f9-408e-8696-8948dc6a9122"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[a]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="463" y="93" width="92" height="15" uuid="0e064a07-44f2-4edb-be2a-6c0079185592"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="108" width="185" height="15" uuid="5b2a1599-b510-4744-a4b2-246382f5b433"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Presupuesto Asignado: ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="185" y="108" width="185" height="15" uuid="9176f5eb-5ea0-4bee-8e7b-2bbb8e743b8d"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Presupuesto Externo (en caso de que exista): ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="370" y="108" width="185" height="15" uuid="a0e4549f-88cf-4efa-8320-9ca9fd95c994"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Financiamiento Devengado: ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="123" width="54" height="15" uuid="d8c9ad37-c15f-488a-8f87-a490ac1f40ee"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[USD.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="185" y="123" width="54" height="15" uuid="ddc6d7e9-65ae-4210-acbe-39d9bf03c370"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[USD.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="370" y="123" width="54" height="15" uuid="dbca23c4-7906-4661-a35b-97b8c839c6c9"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[USD.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="54" y="123" width="131" height="15" uuid="791e5435-edcc-47e2-8eaf-1387444e9133"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRESUPUESTO ASIGNADO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="237" y="123" width="133" height="15" uuid="c72938e8-03da-4306-bb16-aa091b2ddb7e"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRESUPUESTO EXTERNO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="424" y="123" width="131" height="15" uuid="71a926de-fbaf-4c06-ae38-0160d636ab17"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FINANCIAMIENTO DEVENGADO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="138" width="185" height="15" uuid="398e4973-752a-4405-8fbd-8653d7a0db9b"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Línea de investigación: ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="185" y="138" width="185" height="15" uuid="e0d8403f-7b78-4910-882d-7d0bb16cead8"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sublínea de investigación:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="370" y="138" width="185" height="15" uuid="299a391c-0e6b-4744-b5af-7db9c089fe04"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Grupo de Investigación:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="153" width="185" height="15" uuid="9ae52bed-ab29-4152-908f-a5d94ab4d256"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LINEA INVESTIGACION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="185" y="153" width="185" height="15" uuid="b89f8e53-33ae-43b2-bbc6-79b07c3a977f"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SUBLINEA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="370" y="153" width="185" height="15" uuid="18169dec-d094-4f68-b56a-9551db3df1db"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{GRUPO INVESTIGACION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="168" width="555" height="15" uuid="6fe913d0-7202-4c5a-b68d-cc57aa5eb392"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[instituciones auspiciantes: (caso existan)]]></text>
+				</staticText>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="183" width="555" height="50" uuid="88cb4232-b21e-453b-81df-fb7bca26aef9"/>
+					<subreportParameter name="DATGEPROY_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROY_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "instituciones_participantes.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="67">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="15" uuid="2626582c-ddd9-49af-8380-30b9b68abe45"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Estudiantes vinculados al proyecto:]]></text>
+				</staticText>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="15" width="555" height="52" uuid="2d211954-9bb0-4783-9d93-e462e01ab657"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$P{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "estudiantes_vinculados_proyecto.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="80">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="7" width="555" height="20" uuid="215f715b-6afe-4793-9a94-8050509ca9a7"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[2. DESARROLLO DEL PROYECTO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="38" width="555" height="15" uuid="149c9dd2-d348-43d5-b850-b7b21e972548"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+						<leftPen lineWidth="0.25"/>
+						<bottomPen lineWidth="0.25"/>
+						<rightPen lineWidth="0.25"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Objetivo General]]></text>
+				</staticText>
+				<subreport>
+					<reportElement x="0" y="53" width="555" height="20" uuid="5a0ac9fd-178d-45d1-b00c-0939db418b84"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$P{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "objetivo_general.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="42">
+				<subreport>
+					<reportElement x="0" y="2" width="555" height="34" uuid="b702ec1b-dc47-4b6c-8830-dcfe0c974e33"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$P{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "objetivos_especificos.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="50">
+				<subreport>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="50" uuid="21711394-c097-4cbb-abc7-a7677d04b531"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$P{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "presupuesto.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="74">
+				<subreport>
+					<reportElement positionType="Float" x="0" y="38" width="555" height="36" uuid="e2df37fd-9e8e-4bd5-a7bc-ce625f443bda"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$P{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "informe_director.jasper"]]></subreportExpression>
+				</subreport>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="9" width="555" height="20" uuid="ade1c0d0-2a36-49f4-84ba-e2b547da5b4c"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[3. INFORME DEL DIRECTOR DEL DEPARTAMENTO/CENTRO:]]></text>
+				</staticText>
+			</band>
+			<band height="50">
+				<subreport>
+					<reportElement positionType="Float" x="0" y="11" width="555" height="39" uuid="510b46be-df48-480a-9ada-7d8f396e86f7"/>
+					<subreportParameter name="DATGEPROY_ID">
+						<subreportParameterExpression><![CDATA[$P{DATGEPROY_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="STVCAMP_CODE">
+						<subreportParameterExpression><![CDATA[$P{STVCAMP_CODE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "firmas_responsabilidad.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="65" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="61" uuid="eb44cf24-1128-4c76-927f-0717c7be37d3"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="33" uuid="918609c1-3c51-41f8-8d09-9596972afe12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA
+INFORME DE SEGUIMINETO TÉCNICO DE PROYECTOS DE INVESTIGACIÓN]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="28" height="10" uuid="62b25e7f-f1df-4e8d-9767-be6cfb334beb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CÓDIGO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="10" width="28" height="10" uuid="09c35682-d369-407b-be5a-5aa9fff527ef"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VERSION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="93" height="10" uuid="2b280fb2-b845-4c66-9eb6-5e7bb4c54ed4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA ÚLTIMA REVISION:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="28" y="0" width="48" height="10" uuid="07251bf8-b9d1-4f79-95c4-8a6f6f054749"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SGC.DI.213]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="28" y="10" width="48" height="10" uuid="598f5af9-44fb-4345-9c09-457898366327"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1.1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="93" y="20" width="48" height="10" uuid="c852b48f-bcc8-4986-8358-3ddad720e6dc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[14/11/12]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="435" y="17" width="80" height="20" uuid="5938d465-e00b-4bdf-8410-a69838b783b5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="17" width="40" height="20" uuid="1438340c-2b08-4159-8fdd-5b988ec2dd9c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

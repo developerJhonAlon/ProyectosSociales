@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="criterios_evaluacion1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="40" rightMargin="60" topMargin="10" bottomMargin="20" isFloatColumnFooter="true" uuid="46838e7d-5cbe-45b4-a909-763dc0883f75">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CONVOCA_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_CRITERIOS_EVALUA.SCE_NOMBRE,
+       SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||'%'
+  FROM SEA_CRITERIOS_EVALUA, SEA_PORCEN_X_CR_CONVOCA
+ WHERE     (SEA_PORCEN_X_CR_CONVOCA.SCE_ID(+) = SEA_CRITERIOS_EVALUA.SCE_ID)
+       AND (SEA_PORCEN_X_CR_CONVOCA.CONVOCA_ID = $P{CONVOCA_ID})
+       AND (SEA_PORCEN_X_CR_CONVOCA.PRD_ID = 261)]]>
+	</queryString>
+	<field name="SCE_NOMBRE" class="java.lang.String"/>
+	<field name="SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||&apos;%&apos;" class="java.lang.String"/>
+	<variable name="SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||&apos;%&apos;_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||'%'}]]></variableExpression>
+	</variable>
+	<variable name="SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||&apos;%&apos;_2" class="java.lang.Integer" resetType="Page" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||'%'}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7dbaf1f0-9f54-4d57-8379-c6dfc4b7cf70" x="0" y="0" width="230" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CRITERIOS DE EVALUACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ecfbb986-1c71-4753-9a72-6b85ea3eedc3" x="230" y="0" width="83" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ CALIFICACIÓN]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="95af5251-f9b6-427c-8809-95707a2db18a" positionType="Float" x="0" y="0" width="230" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SCE_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7b0ee606-99f5-4770-b280-07498f47735f" positionType="Float" stretchType="RelativeToTallestObject" x="230" y="0" width="83" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SEA_PORCEN_X_CR_CONVOCA.SPXCC_PORCENTAJE||'%'}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c08148ea-03aa-415d-8d8a-3f76a0671a71" x="230" y="0" width="83" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[100%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="06165654-79e5-46d3-917e-d2d661f53c04" x="0" y="0" width="230" height="20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

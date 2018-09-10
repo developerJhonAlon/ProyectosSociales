@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_pdf" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ce41f79d-c9e6-44de-a427-ff3dfa57b7cc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     SEA_DAT_GENERAL_PROY."DATGEPROY_PAGILEG_NOMBRE" AS  PAG_NOMBRE,
+     SEA_DAT_GENERAL_PROY."DATGEPROY_PAGLEG_DIGI" AS PAG_DIGITAL
+FROM
+     "SISEACB"."SEA_DAT_GENERAL_PROY" SEA_DAT_GENERAL_PROY
+WHERE DATGEPROY_ID =3]]>
+	</queryString>
+	<field name="PAG_NOMBRE" class="java.lang.String"/>
+	<field name="PAG_DIGITAL" class="oracle.sql.BLOB"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="dea0e41c-7f67-452b-bdb5-357ae5a405bf" x="0" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[PAG_DIGITAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement uuid="dc972795-c61a-45c2-bbcd-a98ae43f1fab" x="0" y="0" width="487" height="37"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PAG_DIGITAL}.getBytes()]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement uuid="5c0f1375-5003-4e13-b6c6-90a5a8820a35" x="387" y="58" width="100" height="20"/>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

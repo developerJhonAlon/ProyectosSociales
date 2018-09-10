@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="institucionesParticipantesProg" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a031de7f-3a5b-4c70-ba1e-bab5c845e1cf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DATGEPROG_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_OPCION_INSTITUCION.OPINSTI_NOMBRE,
+       SEA_OPCION_INSTITUCION.OPINSTI_DIRECCION,
+       SEA_OPCION_INSTITUCION.OPINSTI_CIUDAD,
+       SEA_OPCION_INSTITUCION.OPINSTI_PAGUINA_WEB,
+       SEA_OPCION_INSTITUCION.OPINSTI_MAIL,
+       SEA_OPCION_INSTITUCION.OPINSTI_TELEFONO,
+       SEA_OPCION_INSTITUCION.OPINSTI_FAX
+  FROM SEA_OPCION_INSTITUCION
+ WHERE (SEA_OPCION_INSTITUCION.DATGEPROG_ID = $P{DATGEPROG_ID})
+]]>
+	</queryString>
+	<field name="OPINSTI_NOMBRE" class="java.lang.String"/>
+	<field name="OPINSTI_DIRECCION" class="java.lang.String"/>
+	<field name="OPINSTI_CIUDAD" class="java.lang.String"/>
+	<field name="OPINSTI_PAGUINA_WEB" class="java.lang.String"/>
+	<field name="OPINSTI_MAIL" class="java.lang.String"/>
+	<field name="OPINSTI_TELEFONO" class="java.lang.String"/>
+	<field name="OPINSTI_FAX" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c774270a-bad5-4f0f-a312-907949435c9b" x="1" y="0" width="543" height="15"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUCIONES INVOLUCRAGAS EN EL PROGRAMA]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="c6e8511e-f5c5-4957-ae17-55d860e43b54" x="1" y="16" width="546" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="131" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="b7bb534d-e0eb-4e7b-b581-505af4b88326" x="10" y="4" width="534" height="20" forecolor="#666664" backcolor="#999999"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="a5fd0cff-ff5e-468b-b308-a29dbc12d840" x="25" y="5" width="508" height="20" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_NOMBRE}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="e86984a2-8984-4087-a7f3-0b82d356daeb" x="10" y="24" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="80573df9-e259-4985-93ef-88907ef0f6c7" x="12" y="25" width="94" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="13ae1126-f069-4dbe-92ee-aed4878daacd" x="116" y="24" width="428" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="072e6ad8-7e63-4977-9792-6f231d753797" x="120" y="25" width="413" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_DIRECCION}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="b4c0d3ba-4434-467c-8321-1a5cbeabd3de" x="10" y="44" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="b9ef3d7a-e5f4-4067-bb82-ec8cce65d736" x="116" y="44" width="428" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="494e5d3c-19ff-4779-b9b9-672cf578d74a" x="12" y="45" width="94" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ciudad]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="383cdd71-74e7-4f57-a425-d620ff355d08" x="120" y="45" width="413" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_CIUDAD}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="b4cba925-811b-4a7e-a6cd-35d4fd211217" x="10" y="64" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="0dd016aa-f59f-4144-913c-162ed21d6363" x="116" y="64" width="428" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="e5655823-00af-4509-aefc-ed1894c44690" x="12" y="65" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7ae856f8-e40c-465c-ad76-0e5c5bb628e3" x="120" y="65" width="413" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_MAIL}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="cec43b5d-93a7-4b4c-831d-a644ce6fed0e" x="10" y="84" width="106" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="1aef0e49-fd8f-4d64-9b2d-5b4218360261" x="13" y="85" width="93" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Página Web]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="0d2d460a-8b96-48a4-b29a-df9282436d67" x="116" y="84" width="141" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="160df6df-a3b7-4ad2-b0c2-c9c4bcc789a4" x="120" y="85" width="127" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_PAGUINA_WEB}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="3f628d17-175c-4c00-a357-d17f1f3b9147" x="257" y="84" width="100" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="6d332a9f-ba94-40cd-880a-dd92535f48cd" x="259" y="85" width="86" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfonos]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="cc4cf6ea-cb8c-40c0-8fff-6612787bbb06" x="357" y="84" width="73" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f52171db-5ea9-44fa-aada-2e84f6879491" x="357" y="85" width="63" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_TELEFONO}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="e01e83f3-d4fa-4b4f-8e45-20ac2c9e25e7" x="430" y="84" width="28" height="20" forecolor="#666666"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="649e476d-fa58-4626-9459-f7e02847dccb" x="430" y="85" width="19" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fax]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="bdf8ac92-eec6-4345-a73b-1f24c27f8984" x="458" y="84" width="86" height="20" forecolor="#666666"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fedc6997-b27c-46a9-aadc-a859e3f90651" x="458" y="85" width="75" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPINSTI_FAX}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="1" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

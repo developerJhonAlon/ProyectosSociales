@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="liquidacion_proyecto" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b13fbffd-2ad7-4e40-952a-97aed15c4c44">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Administrador\\Documents\\NetBeansProjects\\APP\\investigacion5\\trunk\\Investigacion\\Investigacion-war\\web\\reportes\\liquidacion_proyecto\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_DAT_GENERAL_PROY.DATGEPROY_ID,
+            SEA_FORMATO_LARGO.SFL_ID,
+            SEA_FORMATO_LARGO.SFL_TITULO_ESPANIOL,
+            SEG_USUARIO.USU_NOMBRES ||' '||SEG_USUARIO.USU_APELLIDOS "NOMBRES",
+            SZDTAOBJPROY.SZDTAOBJPROY_DESCR,
+            SEA_FORMATO_LARGO.SFL_FECHA_INICIO,
+            SEA_FORMATO_LARGO.SFL_FECHA_FINALIZA,
+            SEA_PRESUP_NOTASC.SPNC_ESPE,
+            SEA_PRESUP_NOTASC.SPNC_OTROS,
+            SEA_PRESUP_NOTASC.SPNC_TOTAL,
+            SZDTALIQPROY.SZDTALIQPROY_COMENT
+FROM    SEA_DAT_GENERAL_PROY,
+            SEA_FORMATO_LARGO,
+            SEA_RESPONSABLE_PROG,
+            SEG_USUARIO,
+            SZDTAOBJPROY,
+            SEA_PRESUP_NOTASC,
+            SZDTALIQPROY
+WHERE  (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = SEA_FORMATO_LARGO.DATGEPROY_ID)
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID =  SEA_RESPONSABLE_PROG.DATGEPROY_ID)
+      AND (SEA_RESPONSABLE_PROG.USU_ID_DOCENTE = SEG_USUARIO.USU_ID)
+      AND (SEA_FORMATO_LARGO.SFL_ID = SZDTAOBJPROY.SFL_ID)
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ID = SEA_PRESUP_NOTASC.DATGEPROY_ID)
+      AND (SEA_FORMATO_LARGO.SFL_ID = SZDTALIQPROY  .SFL_ID)
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='0')
+      AND (SEA_DAT_GENERAL_PROY.DATGEPROY_ESTADO !='1')
+      AND (SEA_FORMATO_LARGO.SFL_ID = $P{SFL_ID})
+      AND (SEA_RESPONSABLE_PROG.TIPRES_ID = 3)
+      AND (SZDTAOBJPROY.PRD_ID = 303)]]>
+	</queryString>
+	<field name="DATGEPROY_ID" class="java.math.BigDecimal"/>
+	<field name="SFL_ID" class="java.math.BigDecimal"/>
+	<field name="SFL_TITULO_ESPANIOL" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="SZDTAOBJPROY_DESCR" class="java.lang.String"/>
+	<field name="SFL_FECHA_INICIO" class="java.sql.Timestamp"/>
+	<field name="SFL_FECHA_FINALIZA" class="java.sql.Timestamp"/>
+	<field name="SPNC_ESPE" class="java.math.BigDecimal"/>
+	<field name="SPNC_OTROS" class="java.math.BigDecimal"/>
+	<field name="SPNC_TOTAL" class="java.math.BigDecimal"/>
+	<field name="SZDTALIQPROY_COMENT" class="java.lang.String"/>
+	<group name="HEADER">
+		<groupExpression><![CDATA[$F{DATGEPROY_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="188">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="28" width="555" height="20" uuid="4a520351-763e-4ec7-9d33-e88aea0d700e"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="5" rightPadding="5">
+						<bottomPen lineWidth="0.0" lineStyle="Double" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["En la ciudad de Sangolquí a los  "+ new SimpleDateFormat("dd", new Locale("ES")).format(new Date()) +" días del mes de "+ new SimpleDateFormat("MMMMM", new Locale("ES")).format(new Date())+" del " + new SimpleDateFormat("yyyy", new Locale("ES")).format(new Date()) + ' se celebra la precente Acta de Liquidación del Proyecto "'+ $F{SFL_TITULO_ESPANIOL}+ '" entre la Univerdidad de las Fuerzas Armadas ESPE y el(la) (Profesor(a)/Investigador(a)) '+$F{NOMBRES}+', al finalizar la ejecución del proyecto o programa, cumpliendo con la condiciones determinadas en los objetivos, se procederá a la liquidación, en los siguientes términos: ']]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="48" width="555" height="20" uuid="fef14a7e-5e8a-49dd-aa5e-64d106b0b69e"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[1. OBJETIVO DEL PROYECTO]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="68" width="555" height="20" uuid="0a2d99ca-a41a-478d-87e6-0a18156c0026"/>
+					<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["El objetivo del proyecto fué "+$F{SZDTAOBJPROY_DESCR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="88" width="555" height="20" uuid="cd816b02-ef08-4767-9e10-14b8c67f6d2e"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[2. FECHAS]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="108" width="555" height="20" uuid="9d6682d0-a13c-451f-8d5a-88631b9aba16"/>
+					<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["La fecha de inicio del proeycto "+new SimpleDateFormat("dd/MM/yyyy").format($F{SFL_FECHA_INICIO})+ " Finalizando el "+new SimpleDateFormat("dd/MM/yyyy").format($F{SFL_FECHA_FINALIZA})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="128" width="555" height="20" uuid="ebd3bd0c-b300-4e82-bb05-8425b338a43d"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[3. PRESUPUESTO]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="148" width="555" height="20" uuid="599148e6-666e-4825-ae67-109d4f79cf78"/>
+					<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Se determinó se asigne fondos de los recursos de la institución, para el desarrollo de la ejecución del proyecto " + $F{SFL_TITULO_ESPANIOL} + " un valor de \$ " + new java.text.DecimalFormat("#,##0.00").format($F{SPNC_ESPE}) + " contando con un auspicio de \$ " + new java.text.DecimalFormat("#,##0.00").format($F{SPNC_OTROS}) + ". obteniendo un presupuesto de ingresos de \$ " + new java.text.DecimalFormat("#,##0.00").format($F{SPNC_TOTAL})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="168" width="555" height="20" uuid="944814ba-838e-43c9-8495-cacdc16f5aed"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[4. ENTREGABLE]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="48850a3f-0b80-48a5-8245-cf14c8c11844"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="5" rightPadding="5">
+						<bottomPen lineWidth="0.75" lineStyle="Double" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA['Acta de liquidación del proyecto "'+$F{SFL_TITULO_ESPANIOL}+'",suscrito entre la Universidad de las Fuerzas Armadas ESPE y el(la) (Profesor(a)/Investigador(a)) '+$F{NOMBRES}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="32">
+				<subreport>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="32" uuid="411728ab-9ced-4458-b0e7-0b9a7de36246"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$F{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "entregables.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="71">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="f39a5226-9e4d-4dad-85d6-f12789c4cd1b"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[5. BIENES A FAVOR DE LA UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="20" width="555" height="20" uuid="427897c0-51b1-4a41-980d-1429b679e3d3"/>
+					<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Concluido el proyecto " + $F{SFL_TITULO_ESPANIOL} + " se determina los bienes que se integrán a los recursos privativos de la Institución se encuentran detallados en la liquidación económica."]]></textFieldExpression>
+				</textField>
+				<subreport>
+					<reportElement positionType="Float" x="0" y="40" width="555" height="30" uuid="87547e55-08ae-4fd5-8598-df29d2870870"/>
+					<subreportParameter name="SFL_ID">
+						<subreportParameterExpression><![CDATA[$P{SFL_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "bienes.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="40">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="c4747cee-826b-4fee-b5cd-b58397fdcbf4"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[6. COMENTARIOS]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="20" width="555" height="20" uuid="38894811-7d6a-48c3-9c1e-c610795587a1"/>
+					<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SZDTALIQPROY_COMENT}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="89">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="11fac444-d181-460e-b028-cfce90a081fe"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[7. DOCUMENTOS HABILITANTES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="555" height="69" uuid="887967b5-3805-4cc0-bf9d-e4fecc6d7562"/>
+					<box topPadding="2" leftPadding="40" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[1. Acta de cierre y entrega del proyecto.
+2. Informe de Cierre Técnico.
+3. Matriz de liquidación financiera.
+4. Inventario de bienes de larga duración, adquiridos con recursos asignados al proyecto o programa de inversión, que se encuentren a cardo del proyecto.]]></text>
+				</staticText>
+			</band>
+			<band height="194">
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="53be4c9f-df76-4afe-9d4e-8dd744d89348"/>
+					<box topPadding="2" leftPadding="30" bottomPadding="2" rightPadding="5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[POR LA UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="26" y="70" width="174" height="20" uuid="f47e4824-3bea-4316-9e7a-3ec4b15ec46f"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[RESPONSABLE DEL PROYECTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="357" y="70" width="174" height="20" uuid="5c13e4d4-d2b2-4c30-a2f5-63939b8edcf5"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[DIRECTOR DEL DEPARTAMENTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="178" y="144" width="200" height="20" uuid="50b0f6dd-103d-4afd-b419-6f4d9fb70c2a"/>
+					<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+						<topPen lineWidth="0.25"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[VICERRECTOR / GERENTE]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement positionType="Float" x="0" y="0" width="555" height="61" uuid="02b1ed31-7a14-47fa-86cd-eed48e163826"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="33" uuid="093b2796-1d02-497b-88db-8afc49afbc8c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA
+LIQUIDACIÓN DEL PROYECTO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="434" y="5" width="80" height="20" uuid="7a81f08e-3781-4040-aed3-4c503b46fe48"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="514" y="5" width="40" height="20" uuid="f4947a7b-72bd-489c-afeb-74eef1903a76"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

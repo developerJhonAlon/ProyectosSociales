@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <style>
+                    .inputNumber2 input
+                    {
+                        width: 50px;
+                    }
+                    .col1_puntaje {
+                        width: 190px ;
+                    }
+                </style>  
+                <h:panelGrid id="panelBase" style="width: 100%">
+                    <p:panel header="Evaluación de Proyectos" style="margin-bottom: 35px">
+                        <p:dataTable value="#{proyectosEvaluacionParController.parEvaluacionList}" var="parEva" 
+                                     paginator="true" rows="15" rowIndexVar="index" resizableColumns="true"
+                                     emptyMessage="No se encontraron resultados">
+                            <p:column headerText="Ord." style="text-align: center" width="20">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="Proyecto" style="white-space: pre-line" sortBy="#{parEva.notaConceptual.datgeproyTitulo}">
+                                <h:outputText value="#{parEva.notaConceptual.datgeproyTitulo}" />
+                            </p:column>
+                            <p:column headerText="Estado Evaluación" style="white-space: pre-line" width="120" sortBy="#{parEva.notaConceptual.estado}">
+                                <h:outputText value="#{(parEva.evaluacionPar!=null and parEva.evaluacionPar.estadoFinalizado=='S')?'Evaluado':'Pendiente'}"/>
+                            </p:column>
+                            <p:column headerText="Seleccione" style="text-align: center" width="60">
+                                <p:button outcome="proyectoContenido" icon="ui-icon-circle-check">
+                                    <f:param name="id" value="#{parEva.notaConceptual.datgeproyId}" />
+                                    <f:param name="op" value="evapar" />
+                                </p:button>                                    
+
+                            </p:column>
+
+                        </p:dataTable>
+
+
+                    </p:panel>
+
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

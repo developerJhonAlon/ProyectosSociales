@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bases" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="40" topMargin="20" bottomMargin="20" uuid="6c199230-49cc-46a4-9f93-e17bb4b96eb3">
+	<property name="ireport.zoom" value="1.331000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CONVOCA_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_BASES_CONVOCA.SBC_BASES
+    FROM SEA_CONVOCA, SEA_BASES_CONVOCA
+   WHERE (SEA_CONVOCA.CONVOCA_ID = SEA_BASES_CONVOCA.CONVOCA_ID)
+    AND 	(SEA_BASES_CONVOCA.CONVOCA_ID = $P{CONVOCA_ID})
+ORDER BY SEA_BASES_CONVOCA.SBC_ID ASC]]>
+	</queryString>
+	<field name="SBC_BASES" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="56" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="0" y="0" width="100" height="20" uuid="7e8cbd05-5dcb-45ac-acc7-ce004ee1623e"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BASES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="30" width="459" height="20" uuid="e0fa783b-5f11-4a26-a9ca-058fcbe6ade7"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Los proyectos deben cumplir los siguientes requisitos:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="52" y="0" width="407" height="20" uuid="24d2b371-46b5-4b93-a77c-1e67792a79b3"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SBC_BASES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="26" y="0" width="26" height="20" uuid="068cd11e-0da6-4d49-a8c0-638409993c20"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

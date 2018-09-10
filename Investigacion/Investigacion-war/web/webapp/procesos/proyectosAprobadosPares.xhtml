@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <h:panelGrid id="panelBase" style="width: 100%">
+                    <p:fieldset legend="Reporte: Proyectos Aprobados por Pares" style="margin-left: 20px">
+                        <h:panelGrid columns="4" cellpadding="7" cellspacing="0" style="text-align: justify">
+                            <p:outputLabel value="Convocatoria:" style="font-weight: bold"/>
+                            <p:selectOneMenu  
+                                value="#{proyectosAprobadosParesController.idConvocatoriaSelected}"
+                                effect="fade"
+                                filter="false">
+                                <f:selectItem itemLabel="[-Seleccione una Convocatoria-]" noSelectionOption="true"/>
+                                <f:selectItems value="#{proyectosAprobadosParesController.convocatoriaList}" var="conv" itemValue="#{conv.convocaId}" itemLabel="#{conv.convocaTitulo}"/>
+                                <p:ajax event="change" update=":formPrincipal:dtProyectos" listener="#{proyectosAprobadosParesController.listarProyectos()}"
+                                        onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+                            </p:selectOneMenu> 
+                            <h:commandLink  target="_blank" actionListener="#{proyectosAprobadosParesController.exportarReportePDF()}"
+                                            title="Exportar a PDF">
+                                <p:graphicImage url="../../resources/images/pdf.png"/>
+                            </h:commandLink>                                    
+                            <h:commandLink target="_blank" actionListener="#{proyectosAprobadosParesController.exportarReporteXLS()}"
+                                           title="Exportar a Excel" style="float: right">
+                                <p:graphicImage url="../../resources/images/excel2.png" width="33"/>
+                            </h:commandLink>
+
+
+                        </h:panelGrid>    
+
+                    </p:fieldset>       
+                    <p:dataTable id="dtProyectos" widgetVar="dtProyectos" value="#{proyectosAprobadosParesController.proyectoList}" var="proy2"
+                                 style="margin-left: 20px"
+                                 paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="false" emptyMessage="No se encontraron resultados"
+                                 paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  Nro. items por página: {RowsPerPageDropdown}"
+                                 currentPageReportTemplate="Registros del {startRecord}-{endRecord} , total: {totalRecords}"
+                                 rowsPerPageTemplate="5,10,15,20,30,50,100" >
+
+                        <p:column headerText="No." width="20" style="text-align: center">
+                            <h:outputText value="#{index + 1}"/>
+                        </p:column>
+                        <p:column headerText="DPTO/CENTRO" style="white-space: pre-line; text-align: center" width="100" sortBy="#{proy2.datgeproyId.director.stvsubjCode.stvsubjCode}">
+                            <h:outputText value="#{proy2.datgeproyId.director.stvsubjCode.stvsubjCode}"/>
+                        </p:column>
+                        <p:column headerText="TÍTULO DEL PROYECTO" style="white-space: pre-line" sortBy="#{proy2.nombre}">
+                            <h:outputText value="#{proy2.nombre}" style="text-transform: uppercase"/>
+                        </p:column>
+                        <p:column headerText="DIRECTOR" width="150" style="white-space: pre-line" sortBy="#{proy2.datgeproyId.director.usuIdDocente.nombresCompletos}">
+                            <h:outputText value="#{proy2.datgeproyId.director.usuIdDocente.nombresCompletos}" style="text-transform: uppercase"/>
+                        </p:column>
+                        <p:column headerText="TIEMPO DE EJECUCIÓN" width="80" style="white-space: pre-line; text-align: center" sortBy="#{proy2.datgeproyId.datgeproyTiempoEjecucion}">
+                            <h:outputText value="#{proy2.datgeproyId.datgeproyTiempoEjecucion}"/>
+                        </p:column>
+                        <p:column headerText="ESPE" width="60" sortBy="#{proy2.sflPresupEspe}">
+                            <h:outputText value="#{proy2.sflPresupEspe}" style="float: right">
+                                <f:convertNumber locale="es"  pattern="$ ###,###,##0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="OTRAS" width="60" sortBy="#{proy2.sflPresupEntidadAuspicia}">
+                            <h:outputText value="#{proy2.sflPresupEntidadAuspicia}" style="float: right">
+                                <f:convertNumber locale="es"  pattern="$ ###,###,##0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="EVA1" width="35" style="text-align: center" sortBy="#{proy2.datgeproyId.puntajeEvaluacionPar1}">
+                            <h:outputText value="#{proy2.datgeproyId.puntajeEvaluacionPar1}">
+                                <f:convertNumber locale="es"  pattern="###,###,##0" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="EVA2" width="35" style="text-align: center" sortBy="#{proy2.datgeproyId.puntajeEvaluacionPar2}">
+                            <h:outputText value="#{proy2.datgeproyId.puntajeEvaluacionPar2}">
+                                <f:convertNumber locale="es"  pattern="###,###,##0" />
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>        
+
+
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

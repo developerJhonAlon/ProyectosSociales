@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="presupuesto_partida" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c0d61844-9026-4789-a0d6-091cf78034ae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dirPhoto" class="java.lang.String"/>
+	<parameter name="SFL_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT SEA_CLASIFICADOR_PRESUP.SCP_NOMBRE AS PARTIDA_PRESUPUESTARIA,
+       SEA_CLASIFICADOR_PRESUP.SCP_EJERCICIO,
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_VALOR AS "VALOR ESPE",
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_VALOTRAS AS " VALOR OTRAS INSTITUCIONES",
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_NOMBRE_DOCUMENTO,
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_ESPECIFICACIONES,
+       SEA_PRESUPUESTO_X_PARTIDA.SPXP_CODINCOP AS CODIGO_INCOP
+  FROM SEA_PRESUPUESTO_X_PARTIDA, SEA_CLASIFICADOR_PRESUP
+ WHERE (SEA_PRESUPUESTO_X_PARTIDA.SCP_ID = SEA_CLASIFICADOR_PRESUP.SCP_ID)
+       AND (SEA_PRESUPUESTO_X_PARTIDA.SFL_ID = $P{SFL_ID})]]>
+	</queryString>
+	<field name="PARTIDA_PRESUPUESTARIA" class="java.lang.String"/>
+	<field name="SCP_EJERCICIO" class="java.math.BigDecimal"/>
+	<field name="VALOR ESPE" class="java.math.BigDecimal"/>
+	<field name=" VALOR OTRAS INSTITUCIONES" class="java.math.BigDecimal"/>
+	<field name="SPXP_NOMBRE_DOCUMENTO" class="java.lang.String"/>
+	<field name="SPXP_ESPECIFICACIONES" class="java.lang.String"/>
+	<field name="CODIGO_INCOP" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement uuid="ce7e4665-c334-4348-8e92-ec4a2dc77320" positionType="Float" x="0" y="0" width="802" height="61"/>
+				<imageExpression><![CDATA[$P{dirPhoto} + "banner_OFI.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="4cb9b312-6324-4a73-9787-90fadcf52ddf" positionType="Float" x="0" y="2" width="802" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VICERRECTORADO DE INVESTIGACIÓN, INNOVACIÓN Y TRANSFERENCIA TECNOLÓGICA
+PRESUPUESTO POR PARTIDA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="fc0e49bc-cad7-4eb0-a0d5-8621c7675035" positionType="Float" x="163" y="0" width="50" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ejercicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e7c951bf-3226-4e05-bb44-e3d9e6c6a5e3" positionType="Float" x="213" y="0" width="93" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor ESPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="687e4d84-dd04-45c0-97a3-ada4e42ec6fb" positionType="Float" x="306" y="0" width="107" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Otras Instiduciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e71026b0-4e81-40fe-b3ed-5bfb2bb381a7" positionType="Float" x="413" y="0" width="173" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento de Estemación Presupestaria]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e07bb39-4dca-49e9-b6b0-b975ee492c12" positionType="Float" x="586" y="0" width="141" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Especificaciones Técnicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2a314f5-01e6-441c-b0bb-e0ecf9504fd8" positionType="Float" x="727" y="0" width="75" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código INCOP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c9fe0895-c740-4c20-b624-76693d2a868e" positionType="Float" x="0" y="0" width="163" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Partida Presupuestaria]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="495cd80a-6892-401b-91f5-db7ea5e54391" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="163" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARTIDA_PRESUPUESTARIA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="c8e99b56-ab8f-4f29-a090-b2c63b17a86e" positionType="Float" stretchType="RelativeToTallestObject" x="213" y="0" width="93" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VALOR ESPE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="41d04674-2a17-4b73-b201-a53e2fa91b23" positionType="Float" stretchType="RelativeToTallestObject" x="413" y="0" width="173" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SPXP_NOMBRE_DOCUMENTO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b74a08b3-a248-46f7-80e9-dcb83ad12569" positionType="Float" stretchType="RelativeToTallestObject" x="586" y="0" width="141" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SPXP_ESPECIFICACIONES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2a15223f-401f-4a66-981f-d77800339fac" positionType="Float" stretchType="RelativeToTallestObject" x="727" y="0" width="75" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO_INCOP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="8093582a-0567-45e7-a0bd-ccd16c45ae5c" positionType="Float" stretchType="RelativeToTallestObject" x="306" y="0" width="107" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ VALOR OTRAS INSTITUCIONES}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="8228dcee-666f-4ba7-8ba1-e5a346d51a25" positionType="Float" stretchType="RelativeToTallestObject" x="163" y="0" width="50" height="20"/>
+				<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SCP_EJERCICIO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement uuid="b3e988e2-8bb4-426a-a6b0-70eb889c4103" x="682" y="11" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="52651a5d-5583-4607-9a7a-fa8d82968132" x="762" y="11" width="40" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

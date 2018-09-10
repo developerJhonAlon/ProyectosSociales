@@ -1,0 +1,1154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <h:body>    
+        <ui:composition template="/vista/template-sistema2.xhtml">   
+            <ui:define name="content">
+                <p:panel id="panelBase" header="Mantenimiento Catálogos de Investigación" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold; margin-bottom: 80px">
+                    <p:tabView scrollable="false" id="tabP" style="border: hidden"   >
+                        <p:tab title="Líneas/ Sub Líneas" id="tabP1">
+                            <h:panelGrid columns="1" cellpadding="5" id="h1">
+                                <p:commandButton id="btnAgregarP1" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregra Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{catalogoInvestigacionController.agregarP1()}" rendered="#{!catalogoInvestigacionController.controlGrabar1}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p1" visible="#{catalogoInvestigacionController.controlGrabar1}" style="font-size: 10px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarP1" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP1}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1,:formPrincipal:tabP:dtLinea" action="#{catalogoInvestigacionController.registraP1()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP1" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p1,:formPrincipal:tabP:h1" action="#{catalogoInvestigacionController.cancelarP1()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <h:outputLabel for="descL" value="Descripción Líneas de Investigación:" />
+                                    <p:inputText id="descL" value="#{catalogoInvestigacionController.descripLinea}" autocomplete="off" required="false" style="width: 200px">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP1" listener="#{catalogoInvestigacionController.validarVaciosP1}"/>
+                                    </p:inputText>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtLinea" value="#{catalogoInvestigacionController.lineaInvesList}" var="linea" paginator="true"
+                                         rendered="#{not empty catalogoInvestigacionController.lineaInvesList}"
+                                         rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron resultados" >
+
+                                <p:ajax event="rowToggle" listener="#{catalogoInvestigacionController.onRowToggleLine}"/>
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP1}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP1}" partialSubmit="true"/>
+
+                                <p:column style="width: 2%">
+                                    <p:rowToggler/>
+                                </p:column>
+                                <p:column headerText="Ord." style="width: 3%; font-size: 11px; font-weight: bold;text-align: center">
+                                    <h:outputText value="#{index + 1}"/>
+                                </p:column>
+                                <p:column headerText="Líneas de Investigación" style="width: 50%; font-size: 11px; font-weight: bold" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{linea.lineaDescip}" style="white-space: pre; text-transform: uppercase;text-align: left" /></f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput1" value="#{linea.lineaDescip}" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Agregar SubLínea" style="width: 15%; font-size: 11px; font-weight: bold;text-align: center">
+                                    <p:commandButton id="btnNuevoP11" icon="ui-icon-clipboard"
+                                                     onclick="PF('dialogSublinea').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{linea}" target="#{catalogoInvestigacionController.lineaInvestSelected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column headerText="Editar" style="width: 5%; font-size: 11px; font-weight: bold;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar " style="width: 5%; font-size: 11px; font-weight: bold;text-align: center">
+                                    <p:commandButton id="btnEliminarP1" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialog1').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{linea}" target="#{catalogoInvestigacionController.lineaInvestSelected}" />
+                                    </p:commandButton>    
+                                </p:column>
+                                <p:rowExpansion>
+                                    <p:panelGrid columns="1" style="border:none;margin:0 auto;width:95%; text-align: left" >
+                                        <p:dataTable id="dtSubl" value="#{catalogoInvestigacionController.sublineaList}" var="subl"
+                                                     rendered="#{not empty catalogoInvestigacionController.sublineaList}"
+                                                     rowIndexVar="index" style="width: 80%" editable="true">
+
+                                            <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditSubP1}" partialSubmit="true"/>
+                                            <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelSubP1}" partialSubmit="true"/>
+
+                                            <p:column headerText="Ord." style="width:3%;text-align: center">
+                                                <h:outputText value="#{index + 1}" />
+                                            </p:column>
+                                            <p:column headerText="Sub Línea de Investigación" style="width: 70%">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{subl.lineaDescip}" style="white-space: pre-line;text-transform: uppercase;width: 250px"/></f:facet>
+                                                    <f:facet name="input"><p:inputText id="modelInput111" value="#{subl.lineaDescip}" style="width: 100%"/></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="Cod. Unesco" style="width: 10%">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{subl.lineaUnesco}" style="white-space: pre-line;text-transform: uppercase;width: 100%"/></f:facet>
+                                                    <f:facet name="input"><p:inputText id="modelInput112" value="#{subl.lineaUnesco}"/></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="Editar" style="width: 5%;text-align: center">
+                                                <p:rowEditor/>
+                                            </p:column>
+                                            <p:column headerText="Eliminar" style="width: 10%;text-align: center">
+                                                <p:commandButton id="btnEliminarP12" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                                 onclick="PF('deleteDialog12').show();" process="@this">
+                                                    <f:setPropertyActionListener value="#{subl}" target="#{catalogoInvestigacionController.sublineaInveSelected}"/>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panelGrid>
+                                </p:rowExpansion>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Estrategias" id="tabP2">
+                            <h:panelGrid columns="1" cellpadding="5" id="h2">
+                                <p:commandButton id="btnAgregarP2" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left"
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agrega Información" update=":formPrincipal:tabP:p2,:formPrincipal:tabP:h2" action="#{catalogoInvestigacionController.agregarP2()}" rendered="#{!catalogoInvestigacionController.controlGrabar2}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p2" visible="#{catalogoInvestigacionController.controlGrabar2}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarP2" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP2}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p2,:formPrincipal:tabP:h2,:formPrincipal:tabP:dtEstrat" action="#{catalogoInvestigacionController.registraP2()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP2" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p2,:formPrincipal:tabP:h2" action="#{catalogoInvestigacionController.cancelarP2()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <h:outputLabel for="desEs" value="Descripción Estrategia:" />
+                                    <p:inputText id="desEs" value="#{catalogoInvestigacionController.descripEstra}" autocomplete="off" required="false" style="width: 200px">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP2" listener="#{catalogoInvestigacionController.validarVaciosP2}"/>
+                                    </p:inputText>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtEstrat" value="#{catalogoInvestigacionController.estrategiaList}" var="estrat" paginator="true"
+                                         rendered="#{not empty catalogoInvestigacionController.estrategiaList}"
+                                         rows="10" rowIndexVar="index" resizableColumns="true" editable="true" emptyMessage="No se encontraron resultados" >
+                                <p:ajax event="rowToggle" listener="#{catalogoInvestigacionController.onRowToggleEstrat}" />
+                                <!--<p:ajax event="rowToggle" listener="#{catalogoInvestigacionController.onRowToggleEstrat}" global="false" async="true" process="@none" partialSubmit="true" onstart="return dtEstrat.onClick('#{estrat.estrategId(subLevel.levelKey)}') "/>-->
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP2}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP2}" partialSubmit="true"/>
+
+                                <p:column style="width: 2%">
+                                    <p:rowToggler/>
+                                </p:column>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}"/>
+                                </p:column>
+                                <p:column headerText="Estrategias de Investigación" style="width: 50%;text-align: left" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{estrat.estrategDescrip}" style="white-space: pre; text-transform: uppercase;text-align: left" /></f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput21" value="#{estrat.estrategDescrip}" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Agregar Sub Estrategia" style="width: 15%;text-align: center">
+                                    <p:commandButton id="btnNuevoP21" icon="ui-icon-clipboard"
+                                                     onclick="PF('dialogSubEstrategia').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{estrat}" target="#{catalogoInvestigacionController.estrategiaSelected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column headerText="Editar" style="width: 5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarP1" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialog2').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{estrat}" target="#{catalogoInvestigacionController.estrategiaSelected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <p:rowExpansion>
+                                    <p:panelGrid columns="1" style="border:none;margin:0 auto;width:95%; text-align: left" >
+                                        <p:dataTable id="dtSubEst" value="#{catalogoInvestigacionController.estrategiaSubList}" var="subEst"
+                                                     rendered="#{not empty catalogoInvestigacionController.estrategiaSubList}"
+                                                     rowIndexVar="index" style="width: 80%" editable="true">
+
+                                            <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditSubP2}" partialSubmit="true"/>
+                                            <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowEditSubP2}" partialSubmit="true"/>
+
+                                            <p:column headerText="Ord." style="width: 3%">
+                                                <h:outputText value="#{index + 1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Sub Estrategia de Investigación" style="width: 70%">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{subEst.estrategDescrip}" style="white-space: pre-line;text-transform: uppercase;width: 250px"/></f:facet>
+                                                    <f:facet name="input"><p:inputText id="modelInput221" value="#{subEst.estrategDescrip}" style="width: 100%"/></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="Editar" style="width: 5%;text-align: center">
+                                                <p:rowEditor/>
+                                            </p:column>
+                                            <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                                <p:commandButton id="btnEliminarSubP2" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                                 onclick="PF('deleteDialog21').show();" process="@this">
+                                                    <f:setPropertyActionListener value="#{subEst}" target="#{catalogoInvestigacionController.subEstrategiaSelected}"/>
+                                                    <!--<p:ajax global="false" async="true" process="@none" partialSubmit="true" onstart="return dtEstrat.onClick('#{estrat.estrategId(subLevel.levelKey)}')"/>-->
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:panelGrid>
+                                </p:rowExpansion>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Políticas" id="tabP3">
+                            <h:panelGrid columns="1" cellpadding="5" id="h3">
+                                <p:commandButton id="btnAgregarP3" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3" action="#{catalogoInvestigacionController.agregarP3()}" rendered="#{!catalogoInvestigacionController.controlGrabar3}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p3" visible="#{catalogoInvestigacionController.controlGrabar3}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5"  cellspacing="0">
+                                    <p:commandButton id="btnGrabarP3" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP3}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3,:formPrincipal:tabP:dataTablePoliticas" action="#{catalogoInvestigacionController.registraP3()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP3" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p3,:formPrincipal:tabP:h3" action="#{catalogoInvestigacionController.cancelarP3()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left" >
+
+                                    <h:outputLabel for="nombP" value="Nombre de la Politica:"/>
+                                    <p:inputText id="nombP" value="#{catalogoInvestigacionController.nombrePolit}" autocomplete="off" required="false" style="width: 250px" >
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{catalogoInvestigacionController.validarVaciosP3}"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel for="ambP" value="Ambito de la Politica:"/>
+                                    <p:inputText id="ambP" value="#{catalogoInvestigacionController.ambitoPolit}" autocomplete="off" required="false" style="width: 250px" >
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{catalogoInvestigacionController.validarVaciosP3}"/>
+                                    </p:inputText>
+                                    <h:outputLabel for="descrP" value="Descripción de la Politica:"/>
+                                    <p:inputTextarea id="descrP" cols="100" rows="2" value="#{catalogoInvestigacionController.descriPolit}" >
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP3" listener="#{catalogoInvestigacionController.validarVaciosP3}"/>
+                                    </p:inputTextarea>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dataTablePoliticas" value="#{catalogoInvestigacionController.polinvestList}" var="politicas"
+                                         paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="text-align: left">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP3}" update=":formPrincipal:tabP:dataTablePoliticas"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP3}" update=":formPrincipal:tabP:dataTablePoliticas"/>
+
+                                <p:column headerText="Ord." style="width:3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Nombre" style="width: 10%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{politicas.polinvNombre}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput31" value="#{politicas.polinvNombre}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Ambito" style="width: 20%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{politicas.polinvAmbito}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput32" value="#{politicas.polinvAmbito}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Descripción" style="width: 40%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{politicas.polinvDescrip}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputTextarea id="modelInput33" cols="20" value="#{politicas.polinvDescrip}" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="width: 5%; text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                    <p:commandButton id="btnEliminarP3" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialog3').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{politicas}" target="#{catalogoInvestigacionController.polinvestSelected}"/>
+                                    </p:commandButton>     
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Objetivos del Buen vivir" id="tabP4">
+                            <h:panelGrid columns="1" cellpadding="5" id="h4">
+                                <p:commandButton id="btnAgregarP4" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left " 
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p4,:formPrincipal:tabP:h4" action="#{catalogoInvestigacionController.agregarP4()}" rendered="#{!catalogoInvestigacionController.controlGrabar4}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p4" visible="#{catalogoInvestigacionController.controlGrabar4}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5"  cellspacing="0">
+                                    <p:commandButton id="btnGrabarP4" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP4}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p4,:formPrincipal:tabP:h4,:formPrincipal:tabP:dataTableObjetivoB" action="#{catalogoInvestigacionController.registraP4()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP4" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p4,:formPrincipal:tabP:h4" action="#{catalogoInvestigacionController.cancelarP4()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left" >
+                                    <h:outputLabel for="nomBV" value="Nombre del Objetivo:"/>
+                                    <p:inputText id="nomBV" value="#{catalogoInvestigacionController.nombreBV}" autocomplete="off" required="false" style="width: 250px" >
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP4" listener="#{catalogoInvestigacionController.validarVaciosP4}"/>
+                                    </p:inputText>
+                                    <h:outputLabel for="descrBV" value="Descripción del Objetivo:"/>
+                                    <p:inputText id="descrBV" value="#{catalogoInvestigacionController.descripBV}" autocomplete="off" required="false" style="width: 250px" >
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP4" listener="#{catalogoInvestigacionController.validarVaciosP4}"/>
+                                    </p:inputText>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dataTableObjetivoB" value="#{catalogoInvestigacionController.objetivoBList}" var="objetivoB"
+                                         paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="text-align: left">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP4}" update=":formPrincipal:tabP:dataTableObjetivoB"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP4}" update=":formPrincipal:tabP:dataTableObjetivoB"/>
+
+                                <p:column headerText="Ord." style="width:3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Nombre" style="width: 10%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{objetivoB.obplabvNombre}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput41" value="#{objetivoB.obplabvNombre}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Descripción" style="width: 50%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{objetivoB.obplanbvDecrip}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput42" value="#{objetivoB.obplanbvDecrip}" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="width: 5%; text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                    <p:commandButton id="btnEliminarP4" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialog4').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{objetivoB}" target="#{catalogoInvestigacionController.objBuenVSelected}"/>
+                                    </p:commandButton>     
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Procesos" id="tabP5">
+                            <h:panelGrid columns="1" cellpadding="5" id="h5">
+                                <p:commandButton id="btnAgregarP5" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p5,:formPrincipal:tabP:h5" action="#{catalogoInvestigacionController.agregarP5()}" rendered="#{!catalogoInvestigacionController.controlGrabar5}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p5" visible="#{catalogoInvestigacionController.controlGrabar5}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarP5" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP5}" 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p5,:formPrincipal:tabP:h5,:formPrincipal:tabP:dataTablePro" action="#{catalogoInvestigacionController.registraP5()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP5" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p5,:formPrincipal:tabP:h5" action="#{catalogoInvestigacionController.cancelarP5()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left">
+                                    <h:outputLabel for="descT" value="Nombre del Proceso:"  />
+                                    <p:inputText id="descT" value="#{catalogoInvestigacionController.proDescrip}" required="false" autocomplete="off"  style="width: 400px">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP5" listener="#{catalogoInvestigacionController.validarVaciosP5}"/>
+                                    </p:inputText>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dataTablePro"  value="#{catalogoInvestigacionController.seaProcesoList}" var="proceso"
+                                         paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP5}" update=":formPrincipal:tabP:dataTablePro"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP5}" update=":formPrincipal:tabP:dataTablePro"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre Proceso" style="width:50%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{proceso.proDescrip}" style="text-transform: uppercase; white-space: pre-line"/> </f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput32" value="#{proceso.proDescrip}" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%;text-align: center">
+                                    <p:commandButton id="btnEliminarP5" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash" 
+                                                     onclick="PF('deleteDialogP5').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{proceso}" target="#{catalogoInvestigacionController.seaProcesoSelected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Programas" id="tabP6">
+                            <h:panelGrid columns="1" cellpadding="5" id="h6">
+                                <p:commandButton id="btnAgregarP6" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6" action="#{catalogoInvestigacionController.agregarP6()}" rendered="#{!catalogoInvestigacionController.controlGrabarP6}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p6" visible="#{catalogoInvestigacionController.controlGrabarP6}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarP6" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP6}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6,:formPrincipal:tabP:dTProgramas" action="#{catalogoInvestigacionController.registraP6()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP6" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p6,:formPrincipal:tabP:h6" action="#{catalogoInvestigacionController.cancelarP6()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: left">
+                                    <h:outputLabel for="descPrg" value="Nombre del Proceso:"  />
+                                    <p:inputText id="descPrg" value="#{catalogoInvestigacionController.descriProgr}" required="false" autocomplete="off"  style="width: 400px">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP6" listener="#{catalogoInvestigacionController.validarVaciosP6}"/>
+                                    </p:inputText>
+
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dTProgramas" value="#{catalogoInvestigacionController.seaProgramaList}" var="progr"
+                                         paginator="true" rows="15" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP6}" update=":formPrincipal:tabP:dTProgramas"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP6}" update=":formPrincipal:tabP:dTProgramas"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Nombre Programa" style="width:50%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{progr.progDescrip}" style="text-transform: uppercase; white-space: pre-line"/></f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput61" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="width:5%">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarP6" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     onclick="PF('deleteDialogP6').show();" process="@this">
+                                        <f:setPropertyActionListener value="#{progr}" target="#{catalogoInvestigacionController.seaProgramaSelected}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                        <p:tab title="Cantidad de Publicaciones" id="tabP7">
+                            <h:panelGrid columns="1" cellpadding="5" id="h7">
+                                <p:commandButton id="btnAgregarP7" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:p7,:formPrincipal:tabP:h7" action="#{catalogoInvestigacionController.agregarP7()}" rendered="#{! catalogoInvestigacionController.controlGrabarP7}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="p7" visible="#{catalogoInvestigacionController.controlGrabarP7}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarP7" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosP7}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:p7,:formPrincipal:tabP:h7,:formPrincipal:tabP:dTCantidadProd" action="#{catalogoInvestigacionController.registraP7()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarP7" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:p7,:formPrincipal:tabP:h7" action="#{catalogoInvestigacionController.cancelarP7()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <h:outputLabel for="desc" value="Descripción:"/>
+                                    <p:inputText id="desc" value="#{catalogoInvestigacionController.descriProducto}" required="false" autocomplete="off"  style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarP7" listener="#{catalogoInvestigacionController.validarVaciosP7}"/>
+                                    </p:inputText>
+                                    <h:outputLabel for="estdo" value="Estado:"/>
+                                    <p:selectOneRadio id="estdo" value="#{catalogoInvestigacionController.estadoProduccion}">
+                                        <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                        <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarP7" listener="#{catalogoInvestigacionController.validarVaciosP7}"/>
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dTCantidadProd" value="#{catalogoInvestigacionController.cantProdList}" var="cantPrd"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditP7}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelP7}" partialSubmit="true"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Descripción" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{cantPrd.szdtacantprodDesc}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small"/></f:facet>
+                                        <f:facet name="input"><p:inputText id="modelInput71" value="#{cantPrd.szdtacantprodDesc}" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Fecha Ingreso" style="width: 6%">
+                                    <h:outputText value="#{cantPrd.szdtacantprodFechIngre}" style="text-transform: uppercase; white-space: pre-line; font-size: x-small"><f:convertDateTime locale="es_EC" pattern="dd/MM/yyyy"/></h:outputText>
+                                </p:column>
+                                <p:column headerText="Estado" style="white-space: pre-line; width: 17%; font-size: x-small;text-align: center">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{cantPrd.szdtacantprodEstado}" style="text-transform: uppercase;width: 100%; font-size: x-small"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneRadio value="#{cantPrd.szdtacantprodEstado}">
+                                                <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                                <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                            </p:selectOneRadio>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarP7" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dTCantidadProd"
+                                                     action="#{catalogoInvestigacionController.eliminarP7()}">
+                                        <f:setPropertyActionListener value="#{cantPrd}" target="#{catalogoInvestigacionController.cantProdSelected}"/>
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+
+
+                        <p:tab title="Tipo de Investigacion" id="tabTipoInvestigacion">
+                            <h:panelGrid columns="1" cellpadding="5" id="hTipoInvestigacion">
+                                <p:commandButton id="btnAgregarPTipoInvestigacion" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:pTipoInvestigacion,:formPrincipal:tabP:hTipoInvestigacion" action="#{catalogoInvestigacionController.agregarTipoInvestigacion()}" rendered="#{! catalogoInvestigacionController.controlGrabarTipoInvestigacion}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="pTipoInvestigacion" visible="#{catalogoInvestigacionController.controlGrabarTipoInvestigacion}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarTipoInvestigacion" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosTipoInvestigacion}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:pTipoInvestigacion,:formPrincipal:tabP:hTipoInvestigacion,:formPrincipal:tabP:dtTipoInvestigacion" action="#{catalogoInvestigacionController.registraTipoInvestigacion()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarTipoInvestigacion" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:pTipoInvestigacion,:formPrincipal:tabP:hTipoInvestigacion" action="#{catalogoInvestigacionController.cancelarTipoInvestigacion()}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <h:outputLabel for="descTipoInvestigacion" value="Descripción:"/>
+                                    <p:inputText id="descTipoInvestigacion" value="#{catalogoInvestigacionController.descripcionTipoInvestigacion}" required="false" autocomplete="off"  style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarTipoInvestigacion" listener="#{catalogoInvestigacionController.validarVaciosTipoInvestigacion}"/>
+                                    </p:inputText>
+                                    <h:outputLabel for="estadoTipoInvestigacion" value="Estado:"/>
+                                    <p:selectOneRadio id="estadoTipoInvestigacion" value="#{catalogoInvestigacionController.estadoTipoInvestigacion}">
+                                        <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                        <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                        <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarTipoInvestigacion" listener="#{catalogoInvestigacionController.validarVaciosTipoInvestigacion}"/>
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtTipoInvestigacion" value="#{catalogoInvestigacionController.tipoInvestigacionList}" var="tipInv"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditTipoInvestigacion}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelTipoInvestigacion}" partialSubmit="true"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Descripción" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{tipInv.prdDescripcion}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{tipInv.prdDescripcion}" maxlength="900" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Estado">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{tipInv.prdEstado.toString().equals('A')?'Activo':'Inactivo'}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneRadio value="#{tipInv.prdEstado}">
+                                                <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                                <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                            </p:selectOneRadio>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarTipoInvestigacion" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dtTipoInvestigacion"
+                                                     action="#{catalogoInvestigacionController.eliminarTipoInvestigacion()}">
+                                        <f:setPropertyActionListener value="#{tipInv}" target="#{catalogoInvestigacionController.tipoInvestigacionSelected}"/>
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+
+                        <p:tab title="Recursos a Financiar" id="tabRecursoAFinanciar">
+                            <h:panelGrid columns="1" cellpadding="5" id="hRecursoAFinanciar">
+                                <p:commandButton id="btnAgregarRecursoAFinanciar" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:pRecursoAFinanciar,:formPrincipal:tabP:hRecursoAFinanciar" action="#{catalogoInvestigacionController.agregarRecursoAFinanciar()}" rendered="#{! catalogoInvestigacionController.controlGrabarRecursoAFinanciar}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="pRecursoAFinanciar" visible="#{catalogoInvestigacionController.controlGrabarRecursoAFinanciar}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarRecursoAFinanciar" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosRecursoAFinanciar}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:pRecursoAFinanciar,:formPrincipal:tabP:hRecursoAFinanciar,:formPrincipal:tabP:dtRecursoAFinanciar" action="#{catalogoInvestigacionController.registraRecursoAFinanciar()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarRecursoAFinanciar" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:pRecursoAFinanciar,:formPrincipal:tabP:hRecursoAFinanciar" action="#{catalogoInvestigacionController.cancelarRecursoAFinanciar}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <h:outputLabel for="nombreRecursoAFinanciar" value="Nombre:"/>
+                                    <p:inputText id="nombreRecursoAFinanciar" value="#{catalogoInvestigacionController.nombreRecursoAFinanciar}" required="false" autocomplete="off"  style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarRecursoAFinanciar" listener="#{catalogoInvestigacionController.validarVaciosRecursoAFinanciar}"/>
+                                    </p:inputText>
+                                    <h:outputLabel for="descripcionRecursoAFinanciar" value="Descripción:"/>
+                                    <p:inputText id="descripcionRecursoAFinanciar" value="#{catalogoInvestigacionController.descripcionRecursoAFinanciar}" required="false" autocomplete="off"  style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarRecursoAFinanciar" listener="#{catalogoInvestigacionController.validarVaciosRecursoAFinanciar}"/>
+                                    </p:inputText>
+
+                                    <p:outputLabel for="clasificadorPresupuesto" value="Clasificador:" />
+                                    <p:selectOneMenu id="clasificadorPresupuesto" value="#{catalogoInvestigacionController.clasificadorPresupuestoSelected}"                                        
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{catalogoInvestigacionController.clasificadorPresupuestoList}" var="cp"
+                                                       itemLabel="#{cp.scpNombre}" itemValue="#{cp}" />
+                                        <p:ajax event="change" update=":formPrincipal:tabP:subPartidaPresupuesto" listener="#{catalogoInvestigacionController.onchangeClasificadorPresupuesto()}"
+                                                onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="subPartidaPresupuesto" value="Sub Partida:" />
+                                    <p:selectOneMenu id="subPartidaPresupuesto" value="#{catalogoInvestigacionController.subPartidaPresupuestoSelected}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{catalogoInvestigacionController.subPartidaPresupuestoList}" var="sp"
+                                                       itemLabel="#{sp.scpNombre}" itemValue="#{sp}" />
+                                        <p:ajax event="change" update=":formPrincipal:tabP:partidaPresupuesto" listener="#{catalogoInvestigacionController.onchangeSubPartidaPresupuesto()}"
+                                                onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="partidaPresupuesto" value="Partida:" />
+                                    <p:selectOneMenu id="partidaPresupuesto" value="#{catalogoInvestigacionController.partidaPresupuestoSelected}"                                        
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="[[-Seleccione un item-]]" noSelectionOption="true"/>
+                                        <f:selectItems value="#{catalogoInvestigacionController.partidaPresupuestoList}" var="pp"
+                                                       itemLabel="#{pp.scpNombre}" itemValue="#{pp}" />
+                                        <p:ajax event="change" update=":formPrincipal:tabP:btnGrabarRecursoAFinanciar" listener="#{catalogoInvestigacionController.validarVaciosRecursoAFinanciar}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtRecursoAFinanciar" value="#{catalogoInvestigacionController.recursoAFinanciarList}" var="recFin"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditRecursoAFinanciar}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelRecursoAFinanciar}" partialSubmit="true"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Nombre" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{recFin.srcNombre}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{recFin.srcNombre}" maxlength="29" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Descripción" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{recFin.srcDescripcion}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{recFin.srcDescripcion}" maxlength="95" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Clasificador Prep.">
+                                    <h:outputText value="#{recFin.scpId.scpNombre}"/>
+                                </p:column>
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarRecursoAFinanciar" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dtRecursoAFinanciar"
+                                                     action="#{catalogoInvestigacionController.eliminarRecursoAFinanciar()}">
+                                        <f:setPropertyActionListener value="#{recFin}" target="#{catalogoInvestigacionController.recursoAFinanciarSelected}"/>
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+
+
+                        <p:tab title="Criterios de Evaluación" id="tabCriterioEvaluacion">
+                            <h:panelGrid columns="1" cellpadding="5" id="hCriterioEvaluacion">
+                                <p:commandButton id="btnCriterioEvaluacion" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:pCriterioEvaluacion,:formPrincipal:tabP:hCriterioEvaluacion" action="#{catalogoInvestigacionController.agregarCriterioEvaluacion()}" rendered="#{! catalogoInvestigacionController.controlGrabarCriterioEvaluacion}">
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                            <p:panel id="pCriterioEvaluacion" visible="#{catalogoInvestigacionController.controlGrabarCriterioEvaluacion}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarCriterioEvaluacion" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosCriterioEvaluacion}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:pCriterioEvaluacion,:formPrincipal:tabP:hCriterioEvaluacion,:formPrincipal:tabP:dtCriterioEvaluacion" action="#{catalogoInvestigacionController.registraCriterioEvaluacion()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarCriterioEvaluacion" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:pCriterioEvaluacion,:formPrincipal:tabP:hCriterioEvaluacion" action="#{catalogoInvestigacionController.cancelarCriterioEvaluacion}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <h:outputLabel for="nombreCriterioEvaluacion" value="Nombre:"/>
+                                    <p:inputText id="nombreCriterioEvaluacion" value="#{catalogoInvestigacionController.nombreCriterioEvaluacion}" required="false" autocomplete="off"  style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarCriterioEvaluacion" listener="#{catalogoInvestigacionController.validarVaciosCriterioEvaluacion}"/>
+                                    </p:inputText>
+
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtCriterioEvaluacion" value="#{catalogoInvestigacionController.criterioEvaluacionList}" var="criEva"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold "
+                                         >
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditCriterioEvaluacion}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelCriterioEvaluacion}" partialSubmit="true"/>
+
+                                <p:column style="width: 2%">
+                                    <p:rowToggler/>
+                                </p:column>
+
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+
+
+                                <p:column headerText="Nombre" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{criEva.sceNombre}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{criEva.sceNombre}" maxlength="29" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarCriterioEvaluacion" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dtCriterioEvaluacion"
+                                                     action="#{catalogoInvestigacionController.eliminarCriterioEvaluacion()}">
+                                        <f:setPropertyActionListener value="#{criEva}" target="#{catalogoInvestigacionController.criterioEvaluacionSelected}"/>
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+
+                                <p:rowExpansion>
+
+                                    <p:dataTable id="dtCriEvalHijo" value="#{criEva.seaCriteriosEvaluaList}" var="criEvalHijo" style="width: 90%"
+                                                 rowIndexVar="index" editable="true">
+                                        <f:facet name="header" class="alineadoDerecha">
+                                            <p:panelGrid style="text-align: left">
+                                                <p:commandButton id="btnNuevoSubCriterioEvaluacion" icon="ui-icon-clipboard" value="Nuevo"
+                                                                 onclick="PF('dialogSubCriterioEvaluacion').show();" process="@this">
+                                                    <f:setPropertyActionListener value="#{criEva}" target="#{catalogoInvestigacionController.criterioEvaluacionSelected}"/>
+                                                </p:commandButton>
+                                            </p:panelGrid>
+                                        </f:facet>
+                                        <p:column headerText="Ord.">
+                                            <h:outputText value="#{index +1}"/>    
+                                        </p:column>
+                                        <p:column headerText="Nombre">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{criEvalHijo.sceNombre}"/>
+                                                </f:facet>
+
+                                                <f:facet name="input">
+                                                    <h:inputText value="#{criEvalHijo.sceNombre}" maxlength="900" style="width: 95%"/>
+                                                </f:facet>
+
+                                            </p:cellEditor>
+
+                                        </p:column>
+                                        <p:column headerText="Editar" style="width:5%;text-align: center">
+                                            <p:rowEditor/>
+                                        </p:column>
+                                        <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                            <p:commandButton style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                             process="@this" update=":formPrincipal:tabP:dtCriterioEvaluacion"
+                                                             action="#{catalogoInvestigacionController.eliminarSubCriterioEvaluacion()}">
+                                                <f:setPropertyActionListener value="#{criEvalHijo}" target="#{catalogoInvestigacionController.criterioSubEvaluacionSelected}"/>
+                                                <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                            </p:commandButton>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                </p:rowExpansion>
+                            </p:dataTable>
+                        </p:tab>
+
+
+                        <p:tab title="Zonas de Planificación" id="tabZonaPlanificacion">
+                            <h:panelGrid columns="1" cellpadding="5" id="hZonaPlanificacion">
+                                <p:commandButton id="btnAgregarZonaPlanificacion" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:pZonaPlanificacion,:formPrincipal:tabP:hZonaPlanificacion" action="#{catalogoInvestigacionController.agregarZonaPlanificacion()}" rendered="#{! catalogoInvestigacionController.controlGrabarZonaPlanificacion}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="pZonaPlanificacion" visible="#{catalogoInvestigacionController.controlGrabarZonaPlanificacion}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarZonaPlanificacion" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosZonaPlanificacion}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:pZonaPlanificacion,:formPrincipal:tabP:hZonaPlanificacion,:formPrincipal:tabP:dtZonaPlanificacion" action="#{catalogoInvestigacionController.registraZonaPlanificacion()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarZonaPlanificacion" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:pZonaPlanificacion,:formPrincipal:tabP:hZonaPlanificacion" action="#{catalogoInvestigacionController.cancelarZonaPlanificacion}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <h:outputLabel for="nombreZonaPlanificacion" value="Nombre:"/>
+                                    <p:inputText id="nombreZonaPlanificacion" value="#{catalogoInvestigacionController.nombreZonaPlanificacion}" required="false" autocomplete="off" maxlength="55"  style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarZonaPlanificacion" listener="#{catalogoInvestigacionController.validarVaciosZonaPlanificacion}"/>
+                                    </p:inputText>
+                                    <h:outputLabel for="nombreLargoZonaPlanificacion" value="Nombre Largo:"/>
+                                    <p:inputText id="nombreLargoZonaPlanificacion" value="#{catalogoInvestigacionController.nombreLargoZonaPlanificacion}" required="false" autocomplete="off" maxlength="95" style="width: 400px; font-size: x-small">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarZonaPlanificacion" listener="#{catalogoInvestigacionController.validarVaciosZonaPlanificacion}"/>
+                                    </p:inputText>
+
+
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtZonaPlanificacion" value="#{catalogoInvestigacionController.zonaPlanificacionList}" var="zonPla"
+                                         paginator="true" rows="10" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditZonaPlanificacion}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelZonaPlanificacion}" partialSubmit="true"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Nombre" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{zonPla.zopNombre}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{zonPla.zopNombre}" maxlength="50" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="Nombre Largo" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{zonPla.zopNombreLargo}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{zonPla.zopNombreLargo}" maxlength="95" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarZonaPlanificacion" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dtZonaPlanificacion"
+                                                     action="#{catalogoInvestigacionController.eliminarZonaPlanificacion()}">
+                                        <f:setPropertyActionListener value="#{zonPla}" target="#{catalogoInvestigacionController.zonaPlanificacionSelected}"/>
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>                        
+
+                        <p:tab title="Grupos Investigación" id="tabGrupoInvestigacion">
+                            <h:panelGrid columns="1" cellpadding="5" id="hGrupoInvestigacion">
+                                <p:commandButton id="btnAgregarGrupoInvestigacion" value="Agregar" icon="ui-icon-plus" style="margin: 0; font-size: 11px; float: left "
+                                                 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                 title="Agregar Información" update=":formPrincipal:tabP:pGrupoInvestigacion,:formPrincipal:tabP:hGrupoInvestigacion" action="#{catalogoInvestigacionController.agregarGrupoInvestigacion()}" rendered="#{! catalogoInvestigacionController.controlGrabarGrupoInvestigacion}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:panel id="pGrupoInvestigacion" visible="#{catalogoInvestigacionController.controlGrabarGrupoInvestigacion}" style="font-size: 11px; text-align: left; border: hidden; font-weight: bold">
+                                <h:panelGrid columns="2" cellpadding="5" cellspacing="0">
+                                    <p:commandButton id="btnGrabarGrupoInvestigacion" value="Grabar" icon="ui-icon-locked" style="margin: 0; font-size: 11px; float: left " disabled="#{catalogoInvestigacionController.validaVaciosGrupoInvestigacion}"
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Graba Información" update=":formPrincipal:tabP:pGrupoInvestigacion,:formPrincipal:tabP:hGrupoInvestigacion,:formPrincipal:tabP:dtGrupoInvestigacion" action="#{catalogoInvestigacionController.registraGrupoInvestigacion()}">
+                                    </p:commandButton>
+                                    <p:commandButton id="btnCancelarGrupoInvestigacion" value="Cancelar" icon="ui-icon-arrowreturnthick-1-w" style="margin: 0; font-size: 11px; float: left " 
+                                                     onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+                                                     title="Cancelar Información" update=":formPrincipal:tabP:pGrupoInvestigacion,:formPrincipal:tabP:hGrupoInvestigacion" action="#{catalogoInvestigacionController.cancelarGrupoInvestigacion}">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="7" cellspacing="0" style="text-align: justify">
+                                    <h:outputLabel for="nombreGrupoInvestigacion" value="Nombre:"/>
+                                    <p:inputText id="nombreGrupoInvestigacion" value="#{catalogoInvestigacionController.descripcionGrupoInvestigacion}" required="false" autocomplete="off" size="100" maxlength="490">
+                                        <p:ajax event="keyup" update=":formPrincipal:tabP:btnGrabarGrupoInvestigacion" listener="#{catalogoInvestigacionController.validarVaciosGrupoInvestigacion}"/>
+                                    </p:inputText>
+
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:dataTable id="dtGrupoInvestigacion" value="#{catalogoInvestigacionController.grupoInvestigacionList}" var="gruInv"
+                                         paginator="true" rows="20" rowIndexVar="index" resizableColumns="true" editable="true"
+                                         emptyMessage="No se encontraron resultados"  style="width: 100%; text-align: left; font-size: 11px; font-weight: bold ">
+                                <p:ajax event="rowEdit" listener="#{catalogoInvestigacionController.onRowEditGrupoInvestigacion}" partialSubmit="true"/>
+                                <p:ajax event="rowEditCancel" listener="#{catalogoInvestigacionController.onRowCancelGrupoInvestigacion}" partialSubmit="true"/>
+                                <p:column headerText="Ord." style="width: 3%;text-align: center">
+                                    <h:outputText value="#{index + 1}" />
+                                </p:column>
+                                <p:column headerText="Nombre" style="width:25%">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{gruInv.grupiDescrip}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{gruInv.grupiDescrip}" maxlength="490" style="width: 100%"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+
+                                <p:column headerText="Editar" style="width:5%;text-align: center">
+                                    <p:rowEditor/>
+                                </p:column>
+                                <p:column headerText="Eliminar" style="width: 5%; text-align: center">
+                                    <p:commandButton id="btnEliminarGrupoInvestigacion" style="margin: 0" title="Eliminar el registro" icon="ui-icon-trash"
+                                                     process="@this" update=":formPrincipal:tabP:dtGrupoInvestigacion"
+                                                     action="#{catalogoInvestigacionController.eliminarGrupoInvestigacion()}">
+                                        <f:setPropertyActionListener value="#{gruInv}" target="#{catalogoInvestigacionController.grupoInvestigacionSelected}"/>
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea eliminar el registro.?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab> 
+                        
+                    </p:tabView>
+                </p:panel>
+
+                <p:dialog header="Sublinea"  widgetVar="dialogSublinea"  resizable="false" width="400"  modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+                    <h:form id="fmSublinea" enctype="multipart/form-data" >
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="1">
+                                <h:outputLabel for="dSub" value="Descripción:"/>
+                                <p:inputText id="dSub" value="#{catalogoInvestigacionController.descripSub}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:fmSublinea:btnGrabarSub" listener="#{catalogoInvestigacionController.validarVaciosSubP1()}"/>
+                                </p:inputText>
+                                <h:outputLabel for="unesco" value="Código Unesco:"/>
+                                <p:inputText id="unesco" value="#{catalogoInvestigacionController.codUnesco}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:fmSublinea:btnGrabarSub" listener="#{catalogoInvestigacionController.validarVaciosSubP1()}"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                            <p:spacer height="5"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnGrabarSub" value="Grabar" icon="ui-icon-locked" style="margin: 0"
+                                                     onclick="PF('dialogSublinea').hide();" disabled="#{catalogoInvestigacionController.validaVaciosSubP1}">
+                                        <p:ajax update=":formPrincipal:tabP:dtLinea:dtSubl" listener="#{catalogoInvestigacionController.registraSubP1()}"/>
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>  
+                </p:dialog>
+                <p:dialog id="deleteDlg1" header="Eliminar Registro" widgetVar="deleteDialog1" resizable="false" width="500" modal="true" appendTo="@(body)" style="font-size: 11px; text-align: left; font-weight: bold" >
+                    <h:form id="deleteForm1">
+                        <p:outputPanel id="panelDeleteRegistro1">
+                            <center>
+                                <h:panelGrid id="displayDelete1" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP1"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog1').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dtLinea" listener ="#{catalogoInvestigacionController.eliminarP1()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg12" header="Eliminar Registro" widgetVar="deleteDialog12" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm12">
+                        <p:outputPanel id="panelDeleteRegistro12">
+                            <center>
+                                <h:panelGrid id="displayDelete12" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP12"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog12').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dtLinea:dtSubl" listener ="#{catalogoInvestigacionController.eliminarSubP1()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog header="Estrategia" widgetVar="dialogSubEstrategia" resizable="false" width="400" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+                    <h:form id="fmEstrategia" enctype="multipart/form-data" >
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="1">
+                                <h:outputLabel for="subEst" value="Descripción:"/>
+                                <p:inputText id="subEst" value="#{catalogoInvestigacionController.descSubEstra}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:fmEstrategia:btnGrabarSubEst" listener="#{catalogoInvestigacionController.validarVaciosSubP2()}"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                            <p:spacer height="5"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnGrabarSubEst" value="Grabar" icon="ui-icon-locked" style="margin: 0"
+                                                     onclick="PF('dialogSubEstrategia').hide();" disabled="#{catalogoInvestigacionController.validaVaciosSubP2}">
+                                        <p:ajax update=":formPrincipal:tabP:dtEstrat:dtSubEst" listener="#{catalogoInvestigacionController.registraSubP2()}"/>
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel> 
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg2" header="Eliminar Registro" widgetVar="deleteDialog2" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm2">
+                        <p:outputPanel id="panelDeleteRegistro2">
+                            <center>
+                                <h:panelGrid id="displayDelete2" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP2"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog2').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dtEstrat" listener ="#{catalogoInvestigacionController.eliminarP2()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg21" header="Eliminar Registro" widgetVar="deleteDialog21" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+                    <h:form id="deleteForm21">
+                        <p:outputPanel id="panelDeleteRegistro21">
+                            <center>
+                                <h:panelGrid id="displayDelete21" columns="1">
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP21" value="Eliminar" style="margin: 0"
+                                                     onclick="PF('deleteDialog21').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dtEstrat:dtSubEst" listener="#{catalogoInvestigacionController.eliminarSubP2()}"/>
+                                    <!--<p:ajax event="rowToggle" listener="#{catalogoInvestigacionController.onRowToggleEstrat}" global="false" async="true" process="@none" partialSubmit="true" onstart="return dtEstrat.onClick('#{estrat.estrategId(subLevel.levelKey)}') "/>-->                                                    
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg3" header="Eliminar Registro" widgetVar="deleteDialog3" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm3">
+                        <p:outputPanel id="panelDeleteRegistro3">
+                            <center>
+                                <h:panelGrid id="displayDelete3" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP3"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog3').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTablePoliticas" listener ="#{catalogoInvestigacionController.eliminarP3()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg4" header="Eliminar Registro" widgetVar="deleteDialog4" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm4">
+                        <p:outputPanel id="panelDeleteRegistro4">
+                            <center>
+                                <h:panelGrid id="displayDelete4" columns="1" >                          
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP4"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialog4').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTableObjetivoB" listener ="#{catalogoInvestigacionController.eliminarP4()}" />
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg5" header="Eliminar Registro" widgetVar="deleteDialogP5" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm5">
+                        <p:outputPanel id="panelDeleteRegistroP5">
+                            <center>
+                                <h:panelGrid id="displayDelete5" columns="1" >
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP5"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialogP5').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dataTablePro" listener="#{catalogoInvestigacionController.eliminarP5()}"/>
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="deleteDlg6" header="Eliminar Registro" widgetVar="deleteDialogP6" resizable="false" width="500" modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)" >
+                    <h:form id="deleteForm6">
+                        <p:outputPanel id="panelDeleteRegistroP6">
+                            <center>
+                                <h:panelGrid id="displayDelete6" columns="1" >
+                                    <h:outputLabel value="¿Está seguro que desea eliminar el registro.?" style="font-size: 11px"/>
+                                </h:panelGrid>
+                            </center>
+                            <p:spacer height="10"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnEliminarP6"  value="Eliminar" style="margin:0"
+                                                     onclick="PF('deleteDialogP6').hide();">
+                                        <p:ajax update=":formPrincipal:tabP:dTProgramas" listener="#{catalogoInvestigacionController.eliminarP6()}"/>
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog header="Criterio de Evaluación"  widgetVar="dialogSubCriterioEvaluacion"  resizable="false" width="400"  modal="true" style="font-size: 11px; text-align: left; font-weight: bold" appendTo="@(body)">
+                    <h:form id="fmSubCriterioEvaluacion" enctype="multipart/form-data" >
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="1">
+                                <h:outputLabel for="nombreSubCriterioEvaluacion" value="Criterio Evaluación:"/>
+                                <p:inputText id="nombreSubCriterioEvaluacion" value="#{catalogoInvestigacionController.nombreSubCriterioEvaluacion}" autocomplete="off" style="width: 200px">
+                                    <p:ajax event="keyup" update=":formPrincipal:fmSubCriterioEvaluacion:btnGrabarSubCriterioEvaluacion" listener="#{catalogoInvestigacionController.validarVaciosSubCriterioEvaluacion()}"/>
+                                </p:inputText>
+                            </h:panelGrid>
+                            <p:spacer height="5"></p:spacer>
+                            <h:panelGroup>
+                                <center>
+                                    <p:commandButton id="btnGrabarSubCriterioEvaluacion" value="Grabar" icon="ui-icon-locked" style="margin: 0"
+                                                     onclick="PF('dialogSubCriterioEvaluacion').hide();" disabled="#{catalogoInvestigacionController.validaVaciosSubCriterioEvaluacion}">
+                                        <p:ajax update=":formPrincipal:tabP:dtCriterioEvaluacion" listener="#{catalogoInvestigacionController.registraSubCriterioEvaluacion()}"/>
+                                    </p:commandButton>
+                                </center>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:form>  
+                </p:dialog>
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
